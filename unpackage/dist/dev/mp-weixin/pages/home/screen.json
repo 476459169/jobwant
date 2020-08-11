@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "筛选",
+  "usingComponents": {
+    "lb-picker": "/components/lb-picker/index"
+  }
+}
