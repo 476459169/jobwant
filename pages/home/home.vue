@@ -16,7 +16,7 @@
 		</view>
 
 		<view class="tab_list">
-			<view class="cell" v-for="(item,index) in data" :key="index">
+			<view class="cell" v-for="(item,index) in data" :key="index" @click="itemClick(item)"> 
 				<view class="cell_titleview">
 					<view class="cell_titleview_title">
 						{{item.job}}
@@ -100,7 +100,14 @@
 				uni.navigateTo({
 					url:'./screen'
 				})
+			},
+				
+			itemClick(item){
+				uni.navigateTo({
+					url:'./cvDetail'
+				})
 			}
+			
 		}
 	}
 </script>
@@ -186,13 +193,13 @@
 				margin-top: 10px;
 
 				.cell_titleview_title {
-					font-size: 16px;
+					font-size: 14px;
 
 					flex: 1;
 				}
 
 				.cell_titleview_salary {
-					font-size: 16px;
+					font-size: 14px;
 
 					color: #e8654b;
 				}
@@ -201,7 +208,7 @@
 
 
 			.cell_msg {
-				font-size: 14px;
+				font-size: 12px;
 				color: #333333;
 
 			}
@@ -213,12 +220,12 @@
 				.cell_bottomview_company {
 
 					flex: 1;
-					font-size: 14px;
+					font-size: 12px;
 					color: #333333;
 				}
 
 				.cell_bottomview_time {
-					font-size: 14px;
+					font-size: 12px;
 
 				}
 

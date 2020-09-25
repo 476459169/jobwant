@@ -115,17 +115,17 @@
   margin-top: 10px;
 }
 .tab_list .cell .cell_titleview .cell_titleview_title {
-  font-size: 16px;
+  font-size: 14px;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
           flex: 1;
 }
 .tab_list .cell .cell_titleview .cell_titleview_salary {
-  font-size: 16px;
+  font-size: 14px;
   color: #e8654b;
 }
 .tab_list .cell .cell_msg {
-  font-size: 14px;
+  font-size: 12px;
   color: #333333;
 }
 .tab_list .cell .cell_bottomview {
@@ -140,11 +140,11 @@
   -webkit-box-flex: 1;
   -webkit-flex: 1;
           flex: 1;
-  font-size: 14px;
+  font-size: 12px;
   color: #333333;
 }
 .tab_list .cell .cell_bottomview .cell_bottomview_time {
-  font-size: 14px;
+  font-size: 12px;
 }
 .tab_list .cell .cell_line {
   margin: 10px 0px 0px 0px;

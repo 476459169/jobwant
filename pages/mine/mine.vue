@@ -14,12 +14,12 @@
 			<view  class="item_text">求职进展</view>
 			<image class="item_btn" src="../../static/mine/sjx.png" mode=""></image>
 		</view>
-		<view class="item">
+		<view class="item" @click="">
 			<image class="item_img" src="../../static/mine/my_xx.png" mode=""></image>
 			<view  class="item_text">学习进修</view>
 			<image class="item_btn" src="../../static/mine/sjx.png" mode=""></image>
 		</view>
-		<view class="item">
+		<view class="item" @click="mycerClick()">
 			<image class="item_img" src="../../static/mine/my_zs.png" mode=""></image>
 			<view  class="item_text">我的证书</view>
 			<image class="item_btn" src="../../static/mine/sjx.png" mode=""></image>
@@ -52,7 +52,22 @@
 				uni.navigateTo({
 					url:'./jobProgress'
 				})
+			},
+			
+				
+			mycerClick(){
+				uni.navigateTo({
+					url:'./myCertificate'
+				})
+			},
+			
+				
+			jobManageClick(){
+				uni.navigateTo({
+					url:'./jobManage'
+				})
 			}
+			
 		}
 	}
 </script>

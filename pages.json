@@ -1,40 +1,107 @@
 {
-	"pages": [{
-		"path": "pages/home/home",
-		"style": {
-			"navigationBarTitleText": "职位"
-		}
-	}    ,{
-            "path" : "pages/cv/cv",
-            "style" : {
+	"pages": [
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "职位"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录/注册"
+			}
+		},
+		{
+			"path": "pages/login/phoneLogin",
+			"style": {
+				"navigationBarTitleText": "临研招聘"
+			}
+		},{
+			"path": "pages/cv/cv",
+			"style": {
 				"navigationBarTitleText": "简历"
 			}
-        }
-        ,{
-            "path" : "pages/mine/mine",
-            "style" : {
-        		"navigationBarTitleText": "我的"
-        	}
-        },{
-            "path" : "pages/home/screen",
-            "style" : {
+		}, {
+			"path": "pages/mine/mine",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		}, {
+			"path": "pages/home/screen",
+			"style": {
 				"navigationBarTitleText": "筛选"
 			}
-        },{
-            "path" : "pages/mine/jobProgress",
-            "style" : {
+		}, {
+			"path": "pages/mine/jobProgress",
+			"style": {
 				"navigationBarTitleText": "求职进展"
 			}
-        }
-    ],
-	
+		}, {
+			"path": "pages/mine/myCertificate",
+			"style": {
+				"navigationBarTitleText": "我的证书"
+			}
+		}, {
+			"path": "pages/mine/uploadCertif",
+			"style": {
+				"navigationBarTitleText": "上传证书"
+			}
+		}, {
+			"path": "pages/mine/jobManage",
+			"style": {
+				"navigationBarTitleText": "求职意向"
+			}
+		}, {
+			"path": "pages/mine/addJobIntention",
+			"style": {
+				"navigationBarTitleText": "添加求职意向"
+			}
+		},{
+			"path": "pages/cv/showcv",
+			"style": {
+				"navigationBarTitleText": "简历预览"
+			}
+		}, {
+			"path": "pages/home/cvDetail",
+			"style": {
+				"navigationBarTitleText": "简历详情"
+			}
+		}, {
+			"path": "pages/home/companyDetail",
+			"style": {
+				"navigationBarTitleText": "公司详情"
+			}
+		}, {
+			"path": "pages/cv/cvsetting",
+			"style": {
+				"navigationBarTitleText": "编辑简历"
+			}
+		}, {
+			"path": "pages/cv/workExperience",
+			"style": {
+				"navigationBarTitleText": "工作/实习经历"
+			}
+		}, {
+			"path": "pages/cv/educationExperience",
+			"style": {
+				"navigationBarTitleText": "教育经历"
+			}
+		}, {
+			"path": "pages/cv/projectExpere",
+			"style": {
+				"navigationBarTitleText": "项目经历"
+			}
+		}
+	],
+
 	"easycom": {
 		"autoscan": true,
 		"custom": {
 			"lb-picker": "@/components/lb-picker/index.vue"
 		}
 	},
-	
+
 	"tabBar": {
 		"color": "#7A7E83",
 		"selectedColor": "#ca5a30",
@@ -44,17 +111,19 @@
 			"pagePath": "pages/home/home",
 			"iconPath": "static/mine/zw-g.png",
 			"selectedIconPath": "static/mine/zw-o.png",
-				"text": "职位"
+			"text": "职位"
 		}, {
 			"pagePath": "pages/cv/cv",
 			"iconPath": "static/mine/cv-g.png",
 			"selectedIconPath": "static/mine/cv-o.png",
-				"text": "简历"
+			"text": "简历"
 		}, {
 			"pagePath": "pages/mine/mine",
+			"iconPath": "static/mine/cv-g.png",
+			"selectedIconPath": "static/mine/cv-o.png",
 			// "iconPath": "static/mine_g.png",
 			// "selectedIconPath": "static/mine_o.png"
-				"text": "我的"
+			"text": "我的"
 		}]
 	},
 	"globalStyle": {

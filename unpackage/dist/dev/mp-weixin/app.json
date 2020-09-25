@@ -1,10 +1,23 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/login/login",
+    "pages/login/phoneLogin",
     "pages/cv/cv",
     "pages/mine/mine",
     "pages/home/screen",
-    "pages/mine/jobProgress"
+    "pages/mine/jobProgress",
+    "pages/mine/myCertificate",
+    "pages/mine/uploadCertif",
+    "pages/mine/jobManage",
+    "pages/mine/addJobIntention",
+    "pages/cv/showcv",
+    "pages/home/cvDetail",
+    "pages/home/companyDetail",
+    "pages/cv/cvsetting",
+    "pages/cv/workExperience",
+    "pages/cv/educationExperience",
+    "pages/cv/projectExpere"
   ],
   "subPackages": [],
   "window": {
@@ -33,10 +46,12 @@
       },
       {
         "pagePath": "pages/mine/mine",
+        "iconPath": "static/mine/cv-g.png",
+        "selectedIconPath": "static/mine/cv-o.png",
         "text": "我的"
       }
     ]
   },
   "usingComponents": {},
-  "sitemapLocation": "sitemap7.json"
+  "sitemapLocation": "sitemap96.json"
 }
