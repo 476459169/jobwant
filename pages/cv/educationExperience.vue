@@ -18,13 +18,13 @@
 				学{{zwf+zwf}}历
 			</view>
 			<view class="item" @tap="handleTap('picker333')">
-				<view class="item_content">{{type}}</view>
+				<view class="item_content">{{xltype}}</view>
 				<view class="item_imgView">
 					<image class="item_img" src="../../static/login/star3.png" mode=""></image>
 				</view>
 			</view>
 		</view>
-		<lb-picker ref="picker333" v-model="type" mode="selector" :list="typelist">
+		<lb-picker ref="picker333" v-model="xltype" mode="selector" :list="xlarr">
 		</lb-picker>
 
 		<view class="item_views">
@@ -49,7 +49,7 @@
 				所学专业
 			</view>
 			<view class="item">
-				<input class="item_content" type="text" value="" v-model="schoolName" />
+				<input class="item_content" type="text" value="" v-model="professional" />
 			</view>
 		</view>
 
@@ -77,7 +77,7 @@
 		<e-picker-plus ref="pickerdate2" @confirm="confirm2" mode="YM" :endRule=currentDate> </e-picker-plus>
 
 		<view class="bottom_view">
-			<view class="bottom_view_qd">保存</view>
+			<view class="bottom_view_qd" @click="save()">保存</view>
 		</view>
 	</view>
 </template>
@@ -92,16 +92,13 @@
 				zwf: '\u3000',
 				currentDate: currentD,
 				schoolName: '',
-				jobName: '',
+				professional:'',
 				beginTime: '',
 				endTime: '至今',
-				industry: '',
-				salary: '',
-				workDes: '',
 				typelist: ['1', '2', '3', '4'],
-				type: '',
-				switchValue: false,
-				haveXl:true
+				xltype: '',
+				haveXl:true,
+				xlarr:['不限','初中及以下','中专/中技','高中','大专','本科','硕士','MBA/EMBA','博士']
 			};
 		},
 
@@ -146,7 +143,11 @@
 			},
 			selectxlClick(){
 				this.haveXl = !this.haveXl
-			} 
+			} ,
+			
+			save(){
+				
+			}
 		}
 	}
 </script>

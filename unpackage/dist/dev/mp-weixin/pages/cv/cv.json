@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "简历",
-  "usingComponents": {}
+  "usingComponents": {
+    "d-alert": "/components/d-alert/d-alert"
+  }
 }

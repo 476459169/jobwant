@@ -205,7 +205,7 @@
 			<view class="plateItemview_titleView">
 				<view class="plateItemview_titleView_title">自我评价</view>
 				<view class="plateItemview_titleView_noneview"></view>
-				<image class="rightBtn" src="../../static/cv/bj.png"></image>
+				<image class="rightBtn" src="../../static/cv/bj.png" @click="assessmen()"></image>
 			</view>
 			<view class="self_pj">
 				{{data.evaluation}}
@@ -388,6 +388,12 @@
 				uni.navigateTo({
 					url: './projectExpere'
 				})
+			},
+			
+			assessmen(){
+				uni.navigateTo({
+					url:'./assessment'
+				})
 			}
 		}
 	}
@@ -489,6 +495,7 @@
 			color: #666666;
 			height: 15px;
 			line-height: 15px;
+			font-size: 12px;
 
 		}
 
@@ -496,16 +503,21 @@
 			display: flex;
 			height: 20px;
 			line-height: 20px;
+			font-size: 12px;
 
 			.work_experienceView_jobview_title {
+				font-size: 12px;
 				flex: 1;
 			}
 
-			.work_experienceView_jobview_salary {}
+			.work_experienceView_jobview_salary {
+				font-size: 12px;
+			}
 		}
 
 		.work_experienceView_detail {
 			color: #666666;
+			font-size: 12px;
 		}
 
 	}

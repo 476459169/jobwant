@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "职位",
-  "usingComponents": {}
+  "usingComponents": {
+    "d-alert": "/components/d-alert/d-alert"
+  }
 }

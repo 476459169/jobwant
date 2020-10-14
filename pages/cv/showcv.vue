@@ -155,29 +155,26 @@
 		</view>
 		
 		
-		<view class="plateItemview">
+	<!-- 	<view class="plateItemview">
 			<view class="plateItemview_titleView">
 				<view class="plateItemview_titleView_title">培训经历</view>
 				<view class="plateItemview_titleView_noneview"></view>
-				<!-- <image class="rightBtn" src="../../static/cv/tj.png"></image> -->
 			</view>
 			<view v-if="data.trainingExperience.length>0">
 				<view class="work_experienceView" v-for="(item,index) in data.trainingExperience" :key="index">
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/gs.png"></image>
 						<view class="view_item_text">{{item.trainingJG}}</view>
-						<!-- <image class="rightBtn" src="../../static/cv/bj.png"></image> -->
 					</view>
 					<view class="work_experienceView_time"> {{item.beginTime+'-'+item.endTime}}</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		
-		<view class="plateItemview">
+		<!-- <view class="plateItemview">
 			<view class="plateItemview_titleView">
 				<view class="plateItemview_titleView_title">语言能力</view>
 				<view class="plateItemview_titleView_noneview"></view>
-				<!-- <image class="rightBtn" src="../../static/cv/tj.png"></image> -->
 			</view>
 			<view v-if="data.language.length>0">
 				<view v-for="(item,index) in data.language" :key="index">
@@ -187,7 +184,7 @@
 					</view>
 				</view>
 			</view>
-		</view>
+		</view> -->
 		
 		
 		<view class="plateItemview">
@@ -459,11 +456,12 @@
 
 	.work_experienceView {
 		font-size: 12px;
-
+		margin-top: 5px;
 		.work_experienceView_time {
 			color: #666666;
 			height: 15px;
 			line-height: 15px;
+			font-size: 12px;
 
 		}
 
@@ -471,16 +469,21 @@
 			display: flex;
 			height: 20px;
 			line-height: 20px;
+			font-size: 12px;
 
 			.work_experienceView_jobview_title {
+				font-size: 12px;
 				flex: 1;
 			}
 
-			.work_experienceView_jobview_salary {}
+			.work_experienceView_jobview_salary {
+				font-size: 12px;
+			}
 		}
 
 		.work_experienceView_detail {
 			color: #666666;
+			font-size: 12px;
 		}
 
 	}

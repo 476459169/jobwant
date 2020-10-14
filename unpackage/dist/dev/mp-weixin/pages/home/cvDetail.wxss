@@ -82,7 +82,8 @@
   color: #e8654b;
   background-color: #fbc9bc;
   margin-right: 5px;
-  border-radius: 2px;
+  -webkit-border-radius: 2px;
+          border-radius: 2px;
   line-height: 15px;
 }
 .title_flexView {

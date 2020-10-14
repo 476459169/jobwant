@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "基本资料",
+  "usingComponents": {
+    "lb-picker": "/components/lb-picker/index",
+    "e-picker-plus": "/components/e-picker-plus/e-picker-plus"
+  }
+}

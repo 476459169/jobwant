@@ -92,7 +92,38 @@
 			"style": {
 				"navigationBarTitleText": "项目经历"
 			}
+		},{
+			"path": "pages/cv/assessment",
+			"style": {
+				"navigationBarTitleText": "自我评价"
+			}
+		},{
+			"path": "pages/mine/mineSetting",
+			"style": {
+				"navigationBarTitleText": "账号设置"
+			}
+		},{
+			"path": "pages/mine/interview",
+			"style": {
+				"navigationBarTitleText": "面试邀请"
+			}
+		},{
+			"path": "pages/mine/shieldingCompanies",
+			"style": {
+				"navigationBarTitleText": "屏蔽企业"
+			}
+		},{
+			"path": "pages/mine/addShieldingCompanies",
+			"style": {
+				"navigationBarTitleText": "添加公司"
+			}
+		},{
+			"path": "pages/cv/basicInformation",
+			"style": {
+				"navigationBarTitleText": "基本资料"
+			}
 		}
+		
 	],
 
 	"easycom": {

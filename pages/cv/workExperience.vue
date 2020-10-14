@@ -181,60 +181,47 @@
 			},
 			saveClick(){
 				
-			
+					
+							let pages = getCurrentPages();  //获取所有页面栈实例列表
+							let nowPage = pages[ pages.length - 1];  //当前页页面实例
+							let prevPage = pages[ pages.length - 2 ];  //上一页页面实例
+							
+							if(this.id){
+								let dic = {
+										company:this.companyName,
+										job:this.jobName,
+										beginTime:this.beginTime,
+										endTime:this.endTime,
+										industry:this.industry,
+										salary:this.salary,
+										detail:this.workDes,
+										id:this.id,
+										private:this.switchValue?1:0,
+										}
+									//修改
+									prevPage.$vm.data.workExperience.splice(this.id-1,1,dic);
+								}else{
+									prevPage.$vm.data.workExperience.push({
+										company:this.companyName,
+										job:this.jobName,
+										beginTime:this.beginTime,
+										endTime:this.endTime,
+										industry:this.industry,
+										salary:this.salary,
+										detail:this.workDes,
+										id:prevPage.$vm.data.workExperience.length==0?1:prevPage.$vm.data.workExperience.length+1,
+										private:this.switchValue?1:0
+									})
+								}
+								uni.navigateBack({
+									
+								})
+							
+						}
+					
 				
-				let pages = getCurrentPages();  //获取所有页面栈实例列表
-				let nowPage = pages[ pages.length - 1];  //当前页页面实例
-				let prevPage = pages[ pages.length - 2 ];  //上一页页面实例
-				
-				
-				console.log("prevPage="+prevPage);
-				if(this.id){
-					//修改
-					console.log("修改");
-					
-					let dic = {
-						company:this.companyName,
-						job:this.jobName,
-						beginTime:this.beginTime,
-						endTime:this.endTime,
-						industry:this.industry,
-						salary:this.salary,
-						detail:this.workDes,
-						id:this.id,
-						private:this.switchValue?1:0
-					}
-					
-					
-					// prevPage.$vm.data.workExperience[this.id-1].company=this.companyName;
-					// prevPage.$vm.data.workExperience[this.id-1].job=this.jobName,
-					// prevPage.$vm.data.workExperience[this.id-1].beginTime=this.beginTime,
-					// prevPage.$vm.data.workExperience[this.id-1].endTime=this.endTime,
-					// prevPage.$vm.data.workExperience[this.id-1].industry=this.industry,
-					// prevPage.$vm.data.workExperience[this.id-1].salary=this.salary,
-					// prevPage.$vm.data.workExperience[this.id-1].detail=this.workDes,
-					// prevPage.$vm.data.workExperience[this.id-1].id=prevPage.$vm.data.workExperience.length==0?1:prevPage.$vm.data.workExperience.length+1,
-					// prevPage.$vm.data.workExperience[this.id-1].private=this.switchValue?1:0
-					prevPage.$vm.data.workExperience.splice(this.id-1,1,dic);
-				}else{
-				   console.log("添加");
-					prevPage.$vm.data.workExperience.push({
-						company:this.companyName,
-						job:this.jobName,
-						beginTime:this.beginTime,
-						endTime:this.endTime,
-						industry:this.industry,
-						salary:this.salary,
-						detail:this.workDes,
-						id:prevPage.$vm.data.workExperience.length==0?1:prevPage.$vm.data.workExperience.length+1,
-						private:this.switchValue?1:0
-					})
-				}
-				uni.navigateBack({
-					
-				})
-			}
 		}
+	
 	}
 </script>
 
@@ -295,7 +282,6 @@
 		display: flex;
 		justify-content: center;
 		width: 100%;
-
 		.bottom_view_cz {
 			border: 2px solid #e8654b;
 			background-color: #fbc9bc;

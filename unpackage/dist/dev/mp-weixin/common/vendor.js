@@ -1935,191 +1935,1415 @@ function normalizeComponent (
 
 /***/ }),
 
-/***/ 137:
-/*!********************************************************************************!*\
-  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/lb-picker/utils.js ***!
-  \********************************************************************************/
+/***/ 11:
+/*!*****************************************************************!*\
+  !*** /Users/linyutang/Desktop/jobwant/jobWanted/store/index.js ***!
+  \*****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.isObject = isObject;exports.getColumns = getColumns; /**
-                                                                                                                                         * 判断是否是对象
-                                                                                                                                         *
-                                                                                                                                         * @export
-                                                                                                                                         * @param {*} val
-                                                                                                                                         * @returns true/false
-                                                                                                                                         */
-function isObject(val) {
-  return Object.prototype.toString.call(val) === '[object Object]';
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _vue = _interopRequireDefault(__webpack_require__(/*! vue */ 2));
+var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+_vue.default.use(_vuex.default);
+var store = new _vuex.default.Store({
+  state: {},
+  mutations: {},
+  actions: {} });var _default =
+
+store;exports.default = _default;
+
+/***/ }),
+
+/***/ 12:
+/*!********************************************!*\
+  !*** ./node_modules/vuex/dist/vuex.esm.js ***!
+  \********************************************/
+/*! exports provided: default, Store, createNamespacedHelpers, install, mapActions, mapGetters, mapMutations, mapState */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createNamespacedHelpers", function() { return createNamespacedHelpers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "install", function() { return install; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapActions", function() { return mapActions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapGetters", function() { return mapGetters; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapMutations", function() { return mapMutations; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapState", function() { return mapState; });
+/*!
+ * vuex v3.4.0
+ * (c) 2020 Evan You
+ * @license MIT
+ */
+function applyMixin (Vue) {
+  var version = Number(Vue.version.split('.')[0]);
+
+  if (version >= 2) {
+    Vue.mixin({ beforeCreate: vuexInit });
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init;
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
+
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit;
+      _init.call(this, options);
+    };
+  }
+
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
+
+  function vuexInit () {
+    var options = this.$options;
+    // store injection
+    if (options.store) {
+      this.$store = typeof options.store === 'function'
+        ? options.store()
+        : options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
+  }
+}
+
+var target = typeof window !== 'undefined'
+  ? window
+  : typeof global !== 'undefined'
+    ? global
+    : {};
+var devtoolHook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
+
+  store._devtoolHook = devtoolHook;
+
+  devtoolHook.emit('vuex:init', store);
+
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState);
+  });
+
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state);
+  }, { prepend: true });
+
+  store.subscribeAction(function (action, state) {
+    devtoolHook.emit('vuex:action', action, state);
+  }, { prepend: true });
 }
 
 /**
-   * 根据value获取columns信息
-   *
-   * @export
-   * @param {*} { value, list, mode, props, level }
-   * @param {number} [type=2] 查询不到value数据返回数据类型 1空值null 2默认第一个选项
-   * @returns
-   */
-function getColumns(_ref) {var value = _ref.value,list = _ref.list,mode = _ref.mode,props = _ref.props,level = _ref.level;var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
-  var pickerValue = [];
-  var pickerColumns = [];
-  var selectValue = [];
-  var selectItem = [];
-  var columnsInfo = null;
-  switch (mode) {
-    case 'selector':
-      var index = list.findIndex(function (item) {
-        return isObject(item) ? item[props.value] === value : item === value;
-      });
-      if (index === -1 && type === 1) {
-        columnsInfo = null;
-      } else {
-        index = index > -1 ? index : 0;
-        selectItem = list[index];
-        selectValue = isObject(selectItem) ?
-        selectItem[props.value] :
-        selectItem;
-        pickerColumns = list;
-        pickerValue = [index];
-        columnsInfo = {
-          index: pickerValue,
-          value: selectValue,
-          item: selectItem,
-          columns: pickerColumns };
+ * Get the first item that pass the test
+ * by second argument function
+ *
+ * @param {Array} list
+ * @param {Function} f
+ * @return {*}
+ */
 
-      }
-      break;
-    case 'multiSelector':
-      var setPickerItems = function setPickerItems() {var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-        if (!data.length) return;
-        var defaultValue = value || [];
-        if (index < level) {
-          var _value = defaultValue[index] || '';
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
 
-          var i = data.findIndex(function (item) {return item[props.label] === _value;});
-          if (i === -1 && type === 1) return;
-          i = i > -1 ? i : 0;
-          pickerValue[index] = i;
-          pickerColumns[index] = data;
-          if (data[i]) {
-            selectValue[index] = data[i][props.label];
-            selectItem[index] = data[i];
-            setPickerItems(data[i][props.children] || [], index + 1);
-          }
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+function partial (fn, arg) {
+  return function () {
+    return fn(arg)
+  }
+}
+
+// Base data struct for store's module, package with some attribute and method
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  // Store some children item
+  this._children = Object.create(null);
+  // Store the origin module object which passed by programmer
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+
+  // Store the origin module's state
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors = { namespaced: { configurable: true } };
+
+prototypeAccessors.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.hasChild = function hasChild (key) {
+  return key in this._children
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  // register root module (Vuex.Store options)
+  this.register([], rawRootModule, false);
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update([], this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  if ((true)) {
+    assertRawModule(path, rawModule);
+  }
+
+  var newModule = new Module(rawModule, runtime);
+  if (path.length === 0) {
+    this.root = newModule;
+  } else {
+    var parent = this.get(path.slice(0, -1));
+    parent.addChild(path[path.length - 1], newModule);
+  }
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  if (!parent.getChild(key).runtime) { return }
+
+  parent.removeChild(key);
+};
+
+ModuleCollection.prototype.isRegistered = function isRegistered (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+
+  return parent.hasChild(key)
+};
+
+function update (path, targetModule, newModule) {
+  if ((true)) {
+    assertRawModule(path, newModule);
+  }
+
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        if ((true)) {
+          console.warn(
+            "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+            'manual reload is needed'
+          );
         }
-      };
-      setPickerItems(list);
-      if (!selectValue.length && type === 1) {
-        columnsInfo = null;
-      } else {
-        columnsInfo = {
-          index: pickerValue,
-          value: selectValue,
-          item: selectItem,
-          columns: pickerColumns };
-
+        return
       }
-      break;
-    case 'unlinkedSelector':
-      list.forEach(function (item, i) {
-        var index = item.findIndex(function (item) {
-          return isObject(item) ?
-          item[props.value] === value[i] :
-          item === value[i];
-        });
-        if (index === -1 && type === 1) return;
-        index = index > -1 ? index : 0;
-        var columnItem = list[i][index];
-        var valueItem = isObject(columnItem) ?
-        columnItem[props.value] :
-        columnItem;
-        pickerValue[i] = index;
-        selectValue[i] = valueItem;
-        selectItem[i] = columnItem;
+      update(
+        path.concat(key),
+        targetModule.getChild(key),
+        newModule.modules[key]
+      );
+    }
+  }
+}
+
+var functionAssert = {
+  assert: function (value) { return typeof value === 'function'; },
+  expected: 'function'
+};
+
+var objectAssert = {
+  assert: function (value) { return typeof value === 'function' ||
+    (typeof value === 'object' && typeof value.handler === 'function'); },
+  expected: 'function or object with "handler" function'
+};
+
+var assertTypes = {
+  getters: functionAssert,
+  mutations: functionAssert,
+  actions: objectAssert
+};
+
+function assertRawModule (path, rawModule) {
+  Object.keys(assertTypes).forEach(function (key) {
+    if (!rawModule[key]) { return }
+
+    var assertOptions = assertTypes[key];
+
+    forEachValue(rawModule[key], function (value, type) {
+      assert(
+        assertOptions.assert(value),
+        makeAssertionMessage(path, key, type, value, assertOptions.expected)
+      );
+    });
+  });
+}
+
+function makeAssertionMessage (path, key, type, value, expected) {
+  var buf = key + " should be " + expected + " but \"" + key + "." + type + "\"";
+  if (path.length > 0) {
+    buf += " in module \"" + (path.join('.')) + "\"";
+  }
+  buf += " is " + (JSON.stringify(value)) + ".";
+  return buf
+}
+
+var Vue; // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  // Auto install if it is not done yet and `window` has `Vue`.
+  // To allow users to avoid auto-installation in some cases,
+  // this code should be placed here. See #731
+  if (!Vue && typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue);
+  }
+
+  if ((true)) {
+    assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
+    assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
+    assert(this instanceof Store, "store must be called with the new operator.");
+  }
+
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._actionSubscribers = [];
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._watcherVM = new Vue();
+  this._makeLocalGettersCache = Object.create(null);
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  var state = this._modules.root.state;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state);
+
+  // apply plugins
+  plugins.forEach(function (plugin) { return plugin(this$1); });
+
+  var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
+  if (useDevtools) {
+    devtoolPlugin(this);
+  }
+};
+
+var prototypeAccessors$1 = { state: { configurable: true } };
+
+prototypeAccessors$1.state.get = function () {
+  return this._vm._data.$$state
+};
+
+prototypeAccessors$1.state.set = function (v) {
+  if ((true)) {
+    assert(false, "use store.replaceState() to explicit replace store state.");
+  }
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+    var options = ref.options;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown mutation type: " + type));
+    }
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+
+  this._subscribers
+    .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+    .forEach(function (sub) { return sub(mutation, this$1.state); });
+
+  if (
+    ( true) &&
+    options && options.silent
+  ) {
+    console.warn(
+      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
+      'Use the filter functionality in the vue-devtools'
+    );
+  }
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+    var this$1 = this;
+
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var action = { type: type, payload: payload };
+  var entry = this._actions[type];
+  if (!entry) {
+    if ((true)) {
+      console.error(("[vuex] unknown action type: " + type));
+    }
+    return
+  }
+
+  try {
+    this._actionSubscribers
+      .slice() // shallow copy to prevent iterator invalidation if subscriber synchronously calls unsubscribe
+      .filter(function (sub) { return sub.before; })
+      .forEach(function (sub) { return sub.before(action, this$1.state); });
+  } catch (e) {
+    if ((true)) {
+      console.warn("[vuex] error in before action subscribers: ");
+      console.error(e);
+    }
+  }
+
+  var result = entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload);
+
+  return new Promise(function (resolve, reject) {
+    result.then(function (res) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.after; })
+          .forEach(function (sub) { return sub.after(action, this$1.state); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in after action subscribers: ");
+          console.error(e);
+        }
+      }
+      resolve(res);
+    }, function (error) {
+      try {
+        this$1._actionSubscribers
+          .filter(function (sub) { return sub.error; })
+          .forEach(function (sub) { return sub.error(action, this$1.state, error); });
+      } catch (e) {
+        if ((true)) {
+          console.warn("[vuex] error in error action subscribers: ");
+          console.error(e);
+        }
+      }
+      reject(error);
+    });
+  })
+};
+
+Store.prototype.subscribe = function subscribe (fn, options) {
+  return genericSubscribe(fn, this._subscribers, options)
+};
+
+Store.prototype.subscribeAction = function subscribeAction (fn, options) {
+  var subs = typeof fn === 'function' ? { before: fn } : fn;
+  return genericSubscribe(subs, this._actionSubscribers, options)
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  if ((true)) {
+    assert(typeof getter === 'function', "store.watch only accepts a function.");
+  }
+  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm._data.$$state = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule, options) {
+    if ( options === void 0 ) options = {};
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+    assert(path.length > 0, 'cannot register the root module by using registerModule.');
+  }
+
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
+  // reset store to update getters...
+  resetStoreVM(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    Vue.delete(parentState, path[path.length - 1]);
+  });
+  resetStore(this);
+};
+
+Store.prototype.hasModule = function hasModule (path) {
+  if (typeof path === 'string') { path = [path]; }
+
+  if ((true)) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  return this._modules.isRegistered(path)
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors$1 );
+
+function genericSubscribe (fn, subs, options) {
+  if (subs.indexOf(fn) < 0) {
+    options && options.prepend
+      ? subs.unshift(fn)
+      : subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+}
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset vm
+  resetStoreVM(store, state, hot);
+}
+
+function resetStoreVM (store, state, hot) {
+  var oldVm = store._vm;
+
+  // bind store public getters
+  store.getters = {};
+  // reset local getters cache
+  store._makeLocalGettersCache = Object.create(null);
+  var wrappedGetters = store._wrappedGetters;
+  var computed = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    // direct inline function use will lead to closure preserving oldVm.
+    // using partial to return function with only arguments preserved in closure environment.
+    computed[key] = partial(fn, store);
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; },
+      enumerable: true // for local getters
+    });
+  });
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed: computed
+  });
+  Vue.config.silent = silent;
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldVm) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldVm._data.$$state = null;
       });
-      pickerColumns = list;
-      if (!selectValue.length && type === 1) {
-        columnsInfo = null;
-      } else {
-        columnsInfo = {
-          index: pickerValue,
-          value: selectValue,
-          item: selectItem,
-          columns: pickerColumns };
+    }
+    Vue.nextTick(function () { return oldVm.$destroy(); });
+  }
+}
 
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    if (store._modulesNamespaceMap[namespace] && ("development" !== 'production')) {
+      console.error(("[vuex] duplicate namespace " + namespace + " for the namespaced module " + (path.join('/'))));
+    }
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      if ((true)) {
+        if (moduleName in parentState) {
+          console.warn(
+            ("[vuex] state field \"" + moduleName + "\" was overridden by a module with the same name at \"" + (path.join('.')) + "\"")
+          );
+        }
       }
-      break;}
+      Vue.set(parentState, moduleName, module.state);
+    });
+  }
 
-  return columnsInfo;
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var type = action.root ? key : namespace + key;
+    var handler = action.handler || action;
+    registerAction(store, type, handler, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._actions[type]) {
+          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if (( true) && !store._mutations[type]) {
+          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by vm update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  if (!store._makeLocalGettersCache[namespace]) {
+    var gettersProxy = {};
+    var splitPos = namespace.length;
+    Object.keys(store.getters).forEach(function (type) {
+      // skip if the target getter is not match this namespace
+      if (type.slice(0, splitPos) !== namespace) { return }
+
+      // extract local getter type
+      var localType = type.slice(splitPos);
+
+      // Add a port to the getters proxy.
+      // Define as getter property because
+      // we do not want to evaluate the getters in this time.
+      Object.defineProperty(gettersProxy, localType, {
+        get: function () { return store.getters[type]; },
+        enumerable: true
+      });
+    });
+    store._makeLocalGettersCache[namespace] = gettersProxy;
+  }
+
+  return store._makeLocalGettersCache[namespace]
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler.call(store, local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload) {
+    var res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    if ((true)) {
+      console.error(("[vuex] duplicate getter key: " + type));
+    }
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, function () {
+    if ((true)) {
+      assert(store._committing, "do not mutate vuex store state outside mutation handlers.");
+    }
+  }, { deep: true, sync: true });
+}
+
+function getNestedState (state, path) {
+  return path.reduce(function (state, key) { return state[key]; }, state)
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  if ((true)) {
+    assert(typeof type === 'string', ("expects string as the type, but found " + (typeof type) + "."));
+  }
+
+  return { type: type, payload: payload, options: options }
+}
+
+function install (_Vue) {
+  if (Vue && _Vue === Vue) {
+    if ((true)) {
+      console.error(
+        '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+      );
+    }
+    return
+  }
+  Vue = _Vue;
+  applyMixin(Vue);
+}
+
+/**
+ * Reduce the code which written in Vue.js for getting the state.
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
+ * @param {Object}
+ */
+var mapState = normalizeNamespace(function (namespace, states) {
+  var res = {};
+  if (( true) && !isValidMap(states)) {
+    console.error('[vuex] mapState: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      var state = this.$store.state;
+      var getters = this.$store.getters;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
+        if (!module) {
+          return
+        }
+        state = module.context.state;
+        getters = module.context.getters;
+      }
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for committing the mutation
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} mutations # Object's item can be a function which accept `commit` function as the first param, it can accept anthor params. You can commit mutation and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapMutations = normalizeNamespace(function (namespace, mutations) {
+  var res = {};
+  if (( true) && !isValidMap(mutations)) {
+    console.error('[vuex] mapMutations: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // Get the commit method from store
+      var commit = this.$store.commit;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapMutations', namespace);
+        if (!module) {
+          return
+        }
+        commit = module.context.commit;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [commit].concat(args))
+        : commit.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for getting the getters
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} getters
+ * @return {Object}
+ */
+var mapGetters = normalizeNamespace(function (namespace, getters) {
+  var res = {};
+  if (( true) && !isValidMap(getters)) {
+    console.error('[vuex] mapGetters: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    // The namespace has been mutated by normalizeNamespace
+    val = namespace + val;
+    res[key] = function mappedGetter () {
+      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
+        return
+      }
+      if (( true) && !(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val));
+        return
+      }
+      return this.$store.getters[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for dispatch the action
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} actions # Object's item can be a function which accept `dispatch` function as the first param, it can accept anthor params. You can dispatch action and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapActions = normalizeNamespace(function (namespace, actions) {
+  var res = {};
+  if (( true) && !isValidMap(actions)) {
+    console.error('[vuex] mapActions: mapper parameter must be either an Array or an Object');
+  }
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // get dispatch function from store
+      var dispatch = this.$store.dispatch;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapActions', namespace);
+        if (!module) {
+          return
+        }
+        dispatch = module.context.dispatch;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [dispatch].concat(args))
+        : dispatch.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Rebinding namespace param for mapXXX function in special scoped, and return them by simple object
+ * @param {String} namespace
+ * @return {Object}
+ */
+var createNamespacedHelpers = function (namespace) { return ({
+  mapState: mapState.bind(null, namespace),
+  mapGetters: mapGetters.bind(null, namespace),
+  mapMutations: mapMutations.bind(null, namespace),
+  mapActions: mapActions.bind(null, namespace)
+}); };
+
+/**
+ * Normalize the map
+ * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
+ * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
+ * @param {Array|Object} map
+ * @return {Object}
+ */
+function normalizeMap (map) {
+  if (!isValidMap(map)) {
+    return []
+  }
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+/**
+ * Validate whether given map is valid or not
+ * @param {*} map
+ * @return {Boolean}
+ */
+function isValidMap (map) {
+  return Array.isArray(map) || isObject(map)
+}
+
+/**
+ * Return a function expect two param contains namespace and map. it will normalize the namespace and then the param's function will handle the new namespace and the map.
+ * @param {Function} fn
+ * @return {Function}
+ */
+function normalizeNamespace (fn) {
+  return function (namespace, map) {
+    if (typeof namespace !== 'string') {
+      map = namespace;
+      namespace = '';
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/';
+    }
+    return fn(namespace, map)
+  }
+}
+
+/**
+ * Search a special module from store by namespace. if module not exist, print error message.
+ * @param {Object} store
+ * @param {String} helper
+ * @param {String} namespace
+ * @return {Object}
+ */
+function getModuleByNamespace (store, helper, namespace) {
+  var module = store._modulesNamespaceMap[namespace];
+  if (( true) && !module) {
+    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
+  }
+  return module
+}
+
+var index = {
+  Store: Store,
+  install: install,
+  version: '3.4.0',
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions,
+  createNamespacedHelpers: createNamespacedHelpers
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (index);
+
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ 3)))
+
+/***/ }),
+
+/***/ 13:
+/*!*******************************************************************!*\
+  !*** /Users/linyutang/Desktop/jobwant/jobWanted/store/myAlert.js ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.default = initModal;var _vuex = _interopRequireDefault(__webpack_require__(/*! vuex */ 12));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}
+function initModal(v) {
+  // 使用Vuex挂在store到全局Vue原型上
+  v.prototype.$modalStore = new _vuex.default.Store({
+    state: {
+      show: false,
+      title: "",
+      content: '内容',
+      showCancel: true,
+      cancelText: "取消",
+      cancelColor: "#000000",
+      confirmText: "确定",
+      confirmColor: "#762cd9",
+      success: null },
+
+    mutations: {
+      hideModal: function hideModal(state) {
+        // 小程序-导航条页面控制
+
+        if (state.hideTabBar) {
+          wx.showTabBar();
+        }
+
+        state.show = false;
+        //
+        state.title = "温馨提示";
+        state.content = "内容";
+        state.showCancel = true;
+        state.cancelText = "取消";
+        state.cancelColor = "#000000";
+        state.confirmText = "确定";
+        state.confirmColor = "#762cd9";
+        state.success = null;
+      },
+      showModal: function showModal(state, data) {
+        state = Object.assign(state, data);
+        // console.log(state);
+        state.show = true;
+      },
+      success: function success(state, res) {
+        var cb = state.success;
+        var resObj = {
+          cancel: false,
+          confirm: false };
+
+        res == "confirm" ? resObj.confirm = true : resObj.cancel = true;
+        cb && cb(resObj);
+      } } });
+
+
+  // 注册$showModal到Vue原型上，以方便全局调用
+  v.prototype.$showModal = function (option) {
+    if (typeof option === 'object') {
+
+      if (option.hideTabBar) {
+        wx.hideTabBar();
+      }
+
+
+      v.prototype.$modalStore.commit('showModal', option);
+    } else {
+      throw "配置项必须为对象传入的值为：" + typeof option;
+    }
+  };
 }
 
 /***/ }),
 
-/***/ 145:
-/*!***************************************************************************************!*\
-  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/lb-picker/mixins/index.js ***!
-  \***************************************************************************************/
+/***/ 14:
+/*!************************************************************************************!*\
+  !*** /Users/linyutang/Desktop/jobwant/jobWanted/common/vmeitime-http/interface.js ***!
+  \************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.commonMixin = void 0;var _utils = __webpack_require__(/*! ../utils */ 137);
-var commonMixin = {
-  data: function data() {
-    return {
-      indicatorStyle: "height: 34px" };
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} /**
+                                                                                                                                                                                                                                                                                                                * 通用uni-app网络请求
+                                                                                                                                                                                                                                                                                                                * 基于 Promise 对象实现更简单的 request 使用方式，支持请求和响应拦截
+                                                                                                                                                                                                                                                                                                                */
 
-  },
-  created: function created() {
-    this.init('init');
-  },
-  methods: {
-    init: function init(changeType) {
-      if (this.list && this.list.length) {
-        var column = (0, _utils.getColumns)({
-          value: this.value,
-          list: this.list,
-          mode: this.mode,
-          props: this.props,
-          level: this.level });var
+/*
+                                                                                                                                                                                                                                                                                                                   // 开放的接口
+                                                                                                                                                                                                                                                                                                                   import http from './interface'
+                                                                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                                   http.config.baseUrl = "http://localhost:8080/api/"
+                                                                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                                   http.request(url:'user/list',method:'GET').then((res)=>{
+                                                                                                                                                                                                                                                                                                                   	console.log(JSON.stringify(res))
+                                                                                                                                                                                                                                                                                                                   })
+                                                                                                                                                                                                                                                                                                                   http.get('user/list').then((res)=>{
+                                                                                                                                                                                                                                                                                                                   	console.log(JSON.stringify(res))
+                                                                                                                                                                                                                                                                                                                   })
+                                                                                                                                                                                                                                                                                                                   http.get('user/list', {status: 1}).then((res)=>{
+                                                                                                                                                                                                                                                                                                                   	console.log(JSON.stringify(res))
+                                                                                                                                                                                                                                                                                                                   })
+                                                                                                                                                                                                                                                                                                                   http.post('user', {id:1, status: 1}).then((res)=>{
+                                                                                                                                                                                                                                                                                                                   	console.log(JSON.stringify(res))
+                                                                                                                                                                                                                                                                                                                   })
+                                                                                                                                                                                                                                                                                                                   http.put('user/1', {status: 2}).then((res)=>{
+                                                                                                                                                                                                                                                                                                                   	console.log(JSON.stringify(res))
+                                                                                                                                                                                                                                                                                                                   })
+                                                                                                                                                                                                                                                                                                                   http.delete('user/1').then((res)=>{
+                                                                                                                                                                                                                                                                                                                   	console.log(JSON.stringify(res))
+                                                                                                                                                                                                                                                                                                                   }) 
+                                                                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                                   */var _default =
+{
+  config: {
+    baseUrl: "http://39.105.48.243/crlink/app/",
+    // baseUrl: "https://uat.crlink.com/crlink/app/",
+    header: _defineProperty({
+      'Content-Type': 'application/json;charset=UTF-8' }, "Content-Type",
+    'application/x-www-form-urlencoded'),
 
-        columns = column.columns,value = column.value,item = column.item,index = column.index;
-        this.selectValue = value;
-        this.selectItem = item;
-        this.pickerColumns = columns;
-        this.pickerValue = index;
-        this.$emit('change', {
-          value: this.selectValue,
-          item: this.selectItem,
-          index: this.pickerValue,
-          change: changeType });
+    data: {},
+    method: "GET",
+    dataType: "json", /* 如设为json，会对返回的数据做一次 JSON.parse */
+    responseType: "text",
+    success: function success() {},
+    fail: function fail() {},
+    complete: function complete() {} },
 
+  interceptor: {
+    request: null,
+    response: null },
+
+  request: function request(options) {var _this = this;
+    if (!options) {
+      options = {};
+    }
+    options.baseUrl = options.baseUrl || this.config.baseUrl;
+    options.dataType = options.dataType || this.config.dataType;
+    options.url = options.baseUrl + options.url;
+    options.data = options.data || {};
+    options.method = options.method || this.config.method;
+    //TODO 加密数据
+
+    //TODO 数据签名
+    /* 
+    _token = {'token': getStorage(STOREKEY_LOGIN).token || 'undefined'},
+    _sign = {'sign': sign(JSON.stringify(options.data))}
+    options.header = Object.assign({}, options.header, _token,_sign) 
+    */
+
+    return new Promise(function (resolve, reject) {
+      var _config = null;
+
+      options.complete = function (response) {
+        var statusCode = response.statusCode;
+        response.config = _config;
+        if (true) {
+          if (statusCode === 200) {
+            // console.log("【" + _config.requestId + "】 结果：" + JSON.stringify(response.data))
+          }
+        }
+        if (_this.interceptor.response) {
+          var newResponse = _this.interceptor.response(response);
+          if (newResponse) {
+            response = newResponse;
+          }
+        }
+        // 统一的响应日志记录
+        _reslog(response);
+        if (statusCode === 200) {//成功
+          resolve(response.data);
+        } else {
+          reject(response);
+        }
+      };
+
+      _config = Object.assign({}, _this.config, options);
+      _config.requestId = new Date().getTime();
+
+      if (_this.interceptor.request) {
+        _this.interceptor.request(_config);
       }
-    } },
 
-  watch: {
-    value: function value() {
-      if (!this.isConfirmChange) {
-        this.init('value');
+      // 统一的请求日志记录
+      _reqlog(_config);
+
+      if (true) {
+        // console.log("【" + _config.requestId + "】 地址：" + _config.url)
+        if (_config.data) {
+          // console.log("【" + _config.requestId + "】 参数：" + JSON.stringify(_config.data))
+        }
       }
-    },
-    list: function list() {
-      this.init('list');
-    } } };exports.commonMixin = commonMixin;
 
-/***/ }),
+      uni.request(_config);
+    });
+  },
+  get: function get(url, data, options) {
+    if (!options) {
+      options = {};
+    }
+    options.url = url;
+    options.data = data;
+    options.method = 'GET';
+    return this.request(options);
+  },
+  post: function post(url, data, options) {
+    if (!options) {
+      options = {};
+    }
+    options.url = url;
+    options.data = data;
+    options.method = 'POST';
+    return this.request(options);
+  },
+  put: function put(url, data, options) {
+    if (!options) {
+      options = {};
+    }
+    options.url = url;
+    options.data = data;
+    options.method = 'PUT';
+    return this.request(options);
+  },
+  delete: function _delete(url, data, options) {
+    if (!options) {
+      options = {};
+    }
+    options.url = url;
+    options.data = data;
+    options.method = 'DELETE';
+    return this.request(options);
+  } };
 
-/***/ 196:
-/*!****************************************************************************************!*\
-  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/e-picker-plus/utils.min.js ***!
-  \****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-var _createClass = function () {function a(b, c) {for (var g, f = 0; f < c.length; f++) {g = c[f], g.enumerable = g.enumerable || !1, g.configurable = !0, 'value' in g && (g.writable = !0), Object.defineProperty(b, g.key, g);}}return function (b, c, f) {return c && a(b.prototype, c), f && a(b, f), b;};}();Object.defineProperty(exports, '__esModule', { value: !0 });function _classCallCheck(a, b) {if (!(a instanceof b)) throw new TypeError('Cannot call a class as a function');}var fmt = function fmt(a) {return 9 < a ? a : '0' + a;},isLeapYear = function isLeapYear(a) {return 0 == a % 4 && 0 != a % 100 || 0 == a % 100 && 0 == a % 400;},modesDef = { Y: { startRule: '2000', endRule: new Date().getFullYear() + '' }, YM: { startRule: '2000-01', endRule: new Date().getFullYear() + '-12' }, YMD: { startRule: '2000-01-01', endRule: new Date().getFullYear() + '-12-31' }, YMDh: { startRule: '2000-01-01 00', endRule: new Date().getFullYear() + '-12-31 23' }, YMDhm: { startRule: '2000-01-01 00:00', endRule: new Date().getFullYear() + '-12-31 23:59' }, YMDhms: { startRule: '2000-01-01 00:00:00', endRule: new Date().getFullYear() + '-12-31 23:59:59' }, h: { startRule: '00', endRule: '23' }, m: { startRule: '00', endRule: '59' }, s: { startRule: '00', endRule: '59' }, hm: { startRule: '00:00', endRule: '23:59' }, hms: { startRule: '00:00:00', endRule: '23:59:59' }, ms: { startRule: '00:00', endRule: '59:59' } },mp = exports.mp = { Y: "\u5E74", M: "\u6708", D: "\u65E5", h: "\u65F6", m: "\u5206", s: "\u79D2" },PickerRun = exports.PickerRun = function () {function a(b) {_classCallCheck(this, a);var c = b.mode,f = b.startRule,g = b.endRule,h = b.defaultValue;this.mode = c, this.columns = c.split(''), this.firstKey = c[0], this.startRule = f || this.getDefRule('startRule'), this.endRule = g || this.getDefRule('endRule'), this.defaultValue = h || this.getLocalTime();}return _createClass(a, [{ key: 'initContainer', value: function initContainer() {var b = {},c = this.datetime2Obj(this.startRule),f = this.datetime2Obj(this.endRule),g = !0,h = !1,j = void 0;try {for (var n, l = this.columns[Symbol.iterator](); !(g = (n = l.next()).done); g = !0) {var o = n.value,p = parseInt(c[o]),q = parseInt(f[o]);if ('D' === o) {var r = this.datetime2Obj(this.defaultValue);q = this.getDays(r.Y, r.M);}b[o] = this.getColumn(p, q);}} catch (o) {h = !0, j = o;} finally {try {!g && l.return && l.return();} finally {if (h) throw j;}}return b;} }, { key: 'getValue', value: function getValue() {var b = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : !0,c = this.datetime2Obj(this.defaultValue);return !1 === b && (c = this.datetime2Obj(this.getLocalTime())), this.obj2Value(this.datetime2Obj(this.startRule), c);} }, { key: 'getDays', value: function getDays(b, c) {var f = [31, isLeapYear(b) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];return f[+c - 1];} }, { key: 'getColumn', value: function getColumn(b, c) {for (var f = [], g = b; g <= c; g++) {f.push(fmt(g) + '');}return f;} }, { key: 'value2Obj', value: function value2Obj(b, c) {for (var f = {}, g = 0; g < this.columns.length; g++) {f[this.columns[g]] = c[this.columns[g]][b[g]];}return f;} }, { key: 'time2Timestamp', value: function time2Timestamp(b) {return new Date(b).getTime();} }, { key: 'getLocalTime', value: function getLocalTime(b) {var c = new Date(),f = { Y: '' + c.getFullYear(), YM: c.getFullYear() + '-' + fmt(c.getMonth() + 1), YMD: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()), YMDh: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()), YMDhm: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()) + ':' + fmt(c.getMinutes()), YMDhms: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), h: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), hm: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), hms: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), m: '' + fmt(c.getMinutes()), s: '' + fmt(c.getSeconds()), ms: fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()) };return b ? f[b] : f[this.mode];} }, { key: 'obj2Arr', value: function obj2Arr(b) {var c = [];for (var f in b) {c.push(b[f] + mp[f]);}return c;} }, { key: 'obj2Value', value: function obj2Value(b, c) {var f = [];for (var g in c) {f.push(+c[g] - +b[g]);}return f;} }, { key: 'getDefRule', value: function getDefRule(b) {return modesDef[this.mode][b];} }, { key: 'datetime2Obj', value: function datetime2Obj(b, c) {var f = this.columns;c && (f = c);for (var g = {}, h = b.split(/-|:|\s/), j = 0; j < h.length; j++) {g[f[j]] = h[j];}return g;} }, { key: 'obj2DateTime', value: function obj2DateTime(b) {var c = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : !0,f = '';for (var h in b) {f += b[h] + mp[h];}var g = f.replace("\u5E74", '-').replace("\u6708", '-').replace("\u65E5", ' ').replace("\u65F6", ':').replace("\u5206", ':').replace("\u79D2", '');return !this.mode.endsWith('s') && c && (g = g.substring(0, g.length - 1)), g;} }, { key: 'getWholeTime', value: function getWholeTime(b) {var c = this.datetime2Obj(this.getLocalTime('YMDhms'), ['Y', 'M', 'D', 'h', 'm', 's']),f = {};for (var g in c) {f[g] = b[g] ? b[g] : c[g];}return this.obj2DateTime(f, !1);} }]), a;}();
+
+/**
+        * 请求接口日志记录
+        */exports.default = _default;
+function _reqlog(req) {
+  if (true) {
+    // console.log("【" + req.requestId + "】 地址：" + req.url)
+    if (req.data) {
+      // console.log("【" + req.requestId + "】 请求参数：" + JSON.stringify(req.data))
+    }
+  }
+  //TODO 调接口异步写入日志数据库
+}
+
+/**
+   * 响应接口日志记录
+   */
+function _reslog(res) {
+  var _statusCode = res.statusCode;
+  if (true) {
+    // console.log("【" + res.config.requestId + "】 地址：" + res.config.url)
+    if (res.config.data) {
+
+    } // console.log("【" + res.config.requestId + "】 请求参数：" + JSON.stringify(res.config.data))
+    // console.log("【" + res.config.requestId + "】 响应结果：" + JSON.stringify(res))
+  }
+  //TODO 除了接口服务错误外，其他日志调接口异步写入日志数据库
+  switch (_statusCode) {
+    case 200:
+      break;
+    case 401:
+      break;
+    case 404:
+      break;
+    default:
+      break;}
+
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
@@ -8167,6 +9391,194 @@ internalMixin(Vue);
 
 /***/ }),
 
+/***/ 220:
+/*!********************************************************************************!*\
+  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/lb-picker/utils.js ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.isObject = isObject;exports.getColumns = getColumns; /**
+                                                                                                                                         * 判断是否是对象
+                                                                                                                                         *
+                                                                                                                                         * @export
+                                                                                                                                         * @param {*} val
+                                                                                                                                         * @returns true/false
+                                                                                                                                         */
+function isObject(val) {
+  return Object.prototype.toString.call(val) === '[object Object]';
+}
+
+/**
+   * 根据value获取columns信息
+   *
+   * @export
+   * @param {*} { value, list, mode, props, level }
+   * @param {number} [type=2] 查询不到value数据返回数据类型 1空值null 2默认第一个选项
+   * @returns
+   */
+function getColumns(_ref) {var value = _ref.value,list = _ref.list,mode = _ref.mode,props = _ref.props,level = _ref.level;var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+  var pickerValue = [];
+  var pickerColumns = [];
+  var selectValue = [];
+  var selectItem = [];
+  var columnsInfo = null;
+  switch (mode) {
+    case 'selector':
+      var index = list.findIndex(function (item) {
+        return isObject(item) ? item[props.value] === value : item === value;
+      });
+      if (index === -1 && type === 1) {
+        columnsInfo = null;
+      } else {
+        index = index > -1 ? index : 0;
+        selectItem = list[index];
+        selectValue = isObject(selectItem) ?
+        selectItem[props.value] :
+        selectItem;
+        pickerColumns = list;
+        pickerValue = [index];
+        columnsInfo = {
+          index: pickerValue,
+          value: selectValue,
+          item: selectItem,
+          columns: pickerColumns };
+
+      }
+      break;
+    case 'multiSelector':
+      var setPickerItems = function setPickerItems() {var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+        if (!data.length) return;
+        var defaultValue = value || [];
+        if (index < level) {
+          var _value = defaultValue[index] || '';
+
+          var i = data.findIndex(function (item) {return item[props.label] === _value;});
+          if (i === -1 && type === 1) return;
+          i = i > -1 ? i : 0;
+          pickerValue[index] = i;
+          pickerColumns[index] = data;
+          if (data[i]) {
+            selectValue[index] = data[i][props.label];
+            selectItem[index] = data[i];
+            setPickerItems(data[i][props.children] || [], index + 1);
+          }
+        }
+      };
+      setPickerItems(list);
+      if (!selectValue.length && type === 1) {
+        columnsInfo = null;
+      } else {
+        columnsInfo = {
+          index: pickerValue,
+          value: selectValue,
+          item: selectItem,
+          columns: pickerColumns };
+
+      }
+      break;
+    case 'unlinkedSelector':
+      list.forEach(function (item, i) {
+        var index = item.findIndex(function (item) {
+          return isObject(item) ?
+          item[props.value] === value[i] :
+          item === value[i];
+        });
+        if (index === -1 && type === 1) return;
+        index = index > -1 ? index : 0;
+        var columnItem = list[i][index];
+        var valueItem = isObject(columnItem) ?
+        columnItem[props.value] :
+        columnItem;
+        pickerValue[i] = index;
+        selectValue[i] = valueItem;
+        selectItem[i] = columnItem;
+      });
+      pickerColumns = list;
+      if (!selectValue.length && type === 1) {
+        columnsInfo = null;
+      } else {
+        columnsInfo = {
+          index: pickerValue,
+          value: selectValue,
+          item: selectItem,
+          columns: pickerColumns };
+
+      }
+      break;}
+
+  return columnsInfo;
+}
+
+/***/ }),
+
+/***/ 228:
+/*!****************************************************************************************!*\
+  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/e-picker-plus/utils.min.js ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var _createClass = function () {function a(b, c) {for (var g, f = 0; f < c.length; f++) {g = c[f], g.enumerable = g.enumerable || !1, g.configurable = !0, 'value' in g && (g.writable = !0), Object.defineProperty(b, g.key, g);}}return function (b, c, f) {return c && a(b.prototype, c), f && a(b, f), b;};}();Object.defineProperty(exports, '__esModule', { value: !0 });function _classCallCheck(a, b) {if (!(a instanceof b)) throw new TypeError('Cannot call a class as a function');}var fmt = function fmt(a) {return 9 < a ? a : '0' + a;},isLeapYear = function isLeapYear(a) {return 0 == a % 4 && 0 != a % 100 || 0 == a % 100 && 0 == a % 400;},modesDef = { Y: { startRule: '2000', endRule: new Date().getFullYear() + '' }, YM: { startRule: '2000-01', endRule: new Date().getFullYear() + '-12' }, YMD: { startRule: '2000-01-01', endRule: new Date().getFullYear() + '-12-31' }, YMDh: { startRule: '2000-01-01 00', endRule: new Date().getFullYear() + '-12-31 23' }, YMDhm: { startRule: '2000-01-01 00:00', endRule: new Date().getFullYear() + '-12-31 23:59' }, YMDhms: { startRule: '2000-01-01 00:00:00', endRule: new Date().getFullYear() + '-12-31 23:59:59' }, h: { startRule: '00', endRule: '23' }, m: { startRule: '00', endRule: '59' }, s: { startRule: '00', endRule: '59' }, hm: { startRule: '00:00', endRule: '23:59' }, hms: { startRule: '00:00:00', endRule: '23:59:59' }, ms: { startRule: '00:00', endRule: '59:59' } },mp = exports.mp = { Y: "\u5E74", M: "\u6708", D: "\u65E5", h: "\u65F6", m: "\u5206", s: "\u79D2" },PickerRun = exports.PickerRun = function () {function a(b) {_classCallCheck(this, a);var c = b.mode,f = b.startRule,g = b.endRule,h = b.defaultValue;this.mode = c, this.columns = c.split(''), this.firstKey = c[0], this.startRule = f || this.getDefRule('startRule'), this.endRule = g || this.getDefRule('endRule'), this.defaultValue = h || this.getLocalTime();}return _createClass(a, [{ key: 'initContainer', value: function initContainer() {var b = {},c = this.datetime2Obj(this.startRule),f = this.datetime2Obj(this.endRule),g = !0,h = !1,j = void 0;try {for (var n, l = this.columns[Symbol.iterator](); !(g = (n = l.next()).done); g = !0) {var o = n.value,p = parseInt(c[o]),q = parseInt(f[o]);if ('D' === o) {var r = this.datetime2Obj(this.defaultValue);q = this.getDays(r.Y, r.M);}b[o] = this.getColumn(p, q);}} catch (o) {h = !0, j = o;} finally {try {!g && l.return && l.return();} finally {if (h) throw j;}}return b;} }, { key: 'getValue', value: function getValue() {var b = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : !0,c = this.datetime2Obj(this.defaultValue);return !1 === b && (c = this.datetime2Obj(this.getLocalTime())), this.obj2Value(this.datetime2Obj(this.startRule), c);} }, { key: 'getDays', value: function getDays(b, c) {var f = [31, isLeapYear(b) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];return f[+c - 1];} }, { key: 'getColumn', value: function getColumn(b, c) {for (var f = [], g = b; g <= c; g++) {f.push(fmt(g) + '');}return f;} }, { key: 'value2Obj', value: function value2Obj(b, c) {for (var f = {}, g = 0; g < this.columns.length; g++) {f[this.columns[g]] = c[this.columns[g]][b[g]];}return f;} }, { key: 'time2Timestamp', value: function time2Timestamp(b) {return new Date(b).getTime();} }, { key: 'getLocalTime', value: function getLocalTime(b) {var c = new Date(),f = { Y: '' + c.getFullYear(), YM: c.getFullYear() + '-' + fmt(c.getMonth() + 1), YMD: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()), YMDh: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()), YMDhm: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()) + ':' + fmt(c.getMinutes()), YMDhms: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), h: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), hm: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), hms: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), m: '' + fmt(c.getMinutes()), s: '' + fmt(c.getSeconds()), ms: fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()) };return b ? f[b] : f[this.mode];} }, { key: 'obj2Arr', value: function obj2Arr(b) {var c = [];for (var f in b) {c.push(b[f] + mp[f]);}return c;} }, { key: 'obj2Value', value: function obj2Value(b, c) {var f = [];for (var g in c) {f.push(+c[g] - +b[g]);}return f;} }, { key: 'getDefRule', value: function getDefRule(b) {return modesDef[this.mode][b];} }, { key: 'datetime2Obj', value: function datetime2Obj(b, c) {var f = this.columns;c && (f = c);for (var g = {}, h = b.split(/-|:|\s/), j = 0; j < h.length; j++) {g[f[j]] = h[j];}return g;} }, { key: 'obj2DateTime', value: function obj2DateTime(b) {var c = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : !0,f = '';for (var h in b) {f += b[h] + mp[h];}var g = f.replace("\u5E74", '-').replace("\u6708", '-').replace("\u65E5", ' ').replace("\u65F6", ':').replace("\u5206", ':').replace("\u79D2", '');return !this.mode.endsWith('s') && c && (g = g.substring(0, g.length - 1)), g;} }, { key: 'getWholeTime', value: function getWholeTime(b) {var c = this.datetime2Obj(this.getLocalTime('YMDhms'), ['Y', 'M', 'D', 'h', 'm', 's']),f = {};for (var g in c) {f[g] = b[g] ? b[g] : c[g];}return this.obj2DateTime(f, !1);} }]), a;}();
+
+/***/ }),
+
+/***/ 236:
+/*!***************************************************************************************!*\
+  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/lb-picker/mixins/index.js ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.commonMixin = void 0;var _utils = __webpack_require__(/*! ../utils */ 220);
+var commonMixin = {
+  data: function data() {
+    return {
+      indicatorStyle: "height: 34px" };
+
+  },
+  created: function created() {
+    this.init('init');
+  },
+  methods: {
+    init: function init(changeType) {
+      if (this.list && this.list.length) {
+        var column = (0, _utils.getColumns)({
+          value: this.value,
+          list: this.list,
+          mode: this.mode,
+          props: this.props,
+          level: this.level });var
+
+        columns = column.columns,value = column.value,item = column.item,index = column.index;
+        this.selectValue = value;
+        this.selectItem = item;
+        this.pickerColumns = columns;
+        this.pickerValue = index;
+        this.$emit('change', {
+          value: this.selectValue,
+          item: this.selectItem,
+          index: this.pickerValue,
+          change: changeType });
+
+      }
+    } },
+
+  watch: {
+    value: function value() {
+      if (!this.isConfirmChange) {
+        this.init('value');
+      }
+    },
+    list: function list() {
+      this.init('list');
+    } } };exports.commonMixin = commonMixin;
+
+/***/ }),
+
 /***/ 3:
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -8209,7 +9621,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 57:
+/***/ 61:
 /*!******************************************************************************!*\
   !*** /Users/linyutang/Desktop/jobwant/jobWanted/pages/home/area-data-min.js ***!
   \******************************************************************************/

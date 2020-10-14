@@ -1,72 +1,85 @@
 <template>
 	<view>
-		<view class="topView">
-
-			<view class="topView_nameView">
-				<view class="topView_nameView_name">
-					{{data.personMsg.name.length>0?data.personMsg.name:'姓名'}}
-				</view>
-				<view class="topView_nameView_xb">
-					{{data.personMsg.gender.length>0?data.personMsg.gender:'/女士'}}
-				</view>
-				<image class="rightBtn" src="../../static/cv/bj.png" mode=""></image>
-			</view>
-
-			<view v-if="data.personMsg.name.length>0">
-				<view class="topView_msg">
-					{{data.personMsg.age+'&nbsp|&nbsp'+data.personMsg.workTime+'&nbsp|&nbsp'+data.personMsg.address}}
-				</view>
-
-				<view class="view_item">
-					<image class="view_item_img" src="../../static/cv/phone.png" mode=""></image>
-					<view class="view_item_text"> {{data.personMsg.phone}}</view>
-				</view>
-
-				<view class="view_item">
-					<image class="view_item_img" src="../../static/cv/yx.png" mode=""></image>
-					<view class="view_item_text">{{data.personMsg.email}}</view>
-				</view>
-			</view>
-		</view>
-		<view class="line"></view>
 		
-		<view class="mycv">
-			<view class="cv_title">我的简历</view>
-				
-			<view class="cv_item" v-for="(item,index) in data.mycv" :key = "index">
-				<view class="cv_item_point"></view>
-				<view class="cv_item_text">
-					CRA简历
-				</view>
-				
-				<view class="cv_item_settingviews">
-					<view class="cv_item_settingviews_item" @click="showcv()">预览</view>
-					<view class="cv_item_settingviews_item" >下载</view>
-					<view class="cv_item_settingviews_item" @click="seettingCv()">修改</view>
-					<view class="cv_item_settingviews_item">删除</view>
-				</view>
-			</view>
-			
-			<view class="line"></view>
-		</view>
 		
-		<view class="mycv">
-			<view class="cv_title">导入简历</view>	
-			<view class="cv_item">
-				<view class="cv_item_point">
-					
-				</view>
-				<view class="cv_item_text">
-					CRA简历
-				</view>
+		 <d-alert v-if="showModal"></d-alert>
+		 
+		 <view class="" v-if="loginKey.length>0">
+		 	<view class="topView">
+		 	
+		 		<view class="topView_nameView">
+		 			<view class="topView_nameView_name">
+		 				{{dataInfo.realName.length>0?dataInfo.realName:'姓名'}}
+		 			</view>
+		 			<view class="topView_nameView_xb">
+		 				{{dataInfo.sexComment.length>0?'/'+dataInfo.sexComment:''}}
+		 			</view>
+		 			<image class="rightBtn" src="../../static/cv/bj.png" mode="" @click="userMsg()"> </image>
+		 		</view>     
+		 	
+		 		<view v-if="dataInfo.workYears.length>0">
+		 			<view class="topView_msg">
+		 				{{dataInfo.userAge+'&nbsp|&nbsp'+dataInfo.workYears+'&nbsp|&nbsp'+dataInfo.livingLocation}}
+		 			</view>
+		 	
+		 			<view class="view_item">
+		 				<image class="view_item_img" src="../../static/cv/phone.png" mode=""></image>
+		 				<view class="view_item_text"> {{dataInfo.contactPhoneNum}}</view>
+		 			</view>
+		 	
+		 			<view class="view_item">
+		 				<image class="view_item_img" src="../../static/cv/yx.png" mode=""></image>
+		 				<view class="view_item_text">{{dataInfo.email}}</view>
+		 			</view>
+		 		</view>
+		 	</view>
+		 	<view class="line"></view>
+		 	
+		 	<view class="mycv">
 				
-				<view class="cv_item_settingviews">
-					<view class="cv_item_settingviews_item">预览</view>
-					<view class="cv_item_settingviews_item">删除</view>
+				<view class="plateItemview_titleView">
+					<view class="plateItemview_titleView_title">
+						我的简历
+					</view>
+					<image class="rightBtn" src="../../static/cv/tj.png" mode="" @click="addcv()"></image>
 				</view>
-			</view>
+		 		
+		 			
+		 		<view class="cv_item" v-for="(item,index) in data.mycv" :key = "index">
+		 			<view class="cv_item_point"></view>
+		 			<view class="cv_item_text">
+		 				CRA简历
+		 			</view>
+		 			
+		 			<view class="cv_item_settingviews">
+		 				<view class="cv_item_settingviews_item" @click="showcv()">预览</view>
+		 				<view class="cv_item_settingviews_item" >下载</view>
+		 				<view class="cv_item_settingviews_item" @click="seettingCv()">修改</view>
+		 				<view class="cv_item_settingviews_item">删除</view>
+		 			</view>
+		 		</view>
+		 	</view>
 			<view class="line"></view>
-		</view>
+		 	
+		 	<view class="mycv">
+		 		<view class="cv_title">导入简历</view>	
+		 		<view class="cv_item">
+		 			<!-- <view class="cv_item_point">
+		 				
+		 			</view>
+		 			<view class="cv_item_text">
+		 				CRA简历
+		 			</view>
+		 			
+		 			<view class="cv_item_settingviews">
+		 				<view class="cv_item_settingviews_item">预览</view>
+		 				<view class="cv_item_settingviews_item">删除</view>
+		 			</view> -->
+		 		</view>
+		 		<view class="line"></view>
+		 	</view>
+		 </view>
+		
 	</view>
 </template>
 
@@ -76,38 +89,92 @@
 			return {
 				showWorkExperience: false,
 				showWorkExperienceNumb: 2,
-				data: {
-					personMsg: {
-						name: '临小妹',
-						age: '36岁',
-						gender: '女士',
-						workTime: '工作17年',
-						address: '北京-朝阳',
-						phone: '13552300611',
-						email: '476459169@qq.com',
-						xl: '本科',
-
-					},
-
-					mycv: [{
-						cvName: 'CRA简历',
-						cvid: ''
-					}, {
-						cvName: 'CRA简历',
-						cvid: ''
-					}],
-					
-					
-
-					evaluation: '自我评价 自我评价 自我评价 自我评价 自我评价 自我评价',
-					reloadTime: "2020.04.26"
-
-
-
-				}
+				loginKey:'',
+				showModal:true,
+				dataInfo: Object,
 			};
 		},
+		
+		onShow() {
+			this.getuserInfo()
+		},
 		methods: {
+			
+			getuserInfo() {
+				// 
+				var loginkey = uni.getStorageSync('loginKey');
+				if (loginkey){
+					this.loginKey = loginkey;
+					this.$api.post('user!ajaxGetUserInfo.action', {
+						loginKey: loginkey
+					}).then(res => {
+						if (res.res.status == 0) {
+							// this.sfz = res.inf.subCardNo
+							console.log("have loginkey");
+							this.showModal = false;
+							this.getResumeInfo();
+						} else {
+							uni.removeStorageSync('loginKey');
+							uni.removeStorageSync('userId');
+							uni.removeStorageSync('isFill');
+							this.showModal = true;
+							this.showLoginModal();
+						}
+					})
+					
+				}else{
+					this.showModal = true;
+					this.showLoginModal();
+				}
+			},
+			
+			getResumeInfo(){
+				var loginkey = uni.getStorageSync('loginKey');
+				if (loginkey){
+					this.loginKey = loginkey;
+					this.$api.post('resume!ajaxGetResumeInfo.action', {
+						loginKey: loginkey
+					}).then(res => {
+						if (res.res.status == 0) {
+							this.dataInfo =  res.inf
+						} else {
+							uni.showToast({
+								title:res.res.error
+							})
+						}
+					})
+					
+				}else{
+					this.showModal = true;
+					this.showLoginModal();
+				}
+			},
+			
+			showLoginModal(){
+				
+					this.$showModal({
+						title: "温馨提示",
+						content: '登录过后才可体验求职小程序',
+						showCancel: true,
+						cancelText: "取消",
+						cancelColor: "#000000",
+						confirmText: "登录",
+						confirmColor: "#3CC51F",
+						success: function(res) {
+							if (res.confirm) {
+								uni.navigateTo({
+									url: '../login/login'
+								})
+							} else {
+							}
+						}
+					})
+				
+			},
+			
+			addcv(){
+				
+			},
 			dowmViewClick() {
 				this.showWorkExperience = !this.showWorkExperience
 				if (this.showWorkExperience == true) {
@@ -134,6 +201,13 @@
 				uni.navigateTo({
 					url:'./cvsetting'
 				})
+			},
+			
+			userMsg(){
+				uni.navigateTo({
+					url:'./basicInformation'
+				})
+				
 			}
 		}
 	}
@@ -156,7 +230,7 @@
 			.topView_nameView_xb {
 				color: #999999;
 				font-size: 12px;
-				margin-top: 3px;
+				margin-top: 5px;
 				margin-left: 3px;
 				flex: 1;
 			}
@@ -256,6 +330,34 @@
 				}
 			}
 			
+		}
+	}
+	
+	.plateItemview_titleView {
+		display: flex;
+		align-items: center;
+		height: 30px;
+	
+		.plateItemview_titleView_title {
+			font-size: 12px;
+			color: #666666;
+			flex: 1;
+		}
+	
+		.plateItemview_titleView_mes {
+			width: 40px;
+			height: 15px;
+			line-height: 15px;
+			font-size: 12px;
+			margin-left: 5px;
+			color: #e8654b;
+			border-radius: 7.5px;
+			border: 1px solid #e8654b;
+			text-align: center;
+		}
+	
+		.plateItemview_titleView_noneview {
+			flex: 1;
 		}
 	}
 

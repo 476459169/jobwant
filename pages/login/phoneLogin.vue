@@ -9,7 +9,7 @@
 			
 			
 			<view class="header_title">
-				<text style="color: #F56C6C;">hi</text>&nbsp欢迎来到临研招聘
+				<text style="color: #F56C6C;">hi</text>{{zwf}}欢迎来到临研招聘
 			</view>
 			<view class="header_title_s">
 				首次登录将自动注册
@@ -50,6 +50,7 @@
 
 		data() {
 			return {
+				zwf:'\u3000',
 				phoneNum: null,
 				VerificationCode: null,
 				VerificationMes: "发送验证码",
@@ -127,7 +128,7 @@
 									});
 									setTimeout(function() {
 										uni.navigateBack({
-											delta: 1
+											delta: 2
 										})
 									}, 1500)
 								}

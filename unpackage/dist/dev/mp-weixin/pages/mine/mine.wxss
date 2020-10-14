@@ -44,7 +44,8 @@
 .topView .user_img {
   width: 80px;
   height: 80px;
-  border-radius: 40px;
+  -webkit-border-radius: 40px;
+          border-radius: 40px;
   background-color: #e8654b;
 }
 .topView .user_name {
@@ -54,7 +55,7 @@
   line-height: 25px;
 }
 .item {
-  margin: 0px 15px 20px 15px;
+  margin: 0px 15px 10px 15px;
   background-color: #f5f7f8;
   display: -webkit-box;
   display: -webkit-flex;
@@ -63,7 +64,8 @@
   -webkit-align-items: center;
           align-items: center;
   padding: 10px;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
 }
 .item .item_img {
   width: 15px;
