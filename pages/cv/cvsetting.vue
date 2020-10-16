@@ -2,14 +2,29 @@
 	<view>
 
 
-		<view class="itemview" style="margin-top: 10px;">
+		<!-- <view class="itemview" style="margin-top: 10px;">
 			<view class="itemview_title">简历名称<text class="btxet">{{zwf}}⦁</text></view>
 			<input class="itemview_text" type="text" value="" />
 		</view>
+		 -->
+		<view class="plateItemview">
+			<view class="plateItemview_titleView">
+				<view class="plateItemview_titleView_title">简历名称<text class="btxet">{{zwf}}⦁</text></view>
+				<!-- <view class="plateItemview_titleView_mes">必填</view> -->
+				<view class="plateItemview_titleView_noneview"></view>
+				<image class="rightBtn" src="../../static/cv/bj.png" mode=""></image>
+			</view>
 		
-		
+			<view class="" v-if="data.title.length>0">
+				<view class="plateItemview_titleView_title" style="color: #666666;">
+					{{data.title}}
+				</view>
+			</view>
+		</view>
+
+
 		<view class="selectView">
-			
+
 			<view class="selectView_item">
 				<view class="titleLabel">简历状态</view>
 				<view class="input_text" @tap="handleTap('picker11111')">
@@ -17,13 +32,13 @@
 						{{status}}
 					</view>
 					<view class="input_text_imgView">
-							<image class="input_text_imgView_img" src="../../static/login/star3.png" mode=""></image>
+						<image class="input_text_imgView_img" src="../../static/login/star3.png" mode=""></image>
 					</view>
 				</view>
 				<lb-picker ref="picker11111" v-model="status" mode="selector" :list="cvtype" @confirm="handleConfirm">
 				</lb-picker>
 			</view>
-			
+
 			<view class="selectView_item">
 				<view class="titleLabel">是否置顶</view>
 				<view class="input_text" @tap="handleTap('picker111111')">
@@ -31,17 +46,17 @@
 						{{zd}}
 					</view>
 					<view class="input_text_imgView">
-							<image class="input_text_imgView_img" src="../../static/login/star3.png" mode=""></image>
+						<image class="input_text_imgView_img" src="../../static/login/star3.png" mode=""></image>
 					</view>
 				</view>
 				<lb-picker ref="picker111111" v-model="zd" mode="selector" :list="zdArr">
 				</lb-picker>
 			</view>
-			
-			
+
+
 		</view>
-		
-		
+
+
 		<view class="plateItemview">
 			<view class="plateItemview_titleView" @click="wantjobClick()">
 				<view class="plateItemview_titleView_title">求职意向<text class="btxet">{{zwf}}⦁</text></view>
@@ -69,15 +84,15 @@
 				<view class="plateItemview_titleView_title">
 					工作/实习经验<text class="btxet">{{zwf}}⦁</text>
 				</view>
-			<!-- 	<view class="plateItemview_titleView_mes">
+				<!-- 	<view class="plateItemview_titleView_mes">
 					必填
 				</view> -->
 				<view class="plateItemview_titleView_noneview"></view>
 				<image class="rightBtn" src="../../static/cv/tj.png" mode="" @click="addworkExperienceClick()"></image>
 			</view>
 
-			<view v-if="data.workExperience.length>0">
-				<view class="work_experienceView" v-for="(item,index) in data.workExperience" :key="index">
+			<view v-if="data.workExpArr.length>0">
+				<view class="work_experienceView" v-for="(item,index) in data.workExpArr" :key="index">
 					<view class="" v-if="index<showWorkExperienceNumb">
 						<view class="view_item">
 							<image class="view_item_img" src="../../static/cv/gs.png"></image>
@@ -109,8 +124,8 @@
 				<image class="rightBtn" src="../../static/cv/tj.png" @click="educationClick()"></image>
 			</view>
 
-			<view v-if="data.educationExperience.length>0">
-				<view class="work_experienceView" v-for="(item,index) in data.educationExperience" :key="index">
+			<view v-if="data.educationArr.length>0">
+				<view class="work_experienceView" v-for="(item,index) in data.educationArr" :key="index">
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/b.png"></image>
 						<view class="view_item_text">{{item.school}}</view>
@@ -132,8 +147,8 @@
 				<view class="plateItemview_titleView_noneview"></view>
 				<image class="rightBtn" src="../../static/cv/tj.png" @click="projecClick()"></image>
 			</view>
-			<view v-if="data.projectExperience.length>0">
-				<view class="work_experienceView" v-for="(item,index) in data.projectExperience" :key="index">
+			<view v-if="data.projectExpArr.length>0">
+				<view class="work_experienceView" v-for="(item,index) in data.projectExpArr" :key="index">
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/b.png"></image>
 						<view class="view_item_text">{{item.project}}</view>
@@ -155,8 +170,8 @@
 				<view class="plateItemview_titleView_noneview"></view>
 				<image class="rightBtn" src="../../static/cv/tj.png"></image>
 			</view>
-			<view v-if="data.certificate.length>0">
-				<view v-for="(item,index) in data.certificate" :key="index">
+			<view v-if="data.certificateArr.length>0">
+				<view v-for="(item,index) in data.certificateArr" :key="index">
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/b.png"></image>
 						<view class="view_item_text">{{item.certificateName}}</view>
@@ -165,7 +180,7 @@
 			</view>
 		</view>
 
-<!-- 
+		<!-- 
 		<view class="plateItemview">
 			<view class="plateItemview_titleView">
 				<view class="plateItemview_titleView_title">培训经历</view>
@@ -208,7 +223,7 @@
 				<image class="rightBtn" src="../../static/cv/bj.png" @click="assessmen()"></image>
 			</view>
 			<view class="self_pj">
-				{{data.evaluation}}
+				{{data.selfEvaluation}}
 			</view>
 		</view>
 
@@ -225,124 +240,152 @@
 			return {
 				showWorkExperience: false,
 				showWorkExperienceNumb: 2,
-				status:'公开',
-				cvtype:[{label:'保密',value:'1'},{label:'公开',value:'2'}],
-				zd:'是',
-				zdArr:['是','否'],
-				zwf:'\u0020',
-				data: {
-					personMsg: {
-						name: '临小妹',
-						age: '36岁',
-						gender: '女士',
-						workTime: '工作17年',
-						address: '北京-朝阳',
-						phone: '13552300611',
-						email: '476459169@qq.com',
-						xl: '本科',
+				status: '公开',
+				cvtype: [{
+					label: '保密',
+					value: '1'
+				}, {
+					label: '公开',
+					value: '2'
+				}],
+				zd: '是',
+				zdArr: ['是', '否'],
+				zwf: '\u0020',
+				data: Object,
+				// data: {
+				// 	personMsg: {
+				// 		name: '临小妹',
+				// 		age: '36岁',
+				// 		gender: '女士',
+				// 		workTime: '工作17年',
+				// 		address: '北京-朝阳',
+				// 		phone: '13552300611',
+				// 		email: '476459169@qq.com',
+				// 		xl: '本科',
 
-					},
-					jobwant: {
-						time: '月内到岗',
-						job: ['CRA', 'PM'],
+				// 	},
+				// 	jobwant: {
+				// 		time: '月内到岗',
+				// 		job: ['CRA', 'PM'],
 
-					},
-					workExperience: [
-						{
-							company: '临语堂（天津）健康管理有限公司',
-							beginTime: '2018.3',
-							endTime: '至今',
-							job: 'CTA',
-							detail: '工作详情',
-							salary: '7k/月',
-							id:1
-						},
-						{
-							company: '临语堂（天津）健康管理有限公司',
-							beginTime: '2018.3',
-							endTime: '至今',
-							job: 'CTA',
-							detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-							salary: '7k/月'
-						},
-						{
-							company: '临语堂（天津）健康管理有限公司',
-							beginTime: '2018.3',
-							endTime: '至今',
-							job: 'CTA',
-							detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-							salary: '7k/月'
-						}
-					],
-					educationExperience: [
-						// {
-						// 	school: '湖北医药大学',
-						// 	beginTime: '2018.3',
-						// 	endTime: '至今',
-						// 	xl: '本科',
-						// 	discipline: '药理学'
-						// },
-						// {
-						// 	school: '湖北医药大学',
-						// 	beginTime: '2018.3',
-						// 	endTime: '至今',
-						// 	xl: '本科',
-						// 	discipline: '药理学'
-						// }
-					],
-					projectExperience: [
-					// 	{
-					// 	project: '肿瘤项目三期',
-					// 	beginTime: '2018.3',
-					// 	endTime: '至今',
-					// 	msg: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工'
-					// },
-					],
-					certificate: [
-						// {
-						// 	certificateName: 'GCP证书',
-						// 	certificateJG: '临语堂'
-						// },
-						// {
-						// 	certificateName: 'GCP证书',
-						// 	certificateJG: '临语堂'
-						// }
-					],
-					trainingExperience: [
-						// {
-						// 	trainingJG: '临语堂培训',
-						// 	beginTime: '2018.3',
-						// 	endTime: '至今',
-						// },
-						// {
-						// 	trainingJG: '临语堂培训',
-						// 	beginTime: '2018.3',
-						// 	endTime: '至今',
-						// }
-					],
-					language: [
-						// {
-						// 	language: '汉语'
-						// },
-						// {
-						// 	language: '英语'
-						// }
-					],
-					evaluation: '自我评价 自我评价 自我评价 自我评价 自我评价 自我评价',
-					reloadTime: "2020.04.26"
-
-
-
-				}
+				// 	},
+				// 	workExperience: [
+				// 		{
+				// 			company: '临语堂（天津）健康管理有限公司',
+				// 			beginTime: '2018.3',
+				// 			endTime: '至今',
+				// 			job: 'CTA',
+				// 			detail: '工作详情',
+				// 			salary: '7k/月',
+				// 			id:1
+				// 		},
+				// 		{
+				// 			company: '临语堂（天津）健康管理有限公司',
+				// 			beginTime: '2018.3',
+				// 			endTime: '至今',
+				// 			job: 'CTA',
+				// 			detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
+				// 			salary: '7k/月'
+				// 		},
+				// 		{
+				// 			company: '临语堂（天津）健康管理有限公司',
+				// 			beginTime: '2018.3',
+				// 			endTime: '至今',
+				// 			job: 'CTA',
+				// 			detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
+				// 			salary: '7k/月'
+				// 		}
+				// 	],
+				// 	educationExperience: [
+				// 		// {
+				// 		// 	school: '湖北医药大学',
+				// 		// 	beginTime: '2018.3',
+				// 		// 	endTime: '至今',
+				// 		// 	xl: '本科',
+				// 		// 	discipline: '药理学'
+				// 		// },
+				// 		// {
+				// 		// 	school: '湖北医药大学',
+				// 		// 	beginTime: '2018.3',
+				// 		// 	endTime: '至今',
+				// 		// 	xl: '本科',
+				// 		// 	discipline: '药理学'
+				// 		// }
+				// 	],
+				// 	projectExperience: [
+				// 	// 	{
+				// 	// 	project: '肿瘤项目三期',
+				// 	// 	beginTime: '2018.3',
+				// 	// 	endTime: '至今',
+				// 	// 	msg: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工'
+				// 	// },
+				// 	],
+				// 	certificate: [
+				// 		// {
+				// 		// 	certificateName: 'GCP证书',
+				// 		// 	certificateJG: '临语堂'
+				// 		// },
+				// 		// {
+				// 		// 	certificateName: 'GCP证书',
+				// 		// 	certificateJG: '临语堂'
+				// 		// }
+				// 	],
+				// 	trainingExperience: [
+				// 		// {
+				// 		// 	trainingJG: '临语堂培训',
+				// 		// 	beginTime: '2018.3',
+				// 		// 	endTime: '至今',
+				// 		// },
+				// 		// {
+				// 		// 	trainingJG: '临语堂培训',
+				// 		// 	beginTime: '2018.3',
+				// 		// 	endTime: '至今',
+				// 		// }
+				// 	],
+				// 	language: [
+				// 		// {
+				// 		// 	language: '汉语'
+				// 		// },
+				// 		// {
+				// 		// 	language: '英语'
+				// 		// }
+				// 	],
+				// 	evaluation: '自我评价 自我评价 自我评价 自我评价 自我评价 自我评价',
+				// 	reloadTime: "2020.04.26"
+				// }
 			};
 		},
-		methods: {
+
+		onLoad(e) {
+			this.id = e.id
+			console.log('id='+e.id);
+			this.getDetailMes()
 			
+		},
+		methods: {
+
+			getDetailMes() {
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxGetOnlineResumeInfo.action', {
+					loginKey: loginkey,
+					resumeId:this.id
+				}).then(res => {
+				if (res.res.status == 0) {
+					this.data = res.inf
+				} else {
+					uni.showToast({
+						title: res.res.error
+					})
+				}		
+				
+				})
+			},
+
 			handleTap(picker) {
 				this.$refs[picker].show()
 			},
-			handleConfirm(e){
-				console.log('handconfirm'+e.item.value);
+			handleConfirm(e) {
+				console.log('handconfirm' + e.item.value);
 			},
 			dowmViewClick() {
 				this.showWorkExperience = !this.showWorkExperience
@@ -353,30 +396,30 @@
 				}
 				console.log('this.showWorkExperience = ' + this.showWorkExperienceNumb);
 			},
-			
-			educationClick(){
+
+			educationClick() {
 				uni.navigateTo({
-					url:'./educationExperience'
+					url: './educationExperience'
 				})
 			},
-			
-			addworkExperienceClick(){
 
-					uni.navigateTo({
-						url:'./workExperience'
-					})
+			addworkExperienceClick() {
+
+				uni.navigateTo({
+					url: './workExperience?id='+this.id
+				})
 			},
-			
-			workExperienceClick(item,index){
-				console.log('index = '+index);
-				
-				console.log("workExperience="+item.id);
-				if(item){
+
+			workExperienceClick(item, index) {
+				console.log('index = ' + index);
+
+				console.log("workExperience=" + item.id);
+				if (item) {
 					uni.navigateTo({
-						url:'./workExperience?data='+encodeURIComponent(JSON.stringify(item))
+						url: './workExperience?workExpId=' + item.workExpId
 					})
 				}
-				
+
 			},
 
 			wantjobClick() {
@@ -384,15 +427,15 @@
 					url: '../mine/jobManage'
 				})
 			},
-			projecClick(){
+			projecClick() {
 				uni.navigateTo({
 					url: './projectExpere'
 				})
 			},
-			
-			assessmen(){
+
+			assessmen() {
 				uni.navigateTo({
-					url:'./assessment'
+					url: './assessment'
 				})
 			}
 		}
@@ -409,8 +452,8 @@
 			font-size: 14px;
 		}
 	}
-	
-	.btxet{
+
+	.btxet {
 		color: #e8654b;
 	}
 
@@ -491,6 +534,7 @@
 	.work_experienceView {
 		font-size: 12px;
 		margin-top: 5px;
+
 		.work_experienceView_time {
 			color: #666666;
 			height: 15px;
@@ -581,19 +625,21 @@
 			background-color: #f5f7f8;
 		}
 	}
-	
-	.selectView{
+
+	.selectView {
 		display: flex;
 		align-items: center;
 		margin-bottom: 10px;
-		.selectView_item{
+
+		.selectView_item {
 			flex: 1;
-			.titleLabel{
+
+			.titleLabel {
 				font-size: 14px;
 				line-height: 15px;
 				padding: 10px;
 			}
-			
+
 			.input_text {
 				margin: 0px 10px;
 				height: 20px;
@@ -604,12 +650,13 @@
 				color: #666666;
 				align-items: center;
 				padding: 5px 0px 5px 5px;
-				.input_text_content{
+
+				.input_text_content {
 					flex: 1;
 					// height: 20px;
 				}
-				
-				.input_text_imgView{
+
+				.input_text_imgView {
 					width: 30px;
 					height: 30px;
 					background-color: #e8654b;
@@ -618,6 +665,7 @@
 					display: flex;
 					align-items: center;
 					justify-content: center;
+
 					.input_text_imgView_img {
 						width: 8px;
 						height: 5px;
@@ -625,8 +673,8 @@
 				}
 			}
 		}
-		
-		
-		
+
+
+
 	}
 </style>

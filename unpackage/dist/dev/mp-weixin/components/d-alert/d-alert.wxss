@@ -58,8 +58,7 @@
 .wrapperAlert .wrapperAlertBox.data-v-e6608128 {
   width: 80%;
   background-color: #fff;
-  -webkit-border-radius: 15rpx;
-          border-radius: 15rpx;
+  border-radius: 15rpx;
 }
 .wrapperAlert .wrapperAlertBox .wrapperAlertBoxTitle.data-v-e6608128 {
   width: 100%;

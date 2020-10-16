@@ -61,7 +61,8 @@
 						<image class="input_text_imgView_img" src="../../static/login/star3.png" mode=""></image>
 					</view>
 				</view>
-				<e-picker-plus ref="pickerdate11" @confirm="confirm1" mode="YM"  :endRule=currentDate> </e-picker-plus>
+				<!-- <e-picker-plus ref="pickerdate11" @confirm="confirm1" mode="YM"  :endRule=currentDate> </e-picker-plus> -->
+				<bory-dateTimePicker ref='pickerdate11' :indicatorStyle='indicatorStyle' :type='type' :datestring='bornTime' @change='confirm1'></bory-dateTimePicker>
 			</view>
 
 
@@ -78,7 +79,8 @@
 						<image class="input_text_imgView_img" src="../../static/login/star3.png" mode=""></image>
 					</view>
 				</view>
-				<e-picker-plus ref="pickerdate11223" @confirm="confirm2" mode="YM" :endRule=currentDate> </e-picker-plus>
+				<!-- <e-picker-plus ref="pickerdate11223" @confirm="confirm2" mode="YM" :endRule=currentDate> </e-picker-plus> -->
+					<bory-dateTimePicker ref='pickerdate11223' :indicatorStyle='indicatorStyle' :type='type' :datestring='workTime' @change='confirm2'></bory-dateTimePicker>
 			</view>
 		</view>
 
@@ -130,7 +132,8 @@
 				workTime: '',
 				email: '',
 				dataInfo: Object,
-				id: null
+				id: null,
+				type:'year-month'
 			};
 		},
 
@@ -145,7 +148,14 @@
 				} else {
 					return '女'
 				}
-			}
+			},
+			indicatorStyle() {
+			                return {
+			                    background: 'rgba(255,0,0,.2)',
+			                    height: '40px',
+			                };
+			            }
+
 		},
 
 		methods: {
@@ -193,11 +203,15 @@
 			handleTap(picker) {
 				this.$refs[picker].show()
 			},
+			
+				
+			
 			confirm1(e) {
-				this.bornTime = e.result
+				// this.bornTime = e.result
+				this.bornTime = e;
 			},
 			confirm2(e) {
-				this.workTime = e.result
+				this.workTime = e
 			},
 			handleConfirm(e) {
 				this.sex = e.item.value;

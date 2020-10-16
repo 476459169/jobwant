@@ -126,8 +126,7 @@
   font-size: 12px;
   margin-left: 5px;
   color: #e8654b;
-  -webkit-border-radius: 7.5px;
-          border-radius: 7.5px;
+  border-radius: 7.5px;
   border: 1px solid #e8654b;
   text-align: center;
 }

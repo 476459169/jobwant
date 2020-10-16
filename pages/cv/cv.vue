@@ -45,17 +45,17 @@
 				</view>
 		 		
 		 			
-		 		<view class="cv_item" v-for="(item,index) in data.mycv" :key = "index">
+		 		<view class="cv_item" v-for="(item,index) in dataInfo.resumeArr" :key = "index">
 		 			<view class="cv_item_point"></view>
 		 			<view class="cv_item_text">
-		 				CRA简历
+		 				{{item.title}}
 		 			</view>
 		 			
 		 			<view class="cv_item_settingviews">
 		 				<view class="cv_item_settingviews_item" @click="showcv()">预览</view>
 		 				<view class="cv_item_settingviews_item" >下载</view>
-		 				<view class="cv_item_settingviews_item" @click="seettingCv()">修改</view>
-		 				<view class="cv_item_settingviews_item">删除</view>
+		 				<view class="cv_item_settingviews_item" @click="seettingCv(item.id)">修改</view>
+		 				<view class="cv_item_settingviews_item" @click="removeCv(item.id)">删除</view>
 		 			</view>
 		 		</view>
 		 	</view>
@@ -173,6 +173,27 @@
 			},
 			
 			addcv(){
+				var loginkey = uni.getStorageSync('loginKey');
+				if (loginkey){
+					this.loginKey = loginkey;
+					this.$api.post('resume!ajaxCreateResume.action', {
+						loginKey: loginkey
+					}).then(res => {
+						if (res.res.status == 0) {
+							 uni.navigateTo({
+							 	url:'./cvsetting?id='+res.inf.id
+							 })
+						} else {
+							uni.showToast({
+								title:res.res.error
+							})
+						}
+					})
+					
+				}else{
+					this.showModal = true;
+					this.showLoginModal();
+				}
 				
 			},
 			dowmViewClick() {
@@ -197,10 +218,29 @@
 					url:'./showcv'
 				})
 			},
-			seettingCv(){
+			seettingCv(id){
 				uni.navigateTo({
-					url:'./cvsetting'
+					url:'./cvsetting?id='+id
 				})
+			},
+			
+			removeCv(id){
+				
+					var loginkey = uni.getStorageSync('loginKey');
+					this.$api.post('resume!ajaxDeleteResume.action', {
+						loginKey: loginkey,
+						resumeId:id
+					}).then(res => {
+						if (res.res.status == 0) {
+							this.getResumeInfo()
+						} else {
+							uni.showToast({
+								title:res.res.error
+							})
+						}
+					})
+					
+				
 			},
 			
 			userMsg(){

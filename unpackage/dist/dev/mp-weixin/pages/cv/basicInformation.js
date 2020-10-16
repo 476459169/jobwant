@@ -96,8 +96,8 @@ var components = {
   lbPicker: function() {
     return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 215))
   },
-  ePickerPlus: function() {
-    return Promise.all(/*! import() | components/e-picker-plus/e-picker-plus */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/e-picker-plus/e-picker-plus")]).then(__webpack_require__.bind(null, /*! @/components/e-picker-plus/e-picker-plus.vue */ 223))
+  boryDateTimePicker: function() {
+    return Promise.all(/*! import() | components/bory-dateTimePicker/bory-dateTimePicker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/bory-dateTimePicker/bory-dateTimePicker")]).then(__webpack_require__.bind(null, /*! @/components/bory-dateTimePicker/bory-dateTimePicker.vue */ 281))
   }
 }
 var render = function() {
@@ -245,6 +245,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 var _default =
 {
   data: function data() {
@@ -269,7 +271,8 @@ var _default =
       workTime: '',
       email: '',
       dataInfo: Object,
-      id: null };
+      id: null,
+      type: 'year-month' };
 
   },
 
@@ -284,7 +287,14 @@ var _default =
       } else {
         return '女';
       }
+    },
+    indicatorStyle: function indicatorStyle() {
+      return {
+        background: 'rgba(255,0,0,.2)',
+        height: '40px' };
+
     } },
+
 
 
   methods: {
@@ -332,11 +342,15 @@ var _default =
     handleTap: function handleTap(picker) {
       this.$refs[picker].show();
     },
+
+
+
     confirm1: function confirm1(e) {
-      this.bornTime = e.result;
+      // this.bornTime = e.result
+      this.bornTime = e;
     },
     confirm2: function confirm2(e) {
-      this.workTime = e.result;
+      this.workTime = e;
     },
     handleConfirm: function handleConfirm(e) {
       this.sex = e.item.value;

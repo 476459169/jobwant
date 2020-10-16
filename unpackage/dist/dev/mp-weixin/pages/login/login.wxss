@@ -37,8 +37,7 @@
   margin-top: 50px;
   width: 100px;
   height: 100px;
-  -webkit-border-radius: 50px;
-          border-radius: 50px;
+  border-radius: 50px;
   background-color: #e8654b;
 }
 .user_header_text {
@@ -55,8 +54,7 @@
   height: 35px;
   width: 80%;
   margin-left: 10%;
-  -webkit-border-radius: 5px;
-          border-radius: 5px;
+  border-radius: 5px;
   border: 1px solid #000000;
   font-size: 14px;
 }

@@ -248,40 +248,99 @@ var _default =
     return {
       currentDate: currentD,
       companyName: '',
-      jobName: '',
-      beginTime: '',
-      endTime: '至今',
+      resumeId: '', //简历id
+      positionInfoId: '', //职位名称id(二级列表中的id)
+      entryTime: '', //入职日期
+      resignnationTime: '', //离职日期
+      industryInfoId: '', //所属行业id(二级列表中的id)
+      selIndustryInfoId: '',
+      monthSalary: '', //月薪
+      workDescription: '',
+      isShield: '',
       industry: '',
-      salary: '',
-      workDes: '',
-      typelist: ['1', '2', '3', '4'],
-      type: '',
+      industrystr: '', //所属行业文字 显示用
+      positionName: '', //职位名称
       switchValue: false,
-      dataDic: {},
-      id: null };
+      workExpId: '',
+      positionArr: [{
+        children: [
+        {
+          label: "临床试验",
+          value: "402880cc751b7c3701751b8167800000" }],
+
+
+        label: "临床试验",
+        value: "402880cc751add0a01751ae0a181000a" },
+      {
+        children: [
+        {
+          label: "销售顾问",
+          value: "402880cc751b7c3701751b8229030001" },
+
+        {
+          label: "商务拓展",
+          value: "402880cc751b7c3701751b8251ca0002" },
+
+        {
+          label: "销售管理",
+          value: "402880cc751b7c3701751b827b2a0003" }],
+
+
+        label: "销售/商务拓展",
+        value: "402880cc751ae40001751ae71d990000" },
+      {
+        children: [],
+
+
+        label: "互联网",
+        value: "402880cc751ae40001751ae777130002" }] };
+
+
+
 
   },
 
 
   onLoad: function onLoad(e) {
-    if (e.data) {
-      if (e.data.length > 0) {
-        var dataDic = JSON.parse(decodeURIComponent(e.data));
-        this.dataDic = dataDic;
-        this.companyName = this.dataDic.company;
-        this.jobName = this.dataDic.job;
-        this.beginTime = this.dataDic.beginTime;
-        this.endTime = this.dataDic.endTime;
-        this.industry = this.dataDic.industry;
-        this.salary = this.dataDic.salary;
-        this.workDes = this.dataDic.detail;
-        this.id = this.dataDic.id;
-        this.switchValue = this.dataDic.private === 1 ? true : false;
-      }
+    if (e.id) {
+      this.id = e.id;
+    }
+
+    if (e.workExpId) {
+      this.workExpId = e.workExpId;
+      this.getMes();
     }
 
   },
   methods: {
+
+    handleConfirm: function handleConfirm(e) {
+      console.log('handconfirm  value=' + e.value + "label =" + e.label + "e.item=" + e.item[1].value);
+      this.industrystr = e.value.map(function (item) {return item;}).join('-');
+      for (var i = 0; i < e.item; i++) {
+        if (i == 0) {
+
+        } else {
+
+        }
+      }
+    },
+    getMes: function getMes() {var _this = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetWorkExperienceInfo.action', {
+        loginKey: loginkey,
+        workExpId: this.workExpId }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this.getResumeInfo();
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
+    },
+
     getDate: function getDate(type) {
       var date = new Date();
 
@@ -319,42 +378,6 @@ var _default =
       }
     },
     saveClick: function saveClick() {
-
-
-      var pages = getCurrentPages(); //获取所有页面栈实例列表
-      var nowPage = pages[pages.length - 1]; //当前页页面实例
-      var prevPage = pages[pages.length - 2]; //上一页页面实例
-
-      if (this.id) {
-        var dic = {
-          company: this.companyName,
-          job: this.jobName,
-          beginTime: this.beginTime,
-          endTime: this.endTime,
-          industry: this.industry,
-          salary: this.salary,
-          detail: this.workDes,
-          id: this.id,
-          private: this.switchValue ? 1 : 0 };
-
-        //修改
-        prevPage.$vm.data.workExperience.splice(this.id - 1, 1, dic);
-      } else {
-        prevPage.$vm.data.workExperience.push({
-          company: this.companyName,
-          job: this.jobName,
-          beginTime: this.beginTime,
-          endTime: this.endTime,
-          industry: this.industry,
-          salary: this.salary,
-          detail: this.workDes,
-          id: prevPage.$vm.data.workExperience.length == 0 ? 1 : prevPage.$vm.data.workExperience.length + 1,
-          private: this.switchValue ? 1 : 0 });
-
-      }
-      uni.navigateBack({});
-
-
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

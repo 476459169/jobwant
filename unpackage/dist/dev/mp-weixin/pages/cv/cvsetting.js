@@ -355,6 +355,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
@@ -362,117 +377,145 @@ var _default =
       showWorkExperience: false,
       showWorkExperienceNumb: 2,
       status: '公开',
-      cvtype: [{ label: '保密', value: '1' }, { label: '公开', value: '2' }],
+      cvtype: [{
+        label: '保密',
+        value: '1' },
+      {
+        label: '公开',
+        value: '2' }],
+
       zd: '是',
       zdArr: ['是', '否'],
       zwf: " ",
-      data: {
-        personMsg: {
-          name: '临小妹',
-          age: '36岁',
-          gender: '女士',
-          workTime: '工作17年',
-          address: '北京-朝阳',
-          phone: '13552300611',
-          email: '476459169@qq.com',
-          xl: '本科' },
+      data: Object
+      // data: {
+      // 	personMsg: {
+      // 		name: '临小妹',
+      // 		age: '36岁',
+      // 		gender: '女士',
+      // 		workTime: '工作17年',
+      // 		address: '北京-朝阳',
+      // 		phone: '13552300611',
+      // 		email: '476459169@qq.com',
+      // 		xl: '本科',
 
+      // 	},
+      // 	jobwant: {
+      // 		time: '月内到岗',
+      // 		job: ['CRA', 'PM'],
 
-        jobwant: {
-          time: '月内到岗',
-          job: ['CRA', 'PM'] },
+      // 	},
+      // 	workExperience: [
+      // 		{
+      // 			company: '临语堂（天津）健康管理有限公司',
+      // 			beginTime: '2018.3',
+      // 			endTime: '至今',
+      // 			job: 'CTA',
+      // 			detail: '工作详情',
+      // 			salary: '7k/月',
+      // 			id:1
+      // 		},
+      // 		{
+      // 			company: '临语堂（天津）健康管理有限公司',
+      // 			beginTime: '2018.3',
+      // 			endTime: '至今',
+      // 			job: 'CTA',
+      // 			detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
+      // 			salary: '7k/月'
+      // 		},
+      // 		{
+      // 			company: '临语堂（天津）健康管理有限公司',
+      // 			beginTime: '2018.3',
+      // 			endTime: '至今',
+      // 			job: 'CTA',
+      // 			detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
+      // 			salary: '7k/月'
+      // 		}
+      // 	],
+      // 	educationExperience: [
+      // 		// {
+      // 		// 	school: '湖北医药大学',
+      // 		// 	beginTime: '2018.3',
+      // 		// 	endTime: '至今',
+      // 		// 	xl: '本科',
+      // 		// 	discipline: '药理学'
+      // 		// },
+      // 		// {
+      // 		// 	school: '湖北医药大学',
+      // 		// 	beginTime: '2018.3',
+      // 		// 	endTime: '至今',
+      // 		// 	xl: '本科',
+      // 		// 	discipline: '药理学'
+      // 		// }
+      // 	],
+      // 	projectExperience: [
+      // 	// 	{
+      // 	// 	project: '肿瘤项目三期',
+      // 	// 	beginTime: '2018.3',
+      // 	// 	endTime: '至今',
+      // 	// 	msg: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工'
+      // 	// },
+      // 	],
+      // 	certificate: [
+      // 		// {
+      // 		// 	certificateName: 'GCP证书',
+      // 		// 	certificateJG: '临语堂'
+      // 		// },
+      // 		// {
+      // 		// 	certificateName: 'GCP证书',
+      // 		// 	certificateJG: '临语堂'
+      // 		// }
+      // 	],
+      // 	trainingExperience: [
+      // 		// {
+      // 		// 	trainingJG: '临语堂培训',
+      // 		// 	beginTime: '2018.3',
+      // 		// 	endTime: '至今',
+      // 		// },
+      // 		// {
+      // 		// 	trainingJG: '临语堂培训',
+      // 		// 	beginTime: '2018.3',
+      // 		// 	endTime: '至今',
+      // 		// }
+      // 	],
+      // 	language: [
+      // 		// {
+      // 		// 	language: '汉语'
+      // 		// },
+      // 		// {
+      // 		// 	language: '英语'
+      // 		// }
+      // 	],
+      // 	evaluation: '自我评价 自我评价 自我评价 自我评价 自我评价 自我评价',
+      // 	reloadTime: "2020.04.26"
+      // }
+    };
+  },
 
-
-        workExperience: [
-        {
-          company: '临语堂（天津）健康管理有限公司',
-          beginTime: '2018.3',
-          endTime: '至今',
-          job: 'CTA',
-          detail: '工作详情',
-          salary: '7k/月',
-          id: 1 },
-
-        {
-          company: '临语堂（天津）健康管理有限公司',
-          beginTime: '2018.3',
-          endTime: '至今',
-          job: 'CTA',
-          detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-          salary: '7k/月' },
-
-        {
-          company: '临语堂（天津）健康管理有限公司',
-          beginTime: '2018.3',
-          endTime: '至今',
-          job: 'CTA',
-          detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-          salary: '7k/月' }],
-
-
-        educationExperience: [
-          // {
-          // 	school: '湖北医药大学',
-          // 	beginTime: '2018.3',
-          // 	endTime: '至今',
-          // 	xl: '本科',
-          // 	discipline: '药理学'
-          // },
-          // {
-          // 	school: '湖北医药大学',
-          // 	beginTime: '2018.3',
-          // 	endTime: '至今',
-          // 	xl: '本科',
-          // 	discipline: '药理学'
-          // }
-        ],
-        projectExperience: [
-          // 	{
-          // 	project: '肿瘤项目三期',
-          // 	beginTime: '2018.3',
-          // 	endTime: '至今',
-          // 	msg: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工'
-          // },
-        ],
-        certificate: [
-          // {
-          // 	certificateName: 'GCP证书',
-          // 	certificateJG: '临语堂'
-          // },
-          // {
-          // 	certificateName: 'GCP证书',
-          // 	certificateJG: '临语堂'
-          // }
-        ],
-        trainingExperience: [
-          // {
-          // 	trainingJG: '临语堂培训',
-          // 	beginTime: '2018.3',
-          // 	endTime: '至今',
-          // },
-          // {
-          // 	trainingJG: '临语堂培训',
-          // 	beginTime: '2018.3',
-          // 	endTime: '至今',
-          // }
-        ],
-        language: [
-          // {
-          // 	language: '汉语'
-          // },
-          // {
-          // 	language: '英语'
-          // }
-        ],
-        evaluation: '自我评价 自我评价 自我评价 自我评价 自我评价 自我评价',
-        reloadTime: "2020.04.26" } };
-
-
-
-
+  onLoad: function onLoad(e) {
+    this.id = e.id;
+    console.log('id=' + e.id);
+    this.getDetailMes();
 
   },
   methods: {
+
+    getDetailMes: function getDetailMes() {var _this = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetOnlineResumeInfo.action', {
+        loginKey: loginkey,
+        resumeId: this.id }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this.data = res.inf;
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+
+      });
+    },
 
     handleTap: function handleTap(picker) {
       this.$refs[picker].show();
@@ -499,7 +542,7 @@ var _default =
     addworkExperienceClick: function addworkExperienceClick() {
 
       uni.navigateTo({
-        url: './workExperience' });
+        url: './workExperience?id=' + this.id });
 
     },
 
@@ -509,7 +552,7 @@ var _default =
       console.log("workExperience=" + item.id);
       if (item) {
         uni.navigateTo({
-          url: './workExperience?data=' + encodeURIComponent(JSON.stringify(item)) });
+          url: './workExperience?workExpId=' + item.workExpId });
 
       }
 

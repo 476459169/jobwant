@@ -61,10 +61,6 @@
 
 		</view>
 
-
-		<view class="pushBtn" @click="datacommit()">
-			批量\n投递
-		</view>
 	</view>
 </template>
 

@@ -37,14 +37,12 @@
   -webkit-align-items: center;
           align-items: center;
   background-color: #f5f7f8;
-  -webkit-border-radius: 5px;
-          border-radius: 5px;
+  border-radius: 5px;
 }
 .list .cell .cell_img {
   width: 30px;
   height: 30px;
-  -webkit-border-radius: 15px;
-          border-radius: 15px;
+  border-radius: 15px;
   background-color: #e8654b;
 }
 .list .cell .cell_contentView {
@@ -101,7 +99,6 @@
   color: #FFFFFF;
   line-height: 40px;
   text-align: center;
-  -webkit-border-radius: 5px;
-          border-radius: 5px;
+  border-radius: 5px;
 }
 

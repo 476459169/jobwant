@@ -309,6 +309,27 @@ var _default =
     },
 
     addcv: function addcv() {
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.loginKey = loginkey;
+        this.$api.post('resume!ajaxCreateResume.action', {
+          loginKey: loginkey }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            uni.navigateTo({
+              url: './cvsetting?id=' + res.inf.id });
+
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+
+      } else {
+        this.showModal = true;
+        this.showLoginModal();
+      }
 
     },
     dowmViewClick: function dowmViewClick() {
@@ -333,9 +354,28 @@ var _default =
         url: './showcv' });
 
     },
-    seettingCv: function seettingCv() {
+    seettingCv: function seettingCv(id) {
       uni.navigateTo({
-        url: './cvsetting' });
+        url: './cvsetting?id=' + id });
+
+    },
+
+    removeCv: function removeCv(id) {var _this3 = this;
+
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxDeleteResume.action', {
+        loginKey: loginkey,
+        resumeId: id }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this3.getResumeInfo();
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
+
 
     },
 

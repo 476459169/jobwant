@@ -4098,11 +4098,13 @@ Dep.SharedObject.targetStack = [];
 function pushTarget (target) {
   Dep.SharedObject.targetStack.push(target);
   Dep.SharedObject.target = target;
+  Dep.target = target;
 }
 
 function popTarget () {
   Dep.SharedObject.targetStack.pop();
   Dep.SharedObject.target = Dep.SharedObject.targetStack[Dep.SharedObject.targetStack.length - 1];
+  Dep.target = Dep.SharedObject.target;
 }
 
 /*  */
@@ -8943,13 +8945,14 @@ function cloneWithData(vm) {
   }, ret);
 
   // vue-composition-api
-  var rawBindings = vm.__secret_vfa_state__ && vm.__secret_vfa_state__.rawBindings;
+  var compositionApiState = vm.__composition_api_state__ || vm.__secret_vfa_state__;
+  var rawBindings = compositionApiState && compositionApiState.rawBindings;
   if (rawBindings) {
     Object.keys(rawBindings).forEach(function (key) {
       ret[key] = vm[key];
     });
   }
-  
+
   //TODO 需要把无用数据处理掉，比如 list=>l0 则 list 需要移除，否则多传输一份数据
   Object.assign(ret, vm.$mp.data || {});
   if (
@@ -9576,6 +9579,57 @@ var commonMixin = {
     list: function list() {
       this.init('list');
     } } };exports.commonMixin = commonMixin;
+
+/***/ }),
+
+/***/ 286:
+/*!***********************************************************************************************!*\
+  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/bory-dateTimePicker/uitls/util.js ***!
+  \***********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.getIndexOfArray = exports.addZero = exports.getTimeArray = exports.getOneMonthDays = void 0; /**
+                                                                                                                                                                                 * 获取某年某月有多少天
+                                                                                                                                                                                 */
+var getOneMonthDays = function getOneMonthDays(year, month) {
+  month = Number(month);
+  var baseMonthsDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) {
+    if (month === 1) {
+      baseMonthsDays[month] = 29;
+    }
+  }
+  return baseMonthsDays[month];
+};
+
+/**
+    * 获取日期的年月日时分秒
+    */exports.getOneMonthDays = getOneMonthDays;
+var getTimeArray = function getTimeArray(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+  var second = date.getSeconds();
+  return [year, month, day, hour, minute, second];
+};
+/**
+    * 小于10的数字前面补0
+    */exports.getTimeArray = getTimeArray;
+var addZero = function addZero(num) {
+  return num < 10 ? '0' + num : num;
+};
+
+/**
+    * 获取当前值在数组中的索引
+    */exports.addZero = addZero;
+var getIndexOfArray = function getIndexOfArray(value, array) {
+  var index = array.findIndex(function (item) {return item == value;});
+  return index > -1 ? index : 0;
+};exports.getIndexOfArray = getIndexOfArray;
 
 /***/ }),
 

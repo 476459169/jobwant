@@ -67,8 +67,7 @@
   -webkit-justify-content: space-between;
           justify-content: space-between;
   padding: 20rpx;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
   position: relative;
   font-size: 32rpx;
   border-bottom: 0.5px solid #e5e5e5;
