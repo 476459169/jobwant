@@ -39,7 +39,8 @@
   display: -webkit-flex;
   display: flex;
   margin: 0px 0px 10px 0px;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   background-color: #f5f7f8;
   font-size: 14px;
   color: #666666;
@@ -58,8 +59,10 @@
   width: 50px;
   height: 40px;
   background-color: #e8654b;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+          border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+          border-bottom-right-radius: 5px;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -95,7 +98,8 @@
   border: 2px solid #e8654b;
   background-color: #fbc9bc;
   color: #e8654b;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   width: 80px;
   height: 30px;
   margin: 10px;
@@ -104,7 +108,8 @@
 }
 .bottom_view .bottom_view_qd {
   border: 2px solid #e8654b;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   height: 30px;
   -webkit-box-flex: 1;
   -webkit-flex: 1;

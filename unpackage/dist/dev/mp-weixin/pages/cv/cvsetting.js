@@ -94,7 +94,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   lbPicker: function() {
-    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 215))
+    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 239))
   }
 }
 var render = function() {
@@ -370,6 +370,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
@@ -379,124 +384,31 @@ var _default =
       status: '公开',
       cvtype: [{
         label: '保密',
-        value: '1' },
+        value: '0' },
       {
         label: '公开',
-        value: '2' }],
+        value: '1' }],
 
-      zd: '是',
-      zdArr: ['是', '否'],
+      zd: '否',
+      zdArr: [{
+        label: '是',
+        value: '1' },
+      {
+        label: '否',
+        value: '0' }],
+
       zwf: " ",
-      data: Object
-      // data: {
-      // 	personMsg: {
-      // 		name: '临小妹',
-      // 		age: '36岁',
-      // 		gender: '女士',
-      // 		workTime: '工作17年',
-      // 		address: '北京-朝阳',
-      // 		phone: '13552300611',
-      // 		email: '476459169@qq.com',
-      // 		xl: '本科',
+      data: Object };
 
-      // 	},
-      // 	jobwant: {
-      // 		time: '月内到岗',
-      // 		job: ['CRA', 'PM'],
-
-      // 	},
-      // 	workExperience: [
-      // 		{
-      // 			company: '临语堂（天津）健康管理有限公司',
-      // 			beginTime: '2018.3',
-      // 			endTime: '至今',
-      // 			job: 'CTA',
-      // 			detail: '工作详情',
-      // 			salary: '7k/月',
-      // 			id:1
-      // 		},
-      // 		{
-      // 			company: '临语堂（天津）健康管理有限公司',
-      // 			beginTime: '2018.3',
-      // 			endTime: '至今',
-      // 			job: 'CTA',
-      // 			detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-      // 			salary: '7k/月'
-      // 		},
-      // 		{
-      // 			company: '临语堂（天津）健康管理有限公司',
-      // 			beginTime: '2018.3',
-      // 			endTime: '至今',
-      // 			job: 'CTA',
-      // 			detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-      // 			salary: '7k/月'
-      // 		}
-      // 	],
-      // 	educationExperience: [
-      // 		// {
-      // 		// 	school: '湖北医药大学',
-      // 		// 	beginTime: '2018.3',
-      // 		// 	endTime: '至今',
-      // 		// 	xl: '本科',
-      // 		// 	discipline: '药理学'
-      // 		// },
-      // 		// {
-      // 		// 	school: '湖北医药大学',
-      // 		// 	beginTime: '2018.3',
-      // 		// 	endTime: '至今',
-      // 		// 	xl: '本科',
-      // 		// 	discipline: '药理学'
-      // 		// }
-      // 	],
-      // 	projectExperience: [
-      // 	// 	{
-      // 	// 	project: '肿瘤项目三期',
-      // 	// 	beginTime: '2018.3',
-      // 	// 	endTime: '至今',
-      // 	// 	msg: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工'
-      // 	// },
-      // 	],
-      // 	certificate: [
-      // 		// {
-      // 		// 	certificateName: 'GCP证书',
-      // 		// 	certificateJG: '临语堂'
-      // 		// },
-      // 		// {
-      // 		// 	certificateName: 'GCP证书',
-      // 		// 	certificateJG: '临语堂'
-      // 		// }
-      // 	],
-      // 	trainingExperience: [
-      // 		// {
-      // 		// 	trainingJG: '临语堂培训',
-      // 		// 	beginTime: '2018.3',
-      // 		// 	endTime: '至今',
-      // 		// },
-      // 		// {
-      // 		// 	trainingJG: '临语堂培训',
-      // 		// 	beginTime: '2018.3',
-      // 		// 	endTime: '至今',
-      // 		// }
-      // 	],
-      // 	language: [
-      // 		// {
-      // 		// 	language: '汉语'
-      // 		// },
-      // 		// {
-      // 		// 	language: '英语'
-      // 		// }
-      // 	],
-      // 	evaluation: '自我评价 自我评价 自我评价 自我评价 自我评价 自我评价',
-      // 	reloadTime: "2020.04.26"
-      // }
-    };
   },
 
   onLoad: function onLoad(e) {
     this.id = e.id;
     console.log('id=' + e.id);
-    this.getDetailMes();
+  },
 
+  onShow: function onShow() {
+    this.getDetailMes();
   },
   methods: {
 
@@ -508,6 +420,8 @@ var _default =
       then(function (res) {
         if (res.res.status == 0) {
           _this.data = res.inf;
+          _this.status = res.inf.isPublic === 1 ? '公开' : '保密';
+          _this.zd = res.inf.isDefault === 1 ? '是' : '否';
         } else {
           uni.showToast({
             title: res.res.error });
@@ -521,7 +435,42 @@ var _default =
       this.$refs[picker].show();
     },
     handleConfirm: function handleConfirm(e) {
+      this.status = e.item.label;
       console.log('handconfirm' + e.item.value);
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxUpdateResumePublic.action', {
+        loginKey: loginkey,
+        resumeId: this.id,
+        isPublic: e.item.value }).
+      then(function (res) {
+        if (res.res.status == 0) {
+
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+
+      });
+
+    },
+    handleConfirm1: function handleConfirm1(e) {
+      this.zd = e.item.label;
+      console.log('handconfirm' + e.item.value);
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxUpdateResumeDefault.action', {
+        loginKey: loginkey,
+        resumeId: this.id,
+        isDefault: e.item.value }).
+      then(function (res) {
+        if (res.res.status == 0) {
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+
+      });
     },
     dowmViewClick: function dowmViewClick() {
       this.showWorkExperience = !this.showWorkExperience;
@@ -533,9 +482,22 @@ var _default =
       console.log('this.showWorkExperience = ' + this.showWorkExperienceNumb);
     },
 
-    educationClick: function educationClick() {
+    editName: function editName() {
       uni.navigateTo({
-        url: './educationExperience' });
+        url: './vcName?id=' + this.id });
+
+    },
+
+    educationClick: function educationClick(item) {
+      uni.navigateTo({
+        url: './educationExperience?id=' + this.id + '&educationExpId=' + item.id });
+
+    },
+
+
+    addeducationClick: function addeducationClick() {
+      uni.navigateTo({
+        url: './educationExperience?id=' + this.id });
 
     },
 
@@ -546,32 +508,48 @@ var _default =
 
     },
 
+    cerClick: function cerClick() {
+      uni.navigateTo({
+        url: './CertificateAssociated?id=' + this.id });
+
+    },
+
     workExperienceClick: function workExperienceClick(item, index) {
       console.log('index = ' + index);
 
       console.log("workExperience=" + item.id);
       if (item) {
         uni.navigateTo({
-          url: './workExperience?workExpId=' + item.workExpId });
+          url: './workExperience?workExpId=' + item.id + '&id=' + this.id });
 
       }
 
     },
 
     wantjobClick: function wantjobClick() {
+      // uni.navigateTo({
+      // 	url: '../mine/jobManage?id=' + this.id
+      // })
+
       uni.navigateTo({
-        url: '../mine/jobManage' });
+        url: '../mine/addJobIntention?id=' + this.id + '&wantedIntentionId=' + this.data.wantedIntention.id });
 
     },
-    projecClick: function projecClick() {
+    projecClick: function projecClick(item) {
       uni.navigateTo({
-        url: './projectExpere' });
+        url: './projectExpere?id=' + this.id + '&projectExpId=' + item.id });
+
+    },
+
+    addprojecClick: function addprojecClick() {
+      uni.navigateTo({
+        url: './projectExpere?id=' + this.id });
 
     },
 
     assessmen: function assessmen() {
       uni.navigateTo({
-        url: './assessment' });
+        url: './assessment?id=' + this.id });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

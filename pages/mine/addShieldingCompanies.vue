@@ -30,22 +30,43 @@
 				typelist: ['1', '2', '3', '4'],
 				type: '',
 				switchValue: false,
-				dataDic:{},
-				id:null
+				dataDic: {},
+				id: null
 			};
 		},
 
 
-		onLoad(e) {
-		},
+		onLoad(e) {},
 		methods: {
-			saveClick(){
-				
-				}
-					
-				
+			saveClick() {
+
+
+				var that = this;
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('qzUser!ajaxAddUserShieldEnterprise.action', {
+					loginKey: loginkey,
+					shieldCompanyName:that.companyName
+				}).then(res => {
+					if (res.res.status == 0) {
+						uni.showToast({
+							title:'添加成功',
+							success() {
+								uni.navigateBack({})
+							}
+						})
+					} else {
+						uni.showModal({
+							title: res.res.error
+						})
+					}
+				})
+
+
+			}
+
+
 		}
-	
+
 	}
 </script>
 
@@ -106,6 +127,7 @@
 		display: flex;
 		justify-content: center;
 		width: 100%;
+
 		.bottom_view_cz {
 			border: 2px solid #e8654b;
 			background-color: #fbc9bc;

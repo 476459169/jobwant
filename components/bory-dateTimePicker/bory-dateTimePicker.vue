@@ -23,7 +23,7 @@
 				<picker-view-column data-id='day' v-if='isShowDay'>
 					<view class="item" v-for="(item,index) in days" :key="index">{{item}}日</view>
 				</picker-view-column>
-				<picker-view-column data-id='hour' v-if='isShowHour'>
+			<!-- 	<picker-view-column data-id='hour' v-if='isShowHour'>
 					<view class="item" v-for="(item,index) in hours" :key="index">{{item}}时</view>
 				</picker-view-column>
 				<picker-view-column data-id='minute' v-if='isShowMinute'>
@@ -31,7 +31,7 @@
 				</picker-view-column>
 				<picker-view-column data-id='second' v-if='isShowSecond'>
 					<view class="item" v-for="(item,index) in seconds" :key="index">{{item}}秒</view>
-				</picker-view-column>
+				</picker-view-column> -->
 			</picker-view>
 		</view>
 	</view>
@@ -144,7 +144,8 @@
 				return this.initTimeData(23, 0);
 			},
 			isShowHour() {
-				return this.type !== 'date' && this.type !== 'year-month' && this.type !== 'year';
+				// return this.type !== 'date' && this.type !== 'year-month' && this.type !== 'year';
+				return false
 			},
 			minutes() {
 				return this.initTimeData(59, 0);

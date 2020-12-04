@@ -33,7 +33,8 @@
   margin: 15px;
   width: 180rpx;
   height: 180rpx;
-  border-radius: 90rpx;
+  -webkit-border-radius: 90rpx;
+          border-radius: 90rpx;
 }
 .topView .change {
   -webkit-box-flex: 1;

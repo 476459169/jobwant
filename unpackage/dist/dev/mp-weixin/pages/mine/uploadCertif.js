@@ -92,7 +92,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "recyclableRender", function() { return recyclableRender; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
-var components
+var components = {
+  boryDateTimePicker: function() {
+    return Promise.all(/*! import() | components/bory-dateTimePicker/bory-dateTimePicker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/bory-dateTimePicker/bory-dateTimePicker")]).then(__webpack_require__.bind(null, /*! @/components/bory-dateTimePicker/bory-dateTimePicker.vue */ 247))
+  }
+}
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -159,15 +163,219 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _default =
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _this;var _default =
 {
   data: function data() {
     return {
-      picStr: '' };
+      id: '',
+      picStr: '',
+      type: 'date',
+      baseUrl: "http://39.105.48.243:8080/crlink/",
+      dataInf: {
+        certNo: '',
+        certUrl: '',
+        organization: '', //证书颁发机构
+        name: '',
+        id: '',
+        awardTime: '' } };
+
 
   },
 
+  onLoad: function onLoad(e) {
+
+    _this = this;
+    if (e.id) {
+      this.id = e.id;
+      this.getData();
+    }
+
+    this.baseUrl = getApp().globalData.baseUrl;
+
+
+  },
+  computed: {
+
+    indicatorStyle: function indicatorStyle() {
+      return {
+        background: 'rgba(15, 128, 255, 0.4)',
+        height: '40px' };
+
+    } },
+
   methods: {
+    getData: function getData() {var _this2 = this;
+
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetCertificateInfo.action', {
+        loginKey: loginkey,
+        certificationId: this.id }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this2.dataInf = res.inf;
+        } else {
+          uni.showModal({
+            title: res.res.error });
+
+        }
+      });
+
+    },
+
+    upData: function upData() {
+
+      if (this.id.length > 0) {
+        //更新
+
+        var dict = {
+          loginKey: loginkey,
+          certName: this.dataInf.name,
+          organization: this.dataInf.organization,
+          awardDate: this.dataInf.awardTime,
+          certNo: this.dataInf.certNo };
+
+        console.log("111111+_this.picStr=" + dict.certName);
+        var loginkey = uni.getStorageSync('loginKey');
+        if (this.picStr) {
+          if (this.picStr.length > 0) {
+            uni.uploadFile({
+              url: this.baseUrl + 'app/resume!ajaxUpdateCertificateInfo.action', //仅为示例，非真实的接口地址
+              filePath: this.picStr ? this.picStr : this.dataInf.certUrl ? this.baseUrl + this.dataInf.certUrl : '',
+              name: 'certFile',
+              formData: {
+                'loginKey': loginkey,
+                'certificationInfo': JSON.stringify({
+                  id: this.id,
+                  name: this.dataInf.name,
+                  organization: this.dataInf.organization,
+                  awardTime: this.dataInf.awardTime,
+                  certNo: this.dataInf.certNo }) },
+
+
+              success: function success(uploadFileRes) {
+                uni.showToast({
+                  title: "更改成功",
+                  success: function success() {
+                    uni.navigateBack({});
+                  } });
+
+              } });
+
+
+          }
+        } else {
+          var loginkey = uni.getStorageSync('loginKey');
+          this.$api.post('resume!ajaxUpdateCertificateInfo.action', {
+            loginKey: loginkey,
+            certificationInfo: JSON.stringify({
+              id: this.id,
+              name: this.dataInf.name,
+              organization: this.dataInf.organization,
+              awardTime: this.dataInf.awardTime,
+              certNo: this.dataInf.certNo }) }).
+
+
+          then(function (res) {
+            if (res.res.status == 0) {
+              uni.showToast({
+                title: "更改成功",
+                success: function success() {
+                  uni.navigateBack({});
+
+
+                } });
+
+            } else {
+              uni.showModal({
+                title: res.res.error });
+
+            }
+          });
+        }
+      } else {
+
+        //添加
+        var loginkey = uni.getStorageSync('loginKey');
+        if (this.picStr) {
+          if (this.picStr.length > 0) {
+
+            var dict = {
+              loginKey: loginkey,
+              certName: this.dataInf.name,
+              organization: this.dataInf.organization,
+              awardDate: this.dataInf.awardTime,
+              certNo: this.dataInf.certNo };
+
+
+            console.log("111111+_this.picStr=" + dict.certName);
+
+            var uploadTask = uni.uploadFile({
+              url: this.baseUrl + 'app/resume!ajaxAddCertification.action', //仅为示例，非真实的接口地址
+              filePath: _this.picStr ? _this.picStr : _this.dataInf.certUrl ? _this.baseUrl + _this.dataInf.certUrl : '../../static/image/mine/default_head_img@2x.png',
+              name: 'certFile',
+              formData: {
+                'loginKey': loginkey,
+                'certName': this.dataInf.name,
+                'organization': this.dataInf.organization,
+                'awardDate': this.dataInf.awardTime,
+                'certNo': this.dataInf.certNo },
+
+              success: function success(uploadFileRes) {
+                uni.showToast({
+                  title: "上传成功",
+                  success: function success() {
+                    uni.navigateBack({});
+                  } });
+
+              } });
+
+
+
+
+            uploadTask.onProgressUpdate(function (res) {
+              console.log('res=' + res);
+              console.log('上传进度' + res.progress);
+              console.log('已经上传的数据长度' + res.totalBytesSent);
+              console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
+            });
+
+          } else {
+            uni.showToast({
+              title: '没有添加图片' });
+
+          }
+        } else {
+
+        }
+      }
+
+
+    },
+    handleTap: function handleTap(picker) {
+      this.$refs[picker].show();
+    },
+
+    confirm1: function confirm1(e) {
+      this.dataInf.awardTime = e;
+    },
 
     pictureClick: function pictureClick() {
       console.log("用户点击了从图库上传");
@@ -175,13 +383,10 @@ var _default =
         count: 1,
         sizeType: ["compressed"],
         success: function success(response) {
-
-
-
           // 选择图片后, 返回的数据
           var fileUrl = response.tempFilePaths[0];
-          _this.picStr = fileUrl;
           console.log("用户点击了从图库上传222 =" + fileUrl);
+          _this.picStr = fileUrl;
         } });
 
     } } };exports.default = _default;

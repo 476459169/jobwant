@@ -34,105 +34,43 @@
 				type: '',
 				switchValue: false,
 				dataDic:{},
-				id:null
+				id:''
 			};
 		},
 
 
 		onLoad(e) {
-			if(e.data){
-				if(e.data.length>0){
-					let  dataDic =  JSON.parse(decodeURIComponent(e.data));
-					this.dataDic = dataDic;
-					this.companyName = this.dataDic.company;
-					this.jobName =  this.dataDic.job;
-					this.beginTime = this.dataDic.beginTime;
-					this.endTime =this.dataDic.endTime;
-					this.industry = this.dataDic.industry;
-					this.salary = this.dataDic.salary;
-					this.workDes = this.dataDic.detail;
-					this.id = this.dataDic.id;
-					this.switchValue = this.dataDic.private===1?true:false
-				}
-			}
-			
+			this.id = e.id
 		},
 		methods: {
-			getDate(type) {
-				const date = new Date();
-
-				let year = date.getFullYear();
-				let month = date.getMonth() + 1;
-				let day = date.getDate();
-
-				if (type === 'start') {
-					year = year - 60;
-				} else if (type === 'end') {
-					year = year + 2;
-				}
-				month = month > 9 ? month : '0' + month;;
-				day = day > 9 ? day : '0' + day;
-				let ztime = `${year}-${month}`
-				return ztime;
-			},
-
-			handleTap(picker) {
-				this.$refs[picker].show()
-			},
-			switchClick() {
-				this.switchValue = !this.switchValue;
-				console.log('this.switch = ' + this.switchValue);
-			},
-			confirm1(e) {
-				this.beginTime = e.result
-				console.log(e.result)
-			},
-			confirm2(e) {
-				if(e.result === this.currentDate){
-					this.endTime='至今'
-				}else{
-					this.endTime = e.result
-				}
-			},
 			saveClick(){
 				
 					
-							let pages = getCurrentPages();  //获取所有页面栈实例列表
-							let nowPage = pages[ pages.length - 1];  //当前页页面实例
-							let prevPage = pages[ pages.length - 2 ];  //上一页页面实例
-							
-							if(this.id){
-								let dic = {
-										company:this.companyName,
-										job:this.jobName,
-										beginTime:this.beginTime,
-										endTime:this.endTime,
-										industry:this.industry,
-										salary:this.salary,
-										detail:this.workDes,
-										id:this.id,
-										private:this.switchValue?1:0,
-										}
-									//修改
-									prevPage.$vm.data.workExperience.splice(this.id-1,1,dic);
-								}else{
-									prevPage.$vm.data.workExperience.push({
-										company:this.companyName,
-										job:this.jobName,
-										beginTime:this.beginTime,
-										endTime:this.endTime,
-										industry:this.industry,
-										salary:this.salary,
-										detail:this.workDes,
-										id:prevPage.$vm.data.workExperience.length==0?1:prevPage.$vm.data.workExperience.length+1,
-										private:this.switchValue?1:0
-									})
-								}
-								uni.navigateBack({
-									
+						var loginkey = uni.getStorageSync('loginKey');
+						this.$api.post('resume!ajaxUpdateSelfEvaluation.action', {
+							loginKey: loginkey,
+							resumeId:this.id,
+							selfEvaluation:this.workDes
+						}).then(res => {
+							if (res.res.status == 0) {
+								uni.showToast({
+									title:'更新成功',
+									success() {
+										uni.navigateBack({
+											
+										})
+									}
 								})
-							
-						}
+							} else {
+								uni.showToast({
+									title:res.res.error
+								})
+							}
+						})
+						
+					
+				
+			}
 					
 				
 		}

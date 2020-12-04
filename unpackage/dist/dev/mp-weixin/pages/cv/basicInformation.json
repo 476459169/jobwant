@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "基本资料",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
   "usingComponents": {
     "lb-picker": "/components/lb-picker/index",
     "bory-date-time-picker": "/components/bory-dateTimePicker/bory-dateTimePicker"

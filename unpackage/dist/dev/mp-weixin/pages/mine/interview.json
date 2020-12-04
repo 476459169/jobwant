@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "面试邀请",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
   "usingComponents": {}
 }

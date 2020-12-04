@@ -148,29 +148,67 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 var _default =
 {
   data: function data() {
     return {
 
-      dataArr: [{
-        companyName: '临语堂' },
-      {
-        companyName: '临语堂' },
-      {
-        companyName: '临语堂' }] };
+      dataArr: [] };
 
+  },
+  onLoad: function onLoad(e) {
 
+  },
 
-
+  onShow: function onShow() {
+    this.getData();
   },
   methods: {
     addcompany: function addcompany() {
       uni.navigateTo({
         url: './addShieldingCompanies' });
 
+    },
+
+    getData: function getData() {
+
+      var that = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('qzUser!ajaxGetUserShieldEnterpriseList.action', {
+        loginKey: loginkey }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          that.dataArr = res.inf.arr;
+        } else {
+          uni.showModal({
+            title: res.res.error });
+
+        }
+      });
+
+    },
+
+    remove: function remove(item) {
+      var that = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('qzUser!ajaxRemoveUserShieldEnterprise.action', {
+        loginKey: loginkey,
+        id: item.id }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          uni.showToast({
+            title: '删除成功',
+            success: function success() {
+              that.getData();
+            } });
+
+
+        } else {
+          uni.showModal({
+            title: res.res.error });
+
+        }
+      });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

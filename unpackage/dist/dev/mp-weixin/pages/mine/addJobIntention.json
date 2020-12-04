@@ -1,5 +1,7 @@
 {
-  "navigationBarTitleText": "添加求职意向",
+  "navigationBarTitleText": "管理求职意向",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
   "usingComponents": {
     "lb-picker": "/components/lb-picker/index"
   }

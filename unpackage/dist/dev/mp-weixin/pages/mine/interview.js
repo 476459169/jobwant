@@ -196,35 +196,109 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _default =
+
+
+var _this;
+var timer = null;var _default =
 {
   data: function data() {
     return {
-      topArr: ['全部', '待处理', '已接受', '已拒绝'],
-      topSelect: '全部',
-      data: [{
-        job: "CRA",
-        salary: "10k-15k",
-        adress: '北京',
-        worktime: '1-3年',
-        xl: '本科',
-        company: '临语堂（天津）健康管理有限公司',
-        releaseTime: '已接受',
-        select: false },
-      {
-        job: "CRA",
-        salary: "10k-15k",
-        adress: '北京',
-        worktime: '1-3年',
-        xl: '本科',
-        company: '临语堂（天津）健康管理有限公司',
-        releaseTime: '已拒绝',
-        select: true }] };
-
+      topArr: [],
+      topSelect: Object,
+      data: [],
+      page: 1 };
 
   },
 
+  onLoad: function onLoad() {
+    _this = this;
+    this.getTopArr();
+
+  },
+
+  onShow: function onShow() {
+    this.page = 1;
+    this.getData();
+  },
+
+  onPullDownRefresh: function onPullDownRefresh() {
+    this.page = 1;
+    this.getData();
+
+  },
+
+  onReachBottom: function onReachBottom() {//当划到最底部的时候触发事件
+    if (timer != null) {//加载缓冲延迟
+      clearTimeout(timer);
+    }
+    timer = setTimeout(function () {
+      _this.getData();
+    }, 600);
+  },
+
   methods: {
+
+
+    getTopArr: function getTopArr() {var _this2 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.loginKey = loginkey;
+        this.$api.post('qzPosition!ajaxGetInterviewInvitationStatusStatusList.action', {
+          loginKey: loginkey }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            _this2.topArr = res.inf.arr;
+          } else {
+
+          }
+        });
+
+      } else {
+      }
+    },
+
+    getData: function getData() {var _this3 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.loginKey = loginkey;
+        this.$api.post('qzPosition!ajaxGetInterviewInvitationList.action', {
+          loginKey: loginkey,
+          interviewInvitationStatus: this.topSelect.id ? this.topSelect.id : this.topSelect.id === 0 ? '0' : '',
+          first: this.page }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            if (res.res.status == 0) {
+              if (_this.page === 1) {
+                _this3.data = res.inf.arr;
+                _this.page++;
+              } else {
+                if (_this.page <= res.inf.pageCount) {
+                  _this.data = _this.data.concat(res.inf.arr); //进行数据的累加
+                  _this.page++; //页数的++
+                  _this.loading = "加载更多";
+                } else {
+                  uni.showToast({
+                    title: '没有更多了！' });
+
+                }
+              }
+
+            } else {
+              uni.showToast({
+                title: res.res.error });
+
+            }
+
+            uni.hideNavigationBarLoading();
+            uni.stopPullDownRefresh(); //数据加载完成,刷新结束
+          } else {
+          }
+        });
+
+      } else {
+
+      }
+    },
     screenClick: function screenClick() {
       uni.navigateTo({
         url: './screen' });
@@ -233,7 +307,7 @@ var _default =
 
     itemClick: function itemClick(item) {
       uni.navigateTo({
-        url: './cvDetail' });
+        url: './invitation?id=' + item.id + '&delta=1' });
 
     },
     itemSelect: function itemSelect(item) {
@@ -244,8 +318,10 @@ var _default =
       console.log("commit");
     },
     topItemClick: function topItemClick(item) {
-      console.log("item = " + item);
+      console.log('index = ' + item.id);
       this.topSelect = item;
+      this.page = 1;
+      this.getData();
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

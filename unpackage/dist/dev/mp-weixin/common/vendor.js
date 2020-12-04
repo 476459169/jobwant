@@ -904,7 +904,7 @@ function initData(vueOptions, context) {
     try {
       data = data.call(context); // 支持 Vue.prototype 上挂的数据
     } catch (e) {
-      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"jobWanted","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.warn('根据 Vue 的 data 函数初始化小程序 data 失败，请尽量确保 data 函数中不访问 vm 对象，否则可能影响首次数据渲染速度。', data);
       }
     }
@@ -8873,7 +8873,7 @@ function type(obj) {
 
 function flushCallbacks$1(vm) {
     if (vm.__next_tick_callbacks && vm.__next_tick_callbacks.length) {
-        if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+        if (Object({"NODE_ENV":"development","VUE_APP_NAME":"jobWanted","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:flushCallbacks[' + vm.__next_tick_callbacks.length + ']');
@@ -8894,14 +8894,14 @@ function nextTick$1(vm, cb) {
     //1.nextTick 之前 已 setData 且 setData 还未回调完成
     //2.nextTick 之前存在 render watcher
     if (!vm.__next_tick_pending && !hasRenderWatcher(vm)) {
-        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"jobWanted","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + vm._uid +
                 ']:nextVueTick');
         }
         return nextTick(cb, vm)
     }else{
-        if(Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
+        if(Object({"NODE_ENV":"development","VUE_APP_NAME":"jobWanted","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG){
             var mpInstance$1 = vm.$scope;
             console.log('[' + (+new Date) + '][' + (mpInstance$1.is || mpInstance$1.route) + '][' + vm._uid +
                 ']:nextMPTick');
@@ -8987,7 +8987,7 @@ var patch = function(oldVnode, vnode) {
     });
     var diffData = this.$shouldDiffData === false ? data : diff(data, mpData);
     if (Object.keys(diffData).length) {
-      if (Object({"NODE_ENV":"development","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
+      if (Object({"NODE_ENV":"development","VUE_APP_NAME":"jobWanted","VUE_APP_PLATFORM":"mp-weixin","BASE_URL":"/"}).VUE_APP_DEBUG) {
         console.log('[' + (+new Date) + '][' + (mpInstance.is || mpInstance.route) + '][' + this._uid +
           ']差量更新',
           JSON.stringify(diffData));
@@ -9394,7 +9394,7 @@ internalMixin(Vue);
 
 /***/ }),
 
-/***/ 220:
+/***/ 244:
 /*!********************************************************************************!*\
   !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/lb-picker/utils.js ***!
   \********************************************************************************/
@@ -9516,73 +9516,7 @@ function getColumns(_ref) {var value = _ref.value,list = _ref.list,mode = _ref.m
 
 /***/ }),
 
-/***/ 228:
-/*!****************************************************************************************!*\
-  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/e-picker-plus/utils.min.js ***!
-  \****************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var _createClass = function () {function a(b, c) {for (var g, f = 0; f < c.length; f++) {g = c[f], g.enumerable = g.enumerable || !1, g.configurable = !0, 'value' in g && (g.writable = !0), Object.defineProperty(b, g.key, g);}}return function (b, c, f) {return c && a(b.prototype, c), f && a(b, f), b;};}();Object.defineProperty(exports, '__esModule', { value: !0 });function _classCallCheck(a, b) {if (!(a instanceof b)) throw new TypeError('Cannot call a class as a function');}var fmt = function fmt(a) {return 9 < a ? a : '0' + a;},isLeapYear = function isLeapYear(a) {return 0 == a % 4 && 0 != a % 100 || 0 == a % 100 && 0 == a % 400;},modesDef = { Y: { startRule: '2000', endRule: new Date().getFullYear() + '' }, YM: { startRule: '2000-01', endRule: new Date().getFullYear() + '-12' }, YMD: { startRule: '2000-01-01', endRule: new Date().getFullYear() + '-12-31' }, YMDh: { startRule: '2000-01-01 00', endRule: new Date().getFullYear() + '-12-31 23' }, YMDhm: { startRule: '2000-01-01 00:00', endRule: new Date().getFullYear() + '-12-31 23:59' }, YMDhms: { startRule: '2000-01-01 00:00:00', endRule: new Date().getFullYear() + '-12-31 23:59:59' }, h: { startRule: '00', endRule: '23' }, m: { startRule: '00', endRule: '59' }, s: { startRule: '00', endRule: '59' }, hm: { startRule: '00:00', endRule: '23:59' }, hms: { startRule: '00:00:00', endRule: '23:59:59' }, ms: { startRule: '00:00', endRule: '59:59' } },mp = exports.mp = { Y: "\u5E74", M: "\u6708", D: "\u65E5", h: "\u65F6", m: "\u5206", s: "\u79D2" },PickerRun = exports.PickerRun = function () {function a(b) {_classCallCheck(this, a);var c = b.mode,f = b.startRule,g = b.endRule,h = b.defaultValue;this.mode = c, this.columns = c.split(''), this.firstKey = c[0], this.startRule = f || this.getDefRule('startRule'), this.endRule = g || this.getDefRule('endRule'), this.defaultValue = h || this.getLocalTime();}return _createClass(a, [{ key: 'initContainer', value: function initContainer() {var b = {},c = this.datetime2Obj(this.startRule),f = this.datetime2Obj(this.endRule),g = !0,h = !1,j = void 0;try {for (var n, l = this.columns[Symbol.iterator](); !(g = (n = l.next()).done); g = !0) {var o = n.value,p = parseInt(c[o]),q = parseInt(f[o]);if ('D' === o) {var r = this.datetime2Obj(this.defaultValue);q = this.getDays(r.Y, r.M);}b[o] = this.getColumn(p, q);}} catch (o) {h = !0, j = o;} finally {try {!g && l.return && l.return();} finally {if (h) throw j;}}return b;} }, { key: 'getValue', value: function getValue() {var b = 0 < arguments.length && void 0 !== arguments[0] ? arguments[0] : !0,c = this.datetime2Obj(this.defaultValue);return !1 === b && (c = this.datetime2Obj(this.getLocalTime())), this.obj2Value(this.datetime2Obj(this.startRule), c);} }, { key: 'getDays', value: function getDays(b, c) {var f = [31, isLeapYear(b) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];return f[+c - 1];} }, { key: 'getColumn', value: function getColumn(b, c) {for (var f = [], g = b; g <= c; g++) {f.push(fmt(g) + '');}return f;} }, { key: 'value2Obj', value: function value2Obj(b, c) {for (var f = {}, g = 0; g < this.columns.length; g++) {f[this.columns[g]] = c[this.columns[g]][b[g]];}return f;} }, { key: 'time2Timestamp', value: function time2Timestamp(b) {return new Date(b).getTime();} }, { key: 'getLocalTime', value: function getLocalTime(b) {var c = new Date(),f = { Y: '' + c.getFullYear(), YM: c.getFullYear() + '-' + fmt(c.getMonth() + 1), YMD: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()), YMDh: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()), YMDhm: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()) + ':' + fmt(c.getMinutes()), YMDhms: c.getFullYear() + '-' + fmt(c.getMonth() + 1) + '-' + fmt(c.getDate()) + ' ' + fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), h: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), hm: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), hms: fmt(c.getHours()) + ':' + fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()), m: '' + fmt(c.getMinutes()), s: '' + fmt(c.getSeconds()), ms: fmt(c.getMinutes()) + ':' + fmt(c.getSeconds()) };return b ? f[b] : f[this.mode];} }, { key: 'obj2Arr', value: function obj2Arr(b) {var c = [];for (var f in b) {c.push(b[f] + mp[f]);}return c;} }, { key: 'obj2Value', value: function obj2Value(b, c) {var f = [];for (var g in c) {f.push(+c[g] - +b[g]);}return f;} }, { key: 'getDefRule', value: function getDefRule(b) {return modesDef[this.mode][b];} }, { key: 'datetime2Obj', value: function datetime2Obj(b, c) {var f = this.columns;c && (f = c);for (var g = {}, h = b.split(/-|:|\s/), j = 0; j < h.length; j++) {g[f[j]] = h[j];}return g;} }, { key: 'obj2DateTime', value: function obj2DateTime(b) {var c = 1 < arguments.length && void 0 !== arguments[1] ? arguments[1] : !0,f = '';for (var h in b) {f += b[h] + mp[h];}var g = f.replace("\u5E74", '-').replace("\u6708", '-').replace("\u65E5", ' ').replace("\u65F6", ':').replace("\u5206", ':').replace("\u79D2", '');return !this.mode.endsWith('s') && c && (g = g.substring(0, g.length - 1)), g;} }, { key: 'getWholeTime', value: function getWholeTime(b) {var c = this.datetime2Obj(this.getLocalTime('YMDhms'), ['Y', 'M', 'D', 'h', 'm', 's']),f = {};for (var g in c) {f[g] = b[g] ? b[g] : c[g];}return this.obj2DateTime(f, !1);} }]), a;}();
-
-/***/ }),
-
-/***/ 236:
-/*!***************************************************************************************!*\
-  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/lb-picker/mixins/index.js ***!
-  \***************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.commonMixin = void 0;var _utils = __webpack_require__(/*! ../utils */ 220);
-var commonMixin = {
-  data: function data() {
-    return {
-      indicatorStyle: "height: 34px" };
-
-  },
-  created: function created() {
-    this.init('init');
-  },
-  methods: {
-    init: function init(changeType) {
-      if (this.list && this.list.length) {
-        var column = (0, _utils.getColumns)({
-          value: this.value,
-          list: this.list,
-          mode: this.mode,
-          props: this.props,
-          level: this.level });var
-
-        columns = column.columns,value = column.value,item = column.item,index = column.index;
-        this.selectValue = value;
-        this.selectItem = item;
-        this.pickerColumns = columns;
-        this.pickerValue = index;
-        this.$emit('change', {
-          value: this.selectValue,
-          item: this.selectItem,
-          index: this.pickerValue,
-          change: changeType });
-
-      }
-    } },
-
-  watch: {
-    value: function value() {
-      if (!this.isConfirmChange) {
-        this.init('value');
-      }
-    },
-    list: function list() {
-      this.init('list');
-    } } };exports.commonMixin = commonMixin;
-
-/***/ }),
-
-/***/ 286:
+/***/ 252:
 /*!***********************************************************************************************!*\
   !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/bory-dateTimePicker/uitls/util.js ***!
   \***********************************************************************************************/
@@ -9630,6 +9564,60 @@ var getIndexOfArray = function getIndexOfArray(value, array) {
   var index = array.findIndex(function (item) {return item == value;});
   return index > -1 ? index : 0;
 };exports.getIndexOfArray = getIndexOfArray;
+
+/***/ }),
+
+/***/ 260:
+/*!***************************************************************************************!*\
+  !*** /Users/linyutang/Desktop/jobwant/jobWanted/components/lb-picker/mixins/index.js ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });exports.commonMixin = void 0;var _utils = __webpack_require__(/*! ../utils */ 244);
+var commonMixin = {
+  data: function data() {
+    return {
+      indicatorStyle: "height: 34px" };
+
+  },
+  created: function created() {
+    this.init('init');
+  },
+  methods: {
+    init: function init(changeType) {
+      if (this.list && this.list.length) {
+        var column = (0, _utils.getColumns)({
+          value: this.value,
+          list: this.list,
+          mode: this.mode,
+          props: this.props,
+          level: this.level });var
+
+        columns = column.columns,value = column.value,item = column.item,index = column.index;
+        this.selectValue = value;
+        this.selectItem = item;
+        this.pickerColumns = columns;
+        this.pickerValue = index;
+        this.$emit('change', {
+          value: this.selectValue,
+          item: this.selectItem,
+          index: this.pickerValue,
+          change: changeType });
+
+      }
+    } },
+
+  watch: {
+    value: function value() {
+      if (!this.isConfirmChange) {
+        this.init('value');
+      }
+    },
+    list: function list() {
+      this.init('list');
+    } } };exports.commonMixin = commonMixin;
 
 /***/ }),
 

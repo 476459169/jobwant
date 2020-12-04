@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "自我评价",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
   "usingComponents": {}
 }

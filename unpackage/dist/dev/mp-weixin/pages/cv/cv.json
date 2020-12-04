@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "简历",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
   "usingComponents": {
     "d-alert": "/components/d-alert/d-alert"
   }

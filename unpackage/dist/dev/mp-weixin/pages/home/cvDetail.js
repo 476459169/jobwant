@@ -234,61 +234,135 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
 
     return {
-      data: {
-        job: 'CRA',
-        salary: '10k-15k/月',
-        company: '临语堂（天津）健康管理有限公司',
-        xl: '本科',
-        status: '全职',
-        workTime: '1-3年',
-        welfare: ['五险一金', '年底双薪', '全勤奖'],
-        description: '1. 可以通过微信开发者工具切换pages.json中condition配置的页面，或者关闭微信开发者工具，然后再从HBuilderX中启动指定页面\n2. 如果出现微信开发者工具启动后白屏的问题，检查是否启动多个微信开发者工具，如果是则关闭所有打开的微信开发者工具，然后再重新运行',
-        companyMsg: {
-          company: '临语堂（天津）健康管理有限公司',
-          peopleNumber: '100-299人',
-          type: '民营',
-          lb: '互联网/医药',
-          address: '北京',
-          mes: '在招职位15个' },
-
-        list: [
-        {
-          job: "CRA",
-          salary: "10k-15k",
-          adress: '北京',
-          worktime: '1-3年',
-          xl: '本科',
-          company: '临语堂（天津）健康管理有限公司',
-          releaseTime: '06月12日' },
-
-        {
-          job: "CRA",
-          salary: "10k-15k",
-          adress: '北京',
-          worktime: '1-3年',
-          xl: '本科',
-          company: '临语堂（天津）健康管理有限公司',
-          releaseTime: '06月12日' }] } };
-
+      dataInf: {},
+      id: '',
+      resumeStatus: '',
+      resumeId: '',
+      deliveryResumeId: '' };
 
 
 
   },
+
+  onLoad: function onLoad(e) {
+    this.id = e.id;
+    this.resumeStatus = e.resumeStatus;
+    this.resumeId = e.resumeId;
+    this.deliveryResumeId = e.deliveryResumeId;
+    this.getData();
+  },
   methods: {
 
     itemClick: function itemClick() {
+
     },
 
 
+    getData: function getData() {var _this = this;
+
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.$api.post('qzPosition!ajaxGetPositionDetail.action', {
+          loginKey: loginkey,
+          positionId: this.id,
+          resumeStatus: this.resumeStatus ? this.resumeStatus : '',
+          resumeId: this.resumeId ? this.resumeId : '',
+          deliveryResumeId: this.deliveryResumeId ? this.deliveryResumeId : '' }).
+
+        then(function (res) {
+          if (res.res.status == 0) {
+            _this.dataInf = res.inf;
+          } else {
+
+          }
+        });
+
+      } else {
+        this.showModal = true;
+        this.showLoginModal();
+
+      }
+
+
+    },
+
+    pushcv: function pushcv() {var _this2 = this;
+      if (this.dataInf.isInterviewed === 1) {
+        //查看面试邀请  sendInvitationCardId
+        uni.navigateTo({
+          url: '../mine/invitation?id=' + this.dataInf.sendInvitationCardId + '&delta=2' });
+
+      } else
+
+      if (this.dataInf.isDelivery === 1) {
+        uni.showToast({
+          title: '请勿重复投递' });
+
+      } else {
+        var loginkey = uni.getStorageSync('loginKey');
+        if (loginkey) {
+          this.$api.post('qzPosition!ajaxDeliverResume.action', {
+            loginKey: loginkey,
+            positionId: this.id }).
+          then(function (res) {
+            if (res.res.status == 0) {
+
+              var pages = getCurrentPages(); //获取所有页面栈实例列表
+              var nowPage = pages[pages.length - 1]; //当前页页面实例
+              var prevPage = pages[pages.length - 2]; //上一页页面实例
+              for (var i = 0; i < prevPage.$vm.data.length; i++) {
+                var item = prevPage.$vm.data[i];
+                if (item.id === _this2.id) {
+                  item.isDelivery = true;
+                }
+              }
+              uni.showToast({
+                title: '投递成功',
+                success: function success() {
+                  uni.navigateBack({});
+
+
+                } });
+
+            } else {
+
+            }
+          });
+
+        } else {
+          this.showModal = true;
+          this.showLoginModal();
+
+        }
+      }
+
+    },
 
     companyDetail: function companyDetail() {
       uni.navigateTo({
-        url: './companyDetail' });
+        url: './companyDetail?positionId=' + this.id + '&companyId=' + this.dataInf.companyInfo.id });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

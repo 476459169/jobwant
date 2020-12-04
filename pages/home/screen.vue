@@ -18,17 +18,17 @@
 		<view class="contentView">
 			<view class="title_view">简历状态</view>
 			<view class="top_view">
-				<view class="top_view_item" :class="[xlSelect == item?'top_view_select_color':'']" v-for="(item,index) in xlArr"
+				<view class="top_view_item" :class="[xlSelect === item.content?'top_view_select_color':'']" v-for="(item,index) in xlArr"
 				 :key="index" @click="itemClick(item,1)">
-					{{item}}
+					{{item.content}}
 				</view>
 			</view>
 			
 			<view class="title_view">工作经验</view>
 			<view class="top_view">
-				<view class="top_view_item" :class="[workSelect == item?'top_view_select_color':'']" v-for="(item,index) in worKArr"
+				<view class="top_view_item" :class="[workSelect === item.content?'top_view_select_color':'']" v-for="(item,index) in worKArr"
 				 :key="index" @click="itemClick(item,2)">
-					{{item}}
+					{{item.content}}
 				</view>
 			</view>
 			
@@ -36,24 +36,24 @@
 			
 			<view class="title_view">公司性质</view>
 			<view class="top_view">
-				<view class="top_view_item" :class="[companyTypeSelect == item?'top_view_select_color':'']" v-for="(item,index) in companyTypeArr"
+				<view class="top_view_item" :class="[companyTypeSelect === item.content?'top_view_select_color':'']" v-for="(item,index) in companyTypeArr"
 				 :key="index" @click="itemClick(item,3)">
-					{{item}}
+					{{item.content}}
 				</view>
 			</view>
 			
 			
 			<view class="title_view">公司规模</view>
 			<view class="top_view">
-				<view class="top_view_item" :class="[companyNumbSelect == item?'top_view_select_color':'']" v-for="(item,index) in companyNumbArr"
+				<view class="top_view_item" :class="[companyNumbSelect === item.content?'top_view_select_color':'']" v-for="(item,index) in companyNumbArr"
 				 :key="index" @click="itemClick(item,4)">
-					{{item}}
+					{{item.content}}
 				</view>
 			</view>
 			
 			<view class="bottom_view">
-				<view class="bottom_view_cz">重置</view>
-				<view class="bottom_view_qd">确定</view>
+				<view class="bottom_view_cz" @click="reset()">重置</view>
+				<view class="bottom_view_qd" @click="comfirm()">确定</view>
 			</view>
 			
 		</view>
@@ -68,35 +68,103 @@
 	export default{
 		data(){
 			return{
-					xlArr: ['不限', '大专', '本科', '硕士', 'MBA/EMBA', '博士'],
-					worKArr:['全部','无经验','1年以下','1-3年','3-5年','5-10年','10年以上'],
-					companyTypeArr:['全部','国企','外商独资','合资','民营','股份制企业','上市公司','医院','药企'],
-					companyNumbArr:['全部','20人以下','20-99人','100-299人','300-499人','500-999人','1000-9999人','10000人以上'],
+					xlArr: [],
+					worKArr:[],
+					companyTypeArr:[],
+					companyNumbArr:[],
 					list:areaData,
 					address:[],
-					xlSelect:'不限',
-					workSelect:'全部',
-					companyTypeSelect:'全部',
-					companyNumbSelect:'全部'
+					xlSelect:'',
+					workSelect:'',
+					companyTypeSelect:'',
+					selWorkLocation:'',
+					companyNumbSelect:'',
+			}
+		},
+		
+		onLoad(e) {
+			this.getDataList()
+			
+			var shield=JSON.parse(decodeURIComponent(e.shieldInf))
+			console.log('shieldinf = '+shield.selEducationRequirement);
+			if(e.shieldInf){
+					this.address = shield.selWorkLocation
+					this.xlSelect = shield.selEducationRequirement
+					this.workSelect = shield.selExperienceRequirement
+					this.companyTypeSelect = shield.selCompanyNatureRequirement
+					this.companyNumbSelect = shield.selCompanyScope
 			}
 		},
 			
 		methods:{
+			
+			getDataList(){
+				var loginkey = uni.getStorageSync('loginKey');
+				if (loginkey){
+					this.$api.post('qzPosition!ajaxGetFilterCondition.action', {
+						loginKey: loginkey
+					}).then(res => {
+						if (res.res.status == 0) {
+							this.worKArr = res.inf.experienceArr
+							this.companyNumbArr = res.inf.scopeArr
+							this.xlArr = res.inf.educationArr
+							this.companyTypeArr = res.inf.companyNatureArr
+						} else {
+							
+						}
+					})
+					
+				}else{
+					this.showModal=true;
+					this.showLoginModal();
+					
+				}
+			},
 			handleTap (picker) {
 							this.$refs[picker].show()
 							// console.log("handleTap");
 						},
 			itemClick(item,ob){
-				if(ob==1){
-					this.xlSelect = item
-				}else if(ob==2){
-					this.workSelect = item
-				}else if(ob==3){
-					this.companyTypeSelect = item
-				}else if(ob==4){
-					this.companyNumbSelect = item
+				if(ob===1){
+					this.xlSelect = item.content
+				}else if(ob===2){
+					this.workSelect = item.content
+				}else if(ob===3){
+					this.companyTypeSelect = item.content
+				}else if(ob===4){
+					this.companyNumbSelect = item.content
 				}
 				
+			},
+			
+			
+			
+			comfirm(){
+				
+				
+				
+				let pages = getCurrentPages();  //获取所有页面栈实例列表
+				let nowPage = pages[ pages.length - 1];  //当前页页面实例
+				let prevPage = pages[ pages.length - 2 ];  //上一页页面实例
+				prevPage.$vm.shieldInf = {
+					reload:'1',
+					selEducationRequirement:this.xlSelect,
+					selExperienceRequirement:this.workSelect,
+					selCompanyNatureRequirement:this.companyTypeSelect,
+					selCompanyScope:this.companyNumbSelect,
+					selWorkLocation:this.address
+				}; 
+				uni.navigateBack({})
+			},
+			
+			
+			
+			reset(){
+				this.address = ''
+				this.xlSelect = '学历不限'
+				this.workSelect = '经验不限'
+				this.companyTypeSelect = '全部'
+				this.companyNumbSelect = '0-55人'
 			}
 		}
 		

@@ -130,7 +130,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
 //
 //
 //
@@ -203,35 +203,51 @@ var _default =
   data: function data() {
 
     return {
-      dataArr: {
-        company: '临语堂（天津）健康管理有限公司',
-        type: '互联网/培训',
-        status: '股份制企业',
-        peopleNumber: '20人以下',
-        companyDetail: 'Vue.js（读音 /vjuː/, 类似于 view） 是一套构建用户界面的渐进式框架Vue 只关注视图层， 采用自底向上增量开发的设计。Vue 的目标是通过尽可能简单的 API 实现响应的数据绑定和组合的视图组件。Vue 学习起来非常简单，本教程基于 Vue 2.1.8 版本测试。',
-        listArr: [
-        {
-          job: "CRA",
-          salary: "10k-15k",
-          adress: '北京',
-          worktime: '1-3年',
-          xl: '本科',
-          company: '临语堂（天津）健康管理有限公司',
-          releaseTime: '06月12日' },
-
-        {
-          job: "CRA",
-          salary: "10k-15k",
-          adress: '北京',
-          worktime: '1-3年',
-          xl: '本科',
-          company: '临语堂（天津）健康管理有限公司',
-          releaseTime: '06月12日' }] } };
+      positionId: '',
+      companyId: '',
 
 
+      dataInf: {} };
 
+  },
 
-  } };exports.default = _default;
+  onLoad: function onLoad(e) {
+    this.positionId = e.positionId;
+    this.companyId = e.companyId;
+    this.getData();
+  },
+
+  methods: {
+
+    getData: function getData() {var _this = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.$api.post('qzPosition!ajaxGetEnterpriseDetailInfo.action', {
+          loginKey: loginkey,
+          positionId: this.positionId,
+          companyId: this.companyId }).
+
+        then(function (res) {
+          if (res.res.status == 0) {
+            _this.dataInf = res.inf;
+          } else {
+
+          }
+        });
+
+      } else {
+        this.showModal = true;
+        this.showLoginModal();
+
+      }
+    },
+
+    itemClick: function itemClick(item) {
+      uni.navigateTo({
+        url: './cvDetail?id=' + item.id });
+
+    } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

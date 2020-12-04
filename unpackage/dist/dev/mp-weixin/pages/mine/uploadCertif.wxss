@@ -37,7 +37,8 @@
   margin-top: 10px;
   height: 20px;
   line-height: 20px;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   background-color: #f5f7f8;
   font-size: 14px;
   color: #666666;
@@ -47,19 +48,100 @@
   margin: 10px 0px;
   width: 100%;
   height: auto;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   background-color: #f5f7f8;
 }
+.bottomView {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
 .commit_btn {
-  margin-top: 20px;
-  width: 80%;
   margin-left: 10%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 80%;
   height: 40px;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   background-color: #e8654b;
   text-align: center;
   line-height: 40px;
   color: #FFFFFF;
   font-size: 14px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.delete_btn {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 30%;
+  margin-left: 10px;
+  height: 40px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  background-color: #e8654b;
+  text-align: center;
+  line-height: 40px;
+  color: #FFFFFF;
+  font-size: 14px;
+}
+.selectView_item {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.selectView_item .titleLabel {
+  font-size: 14px;
+  line-height: 15px;
+  padding: 10px;
+}
+.selectView_item .input_text {
+  margin: 0px 10px;
+  height: 20px;
+  font-size: 14px;
+  background-color: #f5f7f8;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  color: #666666;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  padding: 5px 0px 5px 5px;
+}
+.selectView_item .input_text .input_text_content {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.selectView_item .input_text .input_text_imgView {
+  width: 30px;
+  height: 30px;
+  background-color: #e8654b;
+  -webkit-border-top-right-radius: 5px;
+          border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+          border-bottom-right-radius: 5px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.selectView_item .input_text .input_text_imgView .input_text_imgView_img {
+  width: 8px;
+  height: 5px;
 }
 

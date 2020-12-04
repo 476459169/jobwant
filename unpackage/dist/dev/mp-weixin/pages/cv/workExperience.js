@@ -94,10 +94,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   lbPicker: function() {
-    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 215))
+    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 239))
   },
-  ePickerPlus: function() {
-    return Promise.all(/*! import() | components/e-picker-plus/e-picker-plus */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/e-picker-plus/e-picker-plus")]).then(__webpack_require__.bind(null, /*! @/components/e-picker-plus/e-picker-plus.vue */ 223))
+  boryDateTimePicker: function() {
+    return Promise.all(/*! import() | components/bory-dateTimePicker/bory-dateTimePicker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/bory-dateTimePicker/bory-dateTimePicker")]).then(__webpack_require__.bind(null, /*! @/components/bory-dateTimePicker/bory-dateTimePicker.vue */ 247))
   }
 }
 var render = function() {
@@ -239,6 +239,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var _default =
 {
   data: function data() {
@@ -247,53 +248,26 @@ var _default =
 
     return {
       currentDate: currentD,
-      companyName: '',
-      resumeId: '', //简历id
-      positionInfoId: '', //职位名称id(二级列表中的id)
-      entryTime: '', //入职日期
-      resignnationTime: '', //离职日期
-      industryInfoId: '', //所属行业id(二级列表中的id)
-      selIndustryInfoId: '',
-      monthSalary: '', //月薪
-      workDescription: '',
-      isShield: '',
-      industry: '',
-      industrystr: '', //所属行业文字 显示用
-      positionName: '', //职位名称
       switchValue: false,
+      type: 'year-month',
+      cvid: '',
       workExpId: '',
-      positionArr: [{
-        children: [
-        {
-          label: "临床试验",
-          value: "402880cc751b7c3701751b8167800000" }],
-
-
-        label: "临床试验",
-        value: "402880cc751add0a01751ae0a181000a" },
-      {
-        children: [
-        {
-          label: "销售顾问",
-          value: "402880cc751b7c3701751b8229030001" },
-
-        {
-          label: "商务拓展",
-          value: "402880cc751b7c3701751b8251ca0002" },
-
-        {
-          label: "销售管理",
-          value: "402880cc751b7c3701751b827b2a0003" }],
-
-
-        label: "销售/商务拓展",
-        value: "402880cc751ae40001751ae71d990000" },
-      {
-        children: [],
-
-
-        label: "互联网",
-        value: "402880cc751ae40001751ae777130002" }] };
+      dataInf: {
+        companyName: '',
+        resumeId: '', //简历id
+        positionInfoId: '', //职位名称id(二级列表中的id)
+        entryDate: '', //入职日期
+        resignationDate: '', //离职日期
+        industryInfoId: '', //所属行业id(二级列表中的id)
+        selIndustryInfoId: '',
+        monthSalary: '', //月薪
+        workDescription: '',
+        industry: '',
+        industrystr: '', //所属行业文字 显示用
+        positionName: '', //职位名称
+        isShield: '0', //是否屏蔽公司，1表示屏蔽，0表示不屏蔽
+        positionArr: [],
+        industryArr: [] } };
 
 
 
@@ -303,36 +277,86 @@ var _default =
 
   onLoad: function onLoad(e) {
     if (e.id) {
-      this.id = e.id;
+      this.cvid = e.id;
     }
 
     if (e.workExpId) {
       this.workExpId = e.workExpId;
-      this.getMes();
+      console.log('this.workExpId=' + e.workExpId);
+      this.getMes(e.workExpId);
     }
 
+    this.getdownList();
+
   },
+  computed: {
+
+    indicatorStyle: function indicatorStyle() {
+      return {
+        background: 'rgba(15, 128, 255, 0.4)',
+        height: '40px' };
+
+    } },
+
+
+
   methods: {
 
     handleConfirm: function handleConfirm(e) {
-      console.log('handconfirm  value=' + e.value + "label =" + e.label + "e.item=" + e.item[1].value);
-      this.industrystr = e.value.map(function (item) {return item;}).join('-');
-      for (var i = 0; i < e.item; i++) {
+
+      this.dataInf.industry = e.value.map(function (item) {return item;}).join('-');
+      for (var i = 0; i < e.item.length; i++) {
         if (i == 0) {
 
         } else {
-
+          console.log('industryInfoId=' + e.item[i].value);
+          this.dataInf.industryInfoId = e.item[i].value;
         }
       }
     },
-    getMes: function getMes() {var _this = this;
+
+    handleConfirm1: function handleConfirm1(e) {
+
+      this.dataInf.positionName = e.value.map(function (item) {return item;}).join('-');
+      for (var i = 0; i < e.item.length; i++) {
+        if (i == 0) {
+
+        } else {
+          console.log('positionInfoId=' + e.item[i].value);
+          this.dataInf.positionInfoId = e.item[i].value;
+        }
+      }
+
+    },
+
+    getdownList: function getdownList() {var _this = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetWorkExpDropdownInfo.action', {
+        loginKey: loginkey }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this.dataInf.positionArr = res.inf.positionArr;
+          _this.dataInf.industryArr = res.inf.industryArr;
+
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
+    },
+    getMes: function getMes(workid) {var _this2 = this;
       var loginkey = uni.getStorageSync('loginKey');
       this.$api.post('resume!ajaxGetWorkExperienceInfo.action', {
         loginKey: loginkey,
-        workExpId: this.workExpId }).
+        workExpId: workid }).
       then(function (res) {
         if (res.res.status == 0) {
-          _this.getResumeInfo();
+          _this2.dataInf = res.inf;
+          _this2.dataInf.resumeId = _this2.cvid;
+          _this2.switchValue = res.inf.isShield === 1 ? true : false;
+          _this2.dataInf.positionInfoId = res.inf.selPositionInfoId;
+          _this2.dataInf.industryInfoId = res.inf.selIndustryInfoId;
         } else {
           uni.showToast({
             title: res.res.error });
@@ -364,20 +388,84 @@ var _default =
     },
     switchClick: function switchClick() {
       this.switchValue = !this.switchValue;
+      if (this.switchValue === true) {
+        this.dataInf.isShield = '1';
+      } else {
+        this.dataInf.isShield = '0';
+      }
       console.log('this.switch = ' + this.switchValue);
     },
     confirm1: function confirm1(e) {
-      this.beginTime = e.result;
-      console.log(e.result);
+      this.dataInf.entryDate = e;
     },
     confirm2: function confirm2(e) {
-      if (e.result === this.currentDate) {
-        this.endTime = '至今';
+      if (e === this.currentDate) {
+        this.dataInf.resignationDate = '至今';
       } else {
-        this.endTime = e.result;
+        this.dataInf.resignationDate = e;
       }
     },
     saveClick: function saveClick() {
+
+
+      if (this.workExpId.length > 0) {
+        var loginkey = uni.getStorageSync('loginKey');
+        var workExpInf = JSON.stringify(this.dataInf);
+        this.$api.post('resume!ajaxUpdateWorkExperience.action', {
+          loginKey: loginkey,
+          workExpId: this.workExpId,
+          workExpInfo: workExpInf }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            uni.showToast({
+              title: '保存成功',
+              success: function success() {
+                uni.navigateBack({});
+
+
+              } });
+
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+      } else {
+        var loginkey = uni.getStorageSync('loginKey');
+        var dict = {
+          resumeId: this.cvid,
+          companyName: this.dataInf.companyName,
+          positionInfoId: this.dataInf.positionInfoId,
+          entryDate: this.dataInf.entryDate,
+          resignationDate: this.dataInf.resignationDate,
+          industryInfoId: this.dataInf.industryInfoId,
+          monthSalary: this.dataInf.monthSalary,
+          workDescription: this.dataInf.workDescription,
+          isShield: this.dataInf.isShield };
+
+        var _workExpInf = JSON.stringify(dict);
+        this.$api.post('resume!ajaxAddWorkExperience.action', {
+          loginKey: loginkey,
+          workExpInfo: _workExpInf }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            uni.showToast({
+              title: '保存成功',
+              success: function success() {
+                uni.navigateBack({});
+
+
+              } });
+
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+      }
+
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

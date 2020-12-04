@@ -5,13 +5,21 @@
 				<image class="cell_img" src="../../static/mine/mycer.png" mode=""></image>
 				<view class="cell_contentView">
 					<view class="cell_contentView_title">
-						{{item.certifName}}
+						{{item.name}}
 					</view>
 					<view class="cell_contentView_jg">
-						{{item.certifJG}}
+						{{item.awardDate+'-'+item.organization}}
 					</view>
 				</view>
-				<image class="cell_endBtn" src="../../static/cv/sz.png" mode=""></image>
+				<!-- <image class="cell_endBtn" src="../../static/cv/sz.png" mode="" @click="itemClick(item)"></image> -->
+				<view class="click_btns">
+					<view class="change_btn"  @click="itemClick(item)">
+						修改
+					</view>
+					<view class="delete_btn"  @click="deleteItem(item)">
+						删除
+					</view>
+				</view>
 			</view>
 		</view>
 		
@@ -29,28 +37,69 @@
 	export default{
 		data(){
 			return{
-				dataArr:[
-					{
-						certifName:'CRA学院证书',
-						certifJG:'临语堂（天津）健康管理有限公司',
-						
-					},
-					{
-						certifName:'CRA学院证书',
-						certifJG:'临语堂（天津）健康管理有限公司'
-					}
-				]
+				id:'',
+				dataArr:[]
 			};
 		},
 		
+		onLoad(e) {
+			// this.id = e.id
+			
+		},
 		
+		onShow() {
+			this.getData()
+		},
 		methods:{
 				
 			uploadClick(){
 				uni.navigateTo({
 					url:'./uploadCertif'
 				})
+			},
+			
+				
+			getData(){
+				
+				
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxGetCertificationList.action', {
+					loginKey: loginkey,
+				}).then(res => {
+					if (res.res.status == 0) {
+						this.dataArr = res.inf.arr
+					} else {
+						uni.showToast({
+							title: res.res.error
+						})
+					}
+				
+				})
+			},
+			
+			itemClick(item){
+				uni.navigateTo({
+					url:'./uploadCertif?id='+item.id
+				})
+			},
+			
+			deleteItem(item){
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!deleteCertification.action', {
+					loginKey: loginkey,
+					certificationId:item.id
+				}).then(res => {
+					if (res.res.status == 0) {
+						this.getData()
+					} else {
+						uni.showToast({
+							title: res.res.error
+						})
+					}
+				
+				})
 			}
+			
 		}
 	}
 </script>
@@ -121,6 +170,26 @@
 			line-height: 40px;
 			text-align: center;
 			border-radius: 5px;
+		}
+	}
+	
+	.click_btns{
+		display: flex;
+		align-items: center;
+		.change_btn{
+			font-size: 12px;
+			color: #e8654b;
+			line-height: 30px;
+			height: 30px;
+			padding: 10px;
+		}
+		
+		.delete_btn{
+			font-size: 12px;
+			color: #e8654b;
+			line-height: 30px;
+			height: 30px;
+			padding: 10px;
 		}
 	}
 </style>

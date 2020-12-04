@@ -94,7 +94,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   lbPicker: function() {
-    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 215))
+    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 239))
   }
 }
 var render = function() {
@@ -143,7 +143,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
 
 
@@ -273,8 +273,45 @@ var _areaDataMin = _interopRequireDefault(__webpack_require__(/*! ./area-data-mi
 //
 //
 //
-var _default = { data: function data() {return { xlArr: ['不限', '大专', '本科', '硕士', 'MBA/EMBA', '博士'], worKArr: ['全部', '无经验', '1年以下', '1-3年', '3-5年', '5-10年', '10年以上'], companyTypeArr: ['全部', '国企', '外商独资', '合资', '民营', '股份制企业', '上市公司', '医院', '药企'], companyNumbArr: ['全部', '20人以下', '20-99人', '100-299人', '300-499人', '500-999人', '1000-9999人', '10000人以上'], list: _areaDataMin.default, address: [], xlSelect: '不限', workSelect: '全部', companyTypeSelect: '全部', companyNumbSelect: '全部' };}, methods: { handleTap: function handleTap(picker) {this.$refs[picker].show(); // console.log("handleTap");
-    }, itemClick: function itemClick(item, ob) {if (ob == 1) {this.xlSelect = item;} else if (ob == 2) {this.workSelect = item;} else if (ob == 3) {this.companyTypeSelect = item;} else if (ob == 4) {this.companyNumbSelect = item;}} } };exports.default = _default;
+var _default = { data: function data() {return { xlArr: [], worKArr: [], companyTypeArr: [], companyNumbArr: [], list: _areaDataMin.default, address: [], xlSelect: '', workSelect: '', companyTypeSelect: '', selWorkLocation: '', companyNumbSelect: '' };}, onLoad: function onLoad(e) {this.getDataList();var shield = JSON.parse(decodeURIComponent(e.shieldInf));console.log('shieldinf = ' + shield.selEducationRequirement);if (e.shieldInf) {this.address = shield.selWorkLocation;this.xlSelect = shield.selEducationRequirement;this.workSelect = shield.selExperienceRequirement;this.companyTypeSelect = shield.selCompanyNatureRequirement;this.companyNumbSelect = shield.selCompanyScope;}}, methods: { getDataList: function getDataList() {var _this = this;var loginkey = uni.getStorageSync('loginKey');if (loginkey) {this.$api.post('qzPosition!ajaxGetFilterCondition.action', { loginKey: loginkey }).then(function (res) {if (res.res.status == 0) {_this.worKArr = res.inf.experienceArr;_this.companyNumbArr = res.inf.scopeArr;_this.xlArr = res.inf.educationArr;_this.companyTypeArr = res.inf.companyNatureArr;} else {}});} else {this.showModal = true;this.showLoginModal();}}, handleTap: function handleTap(picker) {this.$refs[picker].show(); // console.log("handleTap");
+    }, itemClick: function itemClick(item, ob) {if (ob === 1) {this.xlSelect = item.content;} else if (ob === 2) {this.workSelect = item.content;} else if (ob === 3) {
+        this.companyTypeSelect = item.content;
+      } else if (ob === 4) {
+        this.companyNumbSelect = item.content;
+      }
+
+    },
+
+
+
+    comfirm: function comfirm() {
+
+
+
+      var pages = getCurrentPages(); //获取所有页面栈实例列表
+      var nowPage = pages[pages.length - 1]; //当前页页面实例
+      var prevPage = pages[pages.length - 2]; //上一页页面实例
+      prevPage.$vm.shieldInf = {
+        reload: '1',
+        selEducationRequirement: this.xlSelect,
+        selExperienceRequirement: this.workSelect,
+        selCompanyNatureRequirement: this.companyTypeSelect,
+        selCompanyScope: this.companyNumbSelect,
+        selWorkLocation: this.address };
+
+      uni.navigateBack({});
+    },
+
+
+
+    reset: function reset() {
+      this.address = '';
+      this.xlSelect = '学历不限';
+      this.workSelect = '经验不限';
+      this.companyTypeSelect = '全部';
+      this.companyNumbSelect = '0-55人';
+    } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

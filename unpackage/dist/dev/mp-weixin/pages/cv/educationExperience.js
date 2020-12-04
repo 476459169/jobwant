@@ -94,10 +94,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   lbPicker: function() {
-    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 215))
+    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 239))
   },
-  ePickerPlus: function() {
-    return Promise.all(/*! import() | components/e-picker-plus/e-picker-plus */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/e-picker-plus/e-picker-plus")]).then(__webpack_require__.bind(null, /*! @/components/e-picker-plus/e-picker-plus.vue */ 223))
+  boryDateTimePicker: function() {
+    return Promise.all(/*! import() | components/bory-dateTimePicker/bory-dateTimePicker */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/bory-dateTimePicker/bory-dateTimePicker")]).then(__webpack_require__.bind(null, /*! @/components/bory-dateTimePicker/bory-dateTimePicker.vue */ 247))
   }
 }
 var render = function() {
@@ -137,7 +137,10 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+//
+//
+//
 //
 //
 //
@@ -228,22 +231,90 @@ var _default =
       format: true });
 
     return {
+      myProps: {
+        label: 'content',
+        value: 'id',
+        children: 'child' },
+
       zwf: "\u3000",
       currentDate: currentD,
-      schoolName: '',
-      professional: '',
-      beginTime: '',
-      endTime: '至今',
-      typelist: ['1', '2', '3', '4'],
-      xltype: '',
-      haveXl: true,
-      xlarr: ['不限', '初中及以下', '中专/中技', '高中', '大专', '本科', '硕士', 'MBA/EMBA', '博士'] };
+      educationExpId: '',
+      educationArr: [],
+      haveXl: false,
+      type: 'year-month',
+      dataInf: {
+        resumeId: '', //简历id
+        schoolName: '',
+        education: '', //学历id
+        isHasDegree: 0, //是否有学位，1表示有，0表示没有
+        major: '', //所学专业
+        enterDate: '', //入学日期
+        graduationDate: '', //毕业日期
+        selEducationId: '', //选择学历id
+        selEducationContent: '' //选中学历内容
+      } };
+
+
 
   },
 
 
-  onLoad: function onLoad() {},
+  onLoad: function onLoad(e) {
+    this.dataInf.resumeId = e.id;
+    if (e.educationExpId) {
+      this.educationExpId = e.educationExpId;
+      this.getMes();
+    }
+  },
+  onShow: function onShow() {
+    this.getdownList();
+    if (this.educationExpId) {
+      this.getMes();
+    }
+  },
+  computed: {
+
+    indicatorStyle: function indicatorStyle() {
+      return {
+        background: 'rgba(15, 128, 255, 0.4)',
+        height: '40px' };
+
+    } },
+
+
+
   methods: {
+
+    getdownList: function getdownList() {var _this = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetEducationArr.action', {
+        loginKey: loginkey }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this.educationArr = res.inf.educationArr;
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
+    },
+    getMes: function getMes(workid) {var _this2 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetEducationInfo.action', {
+        loginKey: loginkey,
+        educationExpId: this.educationExpId }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this2.dataInf = res.inf;
+          _this2.haveXl = res.inf.isHasDegree === 1 ? true : false;
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
+    },
     getDate: function getDate(type) {
       var date = new Date();
 
@@ -262,31 +333,104 @@ var _default =
       return ztime;
     },
 
+    handleConfirm: function handleConfirm(e) {
+
+      this.dataInf.selEducationContent = e.value.map(function (item) {return item;}).join('-');
+      for (var i = 0; i < e.item.length; i++) {
+        if (i == 0) {
+          console.log('industryInfoId=' + e.item[i].id);
+          this.dataInf.selEducationId = e.item[i].id;
+          this.dataInf.education = e.item[i].id;
+        } else {
+
+
+        }
+      }
+    },
+
+    confirm1: function confirm1(e) {
+      this.dataInf.enterDate = e;
+    },
+    confirm2: function confirm2(e) {
+      if (e === this.currentDate) {
+        this.dataInf.graduationDate = '至今';
+      } else {
+        this.dataInf.graduationDate = e;
+      }
+    },
+
     handleTap: function handleTap(picker) {
       this.$refs[picker].show();
     },
-    switchClick: function switchClick() {
-      this.switchValue = !this.switchValue;
-      console.log('this.switch = ' + this.switchValue);
-    },
-    confirm1: function confirm1(e) {
-      this.beginTime = e.result;
-      console.log(e.result);
-    },
-    confirm2: function confirm2(e) {
-      if (e.result === this.currentDate) {
-        this.endTime = '至今';
-      } else {
-        this.endTime = e.result;
-      }
-    },
     selectxlClick: function selectxlClick() {
       this.haveXl = !this.haveXl;
+      if (this.haveXl === true) {
+        this.dataInf.isHasDegree = 1;
+      } else {
+        this.dataInf.isHasDegree = 0;
+      }
     },
 
     save: function save() {
 
+      if (this.educationExpId) {
+
+        //更新
+        var loginkey = uni.getStorageSync('loginKey');
+        var dict = this.dataInf;
+        var workExpInf = JSON.stringify(dict);
+        //添加
+        this.$api.post('resume!ajaxUpdateEducationExpInfo.action', {
+          loginKey: loginkey,
+          educationExpInfo: workExpInf,
+          educationExpId: this.educationExpId }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            uni.showToast({
+              title: '保存成功',
+              success: function success() {
+                uni.navigateBack({});
+
+
+              } });
+
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+
+      } else {
+        //添加
+        var loginkey = uni.getStorageSync('loginKey');
+        var _dict = this.dataInf;
+        var _workExpInf = JSON.stringify(_dict);
+        //添加
+        this.$api.post('resume!ajaxAddEducation.action', {
+          loginKey: loginkey,
+          educationExpInfo: _workExpInf }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            uni.showToast({
+              title: '保存成功',
+              success: function success() {
+                uni.navigateBack({});
+
+
+              } });
+
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+      }
+
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

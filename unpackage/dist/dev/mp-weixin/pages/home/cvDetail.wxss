@@ -67,23 +67,26 @@
 .top_view .top_view_msgview .top_view_msgview_text {
   font-size: 12px;
   color: #cccccc;
-  margin-right: 5px;
+  margin-right: 8px;
+  margin-left: 3px;
 }
 .top_view .top_view_bottomView {
-  margin-top: 5px;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  height: 15px;
   font-size: 10px;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
 }
 .top_view .top_view_bottomView .top_view_bottomView_item {
-  padding: 0px 4px;
+  padding: 0px 5px;
   color: #e8654b;
   background-color: #fbc9bc;
   margin-right: 5px;
-  border-radius: 2px;
-  line-height: 15px;
+  -webkit-border-radius: 2px;
+          border-radius: 2px;
+  font-size: 12px;
+  margin-top: 5px;
 }
 .title_flexView {
   display: -webkit-box;
@@ -267,5 +270,48 @@
   margin: 10px 0px 0px 0px;
   height: 2px;
   background-color: #eceff3;
+}
+.bottom_view {
+  background-color: #FFFFFF;
+  height: 60px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  position: fixed;
+  bottom: 0px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  width: 100%;
+}
+.bottom_view .bottom_view_shareBtn {
+  border: 1px solid #e8654b;
+  color: #e8654b;
+  background-color: #fddfd6;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 80px;
+  text-align: center;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+}
+.bottom_view .bottom_view_pushBtn {
+  border: 1px solid #e8654b;
+  color: #FFFFFF;
+  background-color: #e8654b;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  margin-right: 10px;
+  margin-left: 10px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  text-align: center;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
 }
 

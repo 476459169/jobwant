@@ -28,16 +28,41 @@
 				typelist: ['1', '2', '3', '4'],
 				xltype: '',
 				haveXl:true,
-				xlarr:['不限','初中及以下','中专/中技','高中','大专','本科','硕士','MBA/EMBA','博士']
+				xlarr:['不限','初中及以下','中专/中技','高中','大专','本科','硕士','MBA/EMBA','博士'],
+				resumeId:''
 			};
 		},
 
 
-		onLoad() {},
+		onLoad(e) {
+			this.resumeId = e.id
+		},
 		methods: {
 			
 			save(){
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxUpdateResumeTitle.action', {
+					loginKey: loginkey,
+					resumeId:this.resumeId,
+					resumeTitle:this.schoolName
+					
+				}).then(res => {
+				if (res.res.status == 0) {
+					uni.showToast({
+						title: '修改成功',
+						complete() {
+							uni.navigateBack({
+								
+							})
+						}
+					})
+				} else {
+					uni.showToast({
+						title: res.res.error
+					})
+				}		
 				
+				})
 			}
 		}
 	}

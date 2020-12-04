@@ -94,7 +94,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   lbPicker: function() {
-    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 215))
+    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 239))
   }
 }
 var render = function() {
@@ -199,35 +199,123 @@ var _default =
 
   data: function data() {
     return {
+
+      myProps: {
+        label: 'content',
+        value: 'id',
+        children: 'child' },
+
       typelist: ['离职，随时到岗', '在职，月内到岗', '在职，考虑机会', '在职，暂不考虑'],
-      type: '在职，暂不考虑',
+      type: '月内到岗',
+      typeId: '',
       zwf: " ",
-      dataArr: [
-      {
-        jobName: 'CRA',
-        salary: '10k-15k',
-        address: '北京',
-        status: '全职' },
+      id: '',
+      dataInf: {
+        selJobStatusContent: '' },
 
-      {
-        jobName: 'CRA',
-        salary: '10k-15k',
-        address: '北京',
-        status: '全职' }] };
-
-
+      dataArr: [] };
 
   },
+
+  onLoad: function onLoad(e) {
+    this.id = e.id;
+    this.getdownList();
+  },
+
+  onShow: function onShow() {
+    this.getMes();
+  },
+
+
 
   methods: {
     handleTap: function handleTap(picker) {
       this.$refs[picker].show();
     },
 
-    addClick: function addClick() {
-      uni.navigateTo({
-        url: './addJobIntention' });
+    handleConfirm: function handleConfirm(e) {
 
+      this.dataInf.selJobStatusContent = e.value.map(function (item) {return item;}).join('-');
+      for (var i = 0; i < e.item.length; i++) {
+        if (i == 0) {
+          console.log('positionInfoId=' + e.item[i].id);
+          this.typeId = e.item[i].id;
+          this.upstatus(this.typeId);
+        }
+      }
+    },
+
+    upstatus: function upstatus(id) {var _this = this;
+      //ajaxUpdateResumeJobStatus
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxUpdateResumeJobStatus.action', {
+        loginKey: loginkey,
+        resumeId: this.id,
+        jobStatusId: id }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this.typelist = res.inf.jobWantedStatusArr;
+
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
+    },
+
+
+    editExpected: function editExpected(item) {
+      uni.navigateTo({
+        url: './addJobIntention?id=' + this.id + '&wantedIntentionId=' + item.id });
+
+    },
+    addClick: function addClick() {
+
+
+      if (this.dataArr.length > 4) {
+        uni.navigateTo({
+          url: './addJobIntention?id=' + this.id });
+
+
+      } else {
+        uni.showToast({
+          title: '最多可添加3条！' });
+
+      }
+
+    },
+
+    getdownList: function getdownList() {var _this2 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetJobStatusDropdownInfo.action', {
+        loginKey: loginkey }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this2.typelist = res.inf.jobWantedStatusArr;
+
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
+    },
+    getMes: function getMes() {var _this3 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetWantedIntentionList.action', {
+        loginKey: loginkey,
+        resumeId: this.id }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this3.dataArr = res.inf.arr;
+          _this3.dataInf = res.inf;
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

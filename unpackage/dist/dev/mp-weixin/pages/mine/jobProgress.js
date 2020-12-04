@@ -130,7 +130,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
 //
 //
 //
@@ -186,37 +186,113 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 //
 //
 //
-var _default =
+//
+
+
+var _this;
+var timer = null;var _default =
 {
   data: function data() {
     return {
-      topArr: ['全部', '已投递', '已查看', '受邀面试', '不合适'],
-      topSelect: '全部',
-      data: [{
-        company: 'CRA',
-        progress: '临语堂（天津）健康管理有限公司',
-        status: '受邀面试' },
+      topArr: [],
+      topSelect: Object,
+      data: [],
+      page: 1,
+      baseUrl: '' };
 
-      {
-        company: '临语堂（天津）健康管理有限公司',
-        progress: '感谢您的投递，我会尽快查看您的简历感谢您的投递，我会尽快查看您的简历感谢您的投递，我会尽快查看您的简历',
-        status: '已投递' },
+  },
 
-      {
-        company: '临语堂（天津）健康管理有限公司',
-        progress: '感谢您的投递，我会尽快查看您的简历感谢您的投递，我会尽快查看您的简历感谢您的投递，我会尽快查看您的简历',
-        status: '已投递' }] };
+  onLoad: function onLoad() {
+    _this = this;
+    this.baseUrl = getApp().globalData.baseUrl;
+    this.getTopArr();
+    this.getData();
+  },
 
+  onPullDownRefresh: function onPullDownRefresh() {
+    this.page = 1;
+    this.getData();
 
+  },
 
-
+  onReachBottom: function onReachBottom() {//当划到最底部的时候触发事件
+    if (timer != null) {//加载缓冲延迟
+      clearTimeout(timer);
+    }
+    timer = setTimeout(function () {
+      _this.getData();
+    }, 600);
   },
   methods: {
 
+    getTopArr: function getTopArr() {var _this2 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.loginKey = loginkey;
+        this.$api.post('qzPosition!ajaxGetResumeStatusList.action', {
+          loginKey: loginkey }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            _this2.topArr = res.inf.arr;
+          } else {
+
+          }
+        });
+
+      } else {}
+    },
+
+    getData: function getData() {var _this3 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.loginKey = loginkey;
+        this.$api.post('qzPosition!ajaxGetJobSearchProgress.action', {
+          loginKey: loginkey,
+          resumeStatusId: this.topSelect.id ? this.topSelect.id : '',
+          page: this.page }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            if (_this.page === 1) {
+              _this3.data = res.inf.arr;
+              _this.page++;
+            } else {
+              if (_this.page <= res.inf.pageCount) {
+                _this.data = _this.data.concat(res.inf.arr); //进行数据的累加
+                _this.page++; //页数的++
+                _this.loading = "加载更多";
+              } else {
+                uni.showToast({
+                  title: '没有更多了！' });
+
+              }
+            }
+
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+
+          uni.hideNavigationBarLoading();
+          uni.stopPullDownRefresh(); //数据加载完成,刷新结束
+        });
+
+      } else {}
+    },
+
     topItemClick: function topItemClick(item) {
-      console.log("item = " + item);
       this.topSelect = item;
+      this.page = 1;
+      this.getData();
+    },
+
+
+    itemselect: function itemselect(item) {
+      uni.navigateTo({
+        url: '../home/cvDetail?id=' + item.positionId + '&resumeStatus=' + item.resumeStatus + '&resumeId=' + item.resumeId + '&deliveryResumeId=' + item.id });
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

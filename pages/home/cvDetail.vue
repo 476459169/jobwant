@@ -3,28 +3,31 @@
 		<view class="top_view">
 			<view class="top_view_titleView">
 				<view class="top_view_titleView_title">
-					{{data.job}}
+					{{dataInf.name}}
 				</view>
 				<view class="top_view_titleView_salary">
-					{{data.salary}}
+					{{dataInf.salaryRequirement}}
 				</view>
 			</view>
 			<view class="top_view_company">
-				{{data.company}}
+				{{dataInf.companyName}}
 			</view>
 			<view class="top_view_msgview">
-				<image class="top_view_msgview_img" src="../../static/cv/sj.png" mode=""></image>
-				<view class="top_view_msgview_text">{{data.workTime}}</view>
-				<image class="top_view_msgview_img" src="../../static/cv/sj.png" mode=""></image>
-				<view class="top_view_msgview_text">{{data.xl}}</view>
-				<image class="top_view_msgview_img" src="../../static/cv/sj.png" mode=""></image>
-				<view class="top_view_msgview_text">{{data.status}}</view>
+				<image class="top_view_msgview_img" src="../../static/home/jobDetail_time.png" mode=""></image>
+				<view class="top_view_msgview_text">{{dataInf.expRequirement}}</view>
+				<image class="top_view_msgview_img" src="../../static/home/jobDetail_xl.png" mode=""></image>
+				<view class="top_view_msgview_text">{{dataInf.educationRequirement}}</view>
+				<image class="top_view_msgview_img" src="../../static/home/jobDetail_status.png" mode=""></image>
+				<view class="top_view_msgview_text">{{dataInf.worknature}}</view>
 			</view>
-			<view class="top_view_bottomView">
-				<view class="top_view_bottomView_item" v-for="(item,index) in data.welfare" :key="index">
-					{{item}}
+			<view v-if="dataInf.welfareArr.length>0">
+				<view class="top_view_bottomView">
+					<view class="top_view_bottomView_item" v-for="(item,index) in dataInf.welfareArr" :key="index">
+						{{item}}
+					</view>
 				</view>
 			</view>
+			
 		</view>
 		
 		<view class="title_flexView">
@@ -33,7 +36,7 @@
 			<view class="title_flexView_line"></view>
 		</view>
 		<view class="descriptionView">
-			{{data.description}}
+			{{dataInf.jobRequirement}}
 		</view>
 		
 		<view class="title_flexView">
@@ -46,13 +49,13 @@
 			<image class="companyView_img" src="../../static/home/star.png" mode=""></image>
 			<view class="companyView_contentView">
 				<view class="companyView_contentView_title">
-					{{data.companyMsg.company}}
+					{{dataInf.companyInfo.companyName}}
 				</view>
 				<view class="companyView_contentView_msg">
-					{{data.companyMsg.peopleNumber+'&nbsp|&nbsp'+data.companyMsg.type+'&nbsp|&nbsp'+data.companyMsg.lb}}
+					{{dataInf.companyInfo.companyScope+'&nbsp|&nbsp'+dataInf.companyInfo.companyNature+'&nbsp|&nbsp'+dataInf.companyInfo.companyIndustry}}
 				</view>
 				<view class="companyView_contentView_detail">
-					{{data.companyMsg.address+'&nbsp|&nbsp'+data.companyMsg.mes}}
+					{{dataInf.companyInfo.companyLocation+'&nbsp|&nbsp'+'在招职位'+dataInf.companyInfo.positionCount+'个'}}
 				</view>
 			</view>
 			
@@ -73,24 +76,24 @@
 		</view>
 		
 		<view class="tab_list">
-			<view class="cell" v-for="(item,index) in data.list" :key="index" @click="itemClick(item)"> 
+			<view class="cell" v-for="(item,index) in dataInf.similarPositionArr" :key="index" @click="itemClick(item)"> 
 				<view class="cell_titleview">
 					<view class="cell_titleview_title">
-						{{item.job}}
+						{{item.name}}
 					</view>
 					<view class="cell_titleview_salary">
-						{{item.salary}}
+						{{item.salaryRequirement}}
 					</view>
 				</view>
 				<view class="cell_msg">
-					{{item.adress+'&nbsp|&nbsp'+item.worktime+'&nbsp|&nbsp'+item.xl}}
+					{{item.location+'&nbsp|&nbsp'+item.expRequirement+'&nbsp|&nbsp'+item.educationRequirement}}
 				</view>
 				<view class="cell_bottomview">
 					<view class="cell_bottomview_company">
-						{{item.company}}
+						{{item.companyName}}
 					</view>
 					<view class="cell_bottomview_time">
-						{{item.releaseTime}}
+						{{item.upDate}}
 					</view>
 				</view>
 				<view class="cell_line">
@@ -99,6 +102,20 @@
 			</view>
 		
 		</view>
+		
+		<view class="" style="height: 60px; width: 100%;">
+			<view class="bottom_view">
+				<!-- <view class="bottom_view_shareBtn">
+					分享
+				</view> -->
+				<view class="bottom_view_pushBtn" @click="pushcv()">
+					{{dataInf.isInterviewed ===1?'查看邀请':dataInf.isDelivery===1?'已投递':'投递'}}
+				</view>
+			</view>
+		</view>
+		
+
+	
 	</view>
 </template>
 
@@ -107,56 +124,113 @@
 		data(){
 				
 			return{
-				data:{
-					job:'CRA',
-					salary:'10k-15k/月',
-					company:'临语堂（天津）健康管理有限公司',
-					xl:'本科',
-					status:'全职',
-					workTime:'1-3年',
-					welfare:['五险一金','年底双薪','全勤奖'],
-					description:'1. 可以通过微信开发者工具切换pages.json中condition配置的页面，或者关闭微信开发者工具，然后再从HBuilderX中启动指定页面\n2. 如果出现微信开发者工具启动后白屏的问题，检查是否启动多个微信开发者工具，如果是则关闭所有打开的微信开发者工具，然后再重新运行',
-					companyMsg:{
-						company:'临语堂（天津）健康管理有限公司',
-						peopleNumber:'100-299人',
-						type:'民营',
-						lb:'互联网/医药',
-						address:'北京',
-						mes:'在招职位15个'
-					},
-					list:[
-						{
-								job: "CRA",
-								salary: "10k-15k",
-								adress: '北京',
-								worktime: '1-3年',
-								xl: '本科',
-								company: '临语堂（天津）健康管理有限公司',
-								releaseTime: '06月12日'
-							},
-							{
-								job: "CRA",
-								salary: "10k-15k",
-								adress: '北京',
-								worktime: '1-3年',
-								xl: '本科',
-								company: '临语堂（天津）健康管理有限公司',
-								releaseTime: '06月12日'
-							},
-					]
-				}
+				dataInf:{},
+				id:'',
+				resumeStatus:'',
+				resumeId:'',
+				deliveryResumeId:'',
+				
+				
 			};
+		},
+		
+		onLoad(e) {
+			this.id = e.id
+			this.resumeStatus = e.resumeStatus
+			this.resumeId = e.resumeId
+			this.deliveryResumeId = e.deliveryResumeId
+			this.getData()
 		},
 		methods:{
 				
 			itemClick(){
+				
 			},
 			
+				
+			getData(){
+				
+					var loginkey = uni.getStorageSync('loginKey');
+					if (loginkey){
+						this.$api.post('qzPosition!ajaxGetPositionDetail.action', {
+							loginKey: loginkey,
+							positionId:this.id,
+							resumeStatus:this.resumeStatus?this.resumeStatus:'',
+							resumeId:this.resumeId?this.resumeId:'',
+							deliveryResumeId:this.deliveryResumeId?this.deliveryResumeId:'',
+							
+						}).then(res => {
+							if (res.res.status == 0) {
+								this.dataInf = res.inf
+							} else {
+								
+							}
+						})
+						
+					}else{
+						this.showModal=true;
+						this.showLoginModal();
+						
+					}
+					
+				 
+			},
 			
+			pushcv(){
+				if(this.dataInf.isInterviewed===1){
+					//查看面试邀请  sendInvitationCardId
+					uni.navigateTo({
+						url:'../mine/invitation?id='+this.dataInf.sendInvitationCardId+'&delta=2'
+					})
+				}
+				
+				else if(this.dataInf.isDelivery===1){
+					uni.showToast({
+						title:'请勿重复投递'
+					})
+				}else{
+					var loginkey = uni.getStorageSync('loginKey');
+					if (loginkey){
+						this.$api.post('qzPosition!ajaxDeliverResume.action', {
+							loginKey: loginkey,
+							positionId:this.id
+						}).then(res => {
+							if (res.res.status == 0) {
+								
+								let pages = getCurrentPages();  //获取所有页面栈实例列表
+								let nowPage = pages[ pages.length - 1];  //当前页页面实例
+								let prevPage = pages[ pages.length - 2 ];  //上一页页面实例
+								for (let i = 0; i <  prevPage.$vm.data.length; i++) {
+									let item = prevPage.$vm.data[i]
+									if(item.id === this.id){
+										item.isDelivery = true
+									}
+								}
+								uni.showToast({
+									title:'投递成功',
+									success() {
+										uni.navigateBack({
+											
+										})
+									}
+								})
+							} else {
+								
+							}
+						})
+						
+					}else{
+						this.showModal=true;
+						this.showLoginModal();
+						
+					}
+				}
+				
+			},
 				
 			companyDetail(){
 				uni.navigateTo({
-					url:'./companyDetail'
+					url:'./companyDetail?positionId='+this.id+'&companyId='+this.dataInf.companyInfo.id
 				})
 			}
 		}
@@ -198,22 +272,25 @@
 			.top_view_msgview_text{
 				font-size: 12px;
 				color: #cccccc;
-				margin-right: 5px;
+				margin-right: 8px;
+				margin-left: 3px;
 			}
 		}
 		
 		.top_view_bottomView{
-			margin-top: 5px;
 			display: flex;
-			height: 15px;
 			font-size: 10px;
+			flex-wrap: wrap;
 			.top_view_bottomView_item{
-				padding: 0px 4px;
+				padding: 0px 5px;
 				color: #e8654b;
 				background-color: #fbc9bc;
 				margin-right: 5px;
 				border-radius: 2px;
-				line-height: 15px;
+				// line-height: 15px;
+				font-size: 12px;
+				margin-top: 5px;
+				
 			}
 		}
 	}
@@ -396,5 +473,42 @@
 	
 	
 	
+	}
+	
+	.bottom_view{
+		background-color: #FFFFFF;
+		height: 60px;
+		display: flex;
+		position: fixed;
+		bottom: 0px;
+		align-items: center;
+		width: 100%;
+		.bottom_view_shareBtn{
+			border: 1px solid #e8654b;
+			color: #e8654b;
+			background-color: #fddfd6;
+			height: 40px;
+			line-height: 40px;
+			font-size: 14px;
+			margin-left: 10px;
+			margin-right: 10px;
+			width: 80px;
+			text-align: center;
+			border-radius: 5px;
+			
+		}
+		.bottom_view_pushBtn{
+			border: 1px solid #e8654b;
+			color: #FFFFFF;
+			background-color: #e8654b;
+			height: 40px;
+			line-height: 40px;
+			font-size: 14px;
+			margin-right: 10px;
+			margin-left: 10px;
+			flex: 1;
+			text-align: center;
+			border-radius: 5px;
+		}
 	}
 </style>

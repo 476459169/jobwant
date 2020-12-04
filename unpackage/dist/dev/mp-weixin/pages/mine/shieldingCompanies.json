@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "屏蔽企业",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
   "usingComponents": {}
 }

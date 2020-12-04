@@ -24,115 +24,225 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var _default =
-{
-  data: function data() {
-    return {
-      typelist: ['1', '2', '3', '4'],
-      type: '',
-      wantJob: '',
-      moreSelectArr: [{ id: 1, value: '全部' }, { id: 2, value: '国企国企' }, { id: 3, value: '全部' }, { id: 4, value: 'CRO' }, { id: 5, value: '全部' }, { id: 6, value: '国企国企' }, { id: 7, value: '全部' }, { id: 8, value: '国企国企' }],
-      selectArr: [] };
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;
 
-  },
-  methods: {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var _areaDataMin = _interopRequireDefault(__webpack_require__(/*! ../home/area-data-min.js */ 61));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };} //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var _default = { data: function data() {return { myProps: { label: 'content', value: 'id', children: 'child' }, id: '', selectArr: [], wantedIntentionId: '', cityArr: _areaDataMin.default, //工作城市
+      salaryArr: [], //薪资范围
+      worknatureArr: [], //工作性质
+      companynatureArr: [], //期待公司
+      jobStatusArr: [], //求职状态
+      dataInf: { resumeId: '', workLocation: '', //工作地点
+        selWorkNatureContent: '', //选中的工作性质内容
+        selWorkNatureId: '', //工作性质id
+        selSalaryContent: '', //薪水
+        selSalaryId: '', //薪水id
+        expectedPosition: '', //期望职位
+        selJobStatusId: '', selJobStatusContent: '' //求职状态
+      } };}, onLoad: function onLoad(e) {this.id = e.id;console.log('id = ' + e.id);this.getdownList();if (e.wantedIntentionId) {this.wantedIntentionId = e.wantedIntentionId;this.getdata();}}, methods: { getdownList: function getdownList() {var _this = this;var loginkey = uni.getStorageSync('loginKey');this.$api.post('resume!ajaxGetWantedIntentionDropdownInfo.action', { loginKey: loginkey }).then(function (res) {if (res.res.status == 0) {_this.salaryArr = res.inf.salaryArr;_this.worknatureArr = res.inf.worknatureArr;_this.companynatureArr = res.inf.companynatureArr;_this.jobStatusArr = res.inf.jobStatusArr;} else {uni.showToast({ title: res.res.error });}});}, getdata: function getdata() {var _this2 = this;var loginkey = uni.getStorageSync('loginKey');this.$api.post('resume!ajaxGetWantedIntentionInfo.action', { loginKey: loginkey, wantedIntentionId: this.wantedIntentionId }).then(function (res) {if (res.res.status == 0) {_this2.dataInf = res.inf;_this2.companynatureArr = res.inf.companyNatureArr;for (var i = 0; i < _this2.companynatureArr.length; i++) {var item1 = _this2.companynatureArr[i];if (item1.isSelected === 1) {_this2.selectArr.push(item1);}}} else {uni.showToast({ title: res.res.errMsg });}});}, jobStatushandleConfirm: function jobStatushandleConfirm(e) {this.dataInf.selJobStatusContent = e.value.map(function (item) {return item;}).join('-');for (var i = 0; i < e.item.length; i++) {if (i == 0) {console.log('jobStatusid=' + e.item[i].id);this.dataInf.selJobStatusId = e.item[i].id;}}}, cityhandleConfirm: function cityhandleConfirm(e) {this.dataInf.workLocation = e.value[1];}, salaryhandleConfirm: function salaryhandleConfirm(e) {this.dataInf.selSalaryContent = e.value.map(function (item) {return item;}).join('-');for (var i = 0; i < e.item.length; i++) {if (i == 0) {console.log('selSalaryId=' + e.item[i].id);this.dataInf.selSalaryId = e.item[i].id;}}}, workhandleConfirm: function workhandleConfirm(e) {this.dataInf.selWorkNatureContent = e.value.map(function (item) {return item;}).join('-');for (var i = 0; i < e.item.length; i++) {if (i == 0) {
+          console.log('classificationContent=' + e.item[i].id);
+          this.dataInf.selWorkNatureId = e.item[i].id;
+        }
+      }
+    },
 
     handleTap: function handleTap(picker) {
       this.$refs[picker].show();
@@ -140,12 +250,108 @@ var _default =
 
     selectClick: function selectClick(item) {
       if (this.selectArr.indexOf(item) == -1) {
+
+        if (item.content === '全部') {
+          this.selectArr = [];
+        } else {
+          for (var i = 0; i < this.selectArr.length; i++) {
+            var item1 = this.selectArr[i];
+            if (item1.content === '全部') {
+              var index1 = this.selectArr.indexOf(item1);
+              this.selectArr.splice(index1, 1);
+            }
+          }
+        }
+
         this.selectArr.push(item);
       } else {
         var index1 = this.selectArr.indexOf(item);
         this.selectArr.splice(index1, 1);
       }
+    },
+
+
+    save: function save() {
+      var selectIdArr = [];
+      for (var i = 0; i < this.selectArr.length; i++) {
+        var item1 = this.selectArr[i];
+        selectIdArr.push(item1.id);
+      }
+      var dict = {
+        resumeId: this.id,
+        expectedPosition: this.dataInf.expectedPosition,
+        expectedSalary: this.dataInf.selSalaryId,
+        workLocation: this.dataInf.workLocation,
+        workNature: this.dataInf.selWorkNatureId,
+        companyNature: selectIdArr,
+        jobStatus: this.dataInf.selJobStatusId };
+
+
+      if (this.wantedIntentionId) {
+        //更新
+        var loginkey = uni.getStorageSync('loginKey');
+        this.$api.post('resume!ajaxUpdateWantedIntention.action', {
+          loginKey: loginkey,
+          wantedIntentionId: this.wantedIntentionId,
+          jobWantedIntentionInfo: JSON.stringify(dict) }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            uni.showToast({
+              title: '更新成功',
+              complete: function complete() {
+                uni.navigateBack({});
+              } });
+
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+      } else {
+        var loginkey = uni.getStorageSync('loginKey');
+        this.$api.post('resume!ajaxAddJobWantedIntention.action', {
+          loginKey: loginkey,
+          resumeId: this.id,
+          jobWantedIntentionInfo: JSON.stringify(dict) }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            uni.showToast({
+              title: '添加成功',
+              complete: function complete() {
+                uni.navigateBack({});
+              } });
+
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+      }
+    },
+
+    dele: function dele() {
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxDeleteWantedIntention.action', {
+        loginKey: loginkey,
+        wantedIntentionId: this.wantedIntentionId }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          uni.showToast({
+            title: '删除成功',
+            complete: function complete() {
+              uni.navigateBack({});
+            } });
+
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+      });
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 
@@ -272,14 +478,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   lbPicker: function() {
-    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 215))
+    return Promise.all(/*! import() | components/lb-picker/index */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/lb-picker/index")]).then(__webpack_require__.bind(null, /*! @/components/lb-picker/index.vue */ 239))
   }
 }
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var l0 = _vm.__map(_vm.moreSelectArr, function(item, index) {
+  var l0 = _vm.__map(_vm.companynatureArr, function(item, index) {
     var $orig = _vm.__get_orig(item)
 
     var g0 = _vm.selectArr.indexOf(item)

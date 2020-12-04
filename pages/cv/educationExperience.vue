@@ -6,7 +6,7 @@
 				学校名称
 			</view>
 			<view class="item">
-				<input class="item_content" type="text" value="" v-model="schoolName" />
+				<input class="item_content" type="text" value="" v-model="dataInf.schoolName" />
 			</view>
 		</view>
 
@@ -18,13 +18,15 @@
 				学{{zwf+zwf}}历
 			</view>
 			<view class="item" @tap="handleTap('picker333')">
-				<view class="item_content">{{xltype}}</view>
+				<view class="item_content">{{dataInf.selEducationContent}}</view>
 				<view class="item_imgView">
 					<image class="item_img" src="../../static/login/star3.png" mode=""></image>
 				</view>
 			</view>
 		</view>
-		<lb-picker ref="picker333" v-model="xltype" mode="selector" :list="xlarr">
+		<!-- <lb-picker ref="picker333" v-model="xltype" mode="selector" :list="educationArr">
+		</lb-picker> -->
+		<lb-picker ref="picker333" :props="myProps" mode="multiSelector" level='1' :list="educationArr" @confirm="handleConfirm">
 		</lb-picker>
 
 		<view class="item_views">
@@ -34,7 +36,7 @@
 
 
 			<view class="selectxl" @click="selectxlClick()">
-				<view class="selectxl_item"  :class="[haveXl==true?'isSelect':'']">
+				<view class="selectxl_item" :class="[haveXl==true?'isSelect':'']">
 					有
 				</view>
 				<view class="selectxl_item" :class="[haveXl==true?'':'isSelect']">
@@ -49,7 +51,7 @@
 				所学专业
 			</view>
 			<view class="item">
-				<input class="item_content" type="text" value="" v-model="professional" />
+				<input class="item_content" type="text" value="" v-model="dataInf.major" />
 			</view>
 		</view>
 
@@ -57,8 +59,8 @@
 			<view class="item_title">
 				在校时间
 			</view>
-			<view class="item" @tap="handleTap('pickerdate1')">
-				<view class="item_content">{{beginTime}}</view>
+			<view class="item" @tap="handleTap('pickerdate3')">
+				<view class="item_content">{{dataInf.enterDate}}</view>
 				<view class="item_imgView">
 					<image class="item_img" src="../../static/login/star3.png" mode=""></image>
 				</view>
@@ -66,16 +68,17 @@
 			<view class="item_title" style="margin-left: 5px;">
 				-
 			</view>
-			<view class="item" @tap="handleTap('pickerdate2')">
-				<view class="item_content">{{endTime}}</view>
+			<view class="item" @tap="handleTap('pickerdate4')">
+				<view class="item_content">{{dataInf.graduationDate}}</view>
 				<view class="item_imgView">
 					<image class="item_img" src="../../static/login/star3.png" mode=""></image>
 				</view>
 			</view>
 		</view>
-		<e-picker-plus ref="pickerdate1" @confirm="confirm1" mode="YM" :endRule=currentDate> </e-picker-plus>
-		<e-picker-plus ref="pickerdate2" @confirm="confirm2" mode="YM" :endRule=currentDate> </e-picker-plus>
-
+		<!-- <e-picker-plus ref="pickerdate1" @confirm="confirm1" mode="YM" :endRule=currentDate> </e-picker-plus>
+		<e-picker-plus ref="pickerdate2" @confirm="confirm2" mode="YM" :endRule=currentDate> </e-picker-plus> -->
+		<bory-dateTimePicker ref='pickerdate3' :indicatorStyle='indicatorStyle' :type='type' :datestring='workTime' @change='confirm1'></bory-dateTimePicker>
+		<bory-dateTimePicker ref='pickerdate4' :indicatorStyle='indicatorStyle' :type='type' :datestring='workTime' @change='confirm2'></bory-dateTimePicker>
 		<view class="bottom_view">
 			<view class="bottom_view_qd" @click="save()">保存</view>
 		</view>
@@ -89,22 +92,90 @@
 				format: true
 			})
 			return {
+				myProps: {
+					label: 'content',
+					value: 'id',
+					children: 'child'
+				},
 				zwf: '\u3000',
 				currentDate: currentD,
-				schoolName: '',
-				professional:'',
-				beginTime: '',
-				endTime: '至今',
-				typelist: ['1', '2', '3', '4'],
-				xltype: '',
-				haveXl:true,
-				xlarr:['不限','初中及以下','中专/中技','高中','大专','本科','硕士','MBA/EMBA','博士']
+				educationExpId: '',
+				educationArr: [],
+				haveXl: false,
+				type: 'year-month',
+				dataInf: {
+					resumeId: '', //简历id
+					schoolName: '',
+					education: '', //学历id
+					isHasDegree: 0, //是否有学位，1表示有，0表示没有
+					major: '', //所学专业
+					enterDate: '', //入学日期
+					graduationDate: '', //毕业日期
+					selEducationId: '', //选择学历id
+					selEducationContent: '' //选中学历内容
+
+				},
+
 			};
 		},
 
 
-		onLoad() {},
+		onLoad(e) {
+			this.dataInf.resumeId = e.id
+			if (e.educationExpId) {
+				this.educationExpId = e.educationExpId
+				this.getMes()
+			}
+		},
+		onShow() {
+			this.getdownList()
+			if (this.educationExpId) {
+				this.getMes()
+			}
+		},
+		computed: {
+		
+			indicatorStyle() {
+			                return {
+			                    background: 'rgba(15, 128, 255, 0.4)',
+			                    height: '40px',
+			                };
+			            },
+			
+		
+		},
 		methods: {
+
+			getdownList() {
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxGetEducationArr.action', {
+					loginKey: loginkey
+				}).then(res => {
+					if (res.res.status == 0) {
+						this.educationArr = res.inf.educationArr;
+					} else {
+						uni.showToast({
+							title: res.res.error
+						})
+					}
+				})
+			},
+			getMes(workid) {
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxGetEducationInfo.action', {
+					loginKey: loginkey,
+					educationExpId: this.educationExpId
+				}).then(res => {
+					if (res.res.status == 0) {
+						this.dataInf = res.inf
+					this.haveXl = res.inf.isHasDegree === 1?true:false
+					} else {
+						uni.showToast({
+							title: res.res.error
+						})
+					}
+				})
+			},
 			getDate(type) {
 				const date = new Date();
 
@@ -123,29 +194,101 @@
 				return ztime;
 			},
 
+			handleConfirm(e) {
+
+				this.dataInf.selEducationContent = e.value.map(item => item).join('-');
+				for (var i = 0; i < e.item.length; i++) {
+					if (i == 0) {
+						console.log('industryInfoId=' + e.item[i].id);
+						this.dataInf.selEducationId = e.item[i].id
+						this.dataInf.education = e.item[i].id
+					} else {
+
+
+					}
+				}
+			},
+
+			confirm1(e) {
+				this.dataInf.enterDate = e
+			},
+			confirm2(e) {
+				if (e === this.currentDate) {
+					this.dataInf.graduationDate = '至今'
+				} else {
+					this.dataInf.graduationDate = e
+				}
+			},
+
 			handleTap(picker) {
 				this.$refs[picker].show()
 			},
-			switchClick() {
-				this.switchValue = !this.switchValue;
-				console.log('this.switch = ' + this.switchValue);
-			},
-			confirm1(e) {
-				this.beginTime = e.result
-				console.log(e.result)
-			},
-			confirm2(e) {
-				if (e.result === this.currentDate) {
-					this.endTime = '至今'
-				} else {
-					this.endTime = e.result
+			selectxlClick() {
+				this.haveXl = !this.haveXl
+				if(this.haveXl === true){
+					this.dataInf.isHasDegree = 1
+				}else{
+					this.dataInf.isHasDegree = 0
 				}
 			},
-			selectxlClick(){
-				this.haveXl = !this.haveXl
-			} ,
-			
-			save(){
+
+			save() {
+				
+				if(this.educationExpId){
+					
+						//更新
+						var loginkey = uni.getStorageSync('loginKey');
+							let dict = this.dataInf
+							let workExpInf = JSON.stringify(dict)
+							//添加
+							this.$api.post('resume!ajaxUpdateEducationExpInfo.action', {
+								loginKey: loginkey,
+								educationExpInfo: workExpInf,
+								educationExpId:this.educationExpId
+							}).then(res => {
+								if (res.res.status == 0) {
+									uni.showToast({
+										title: '保存成功',
+										success() {
+											uni.navigateBack({
+							
+											})
+										}
+									})
+								} else {
+									uni.showToast({
+										title: res.res.error
+									})
+								}
+							})
+						
+				}else{
+					//添加
+					var loginkey = uni.getStorageSync('loginKey');
+					let dict = this.dataInf
+					let workExpInf = JSON.stringify(dict)
+					//添加
+					this.$api.post('resume!ajaxAddEducation.action', {
+						loginKey: loginkey,
+						educationExpInfo: workExpInf
+					}).then(res => {
+						if (res.res.status == 0) {
+							uni.showToast({
+								title: '保存成功',
+								success() {
+									uni.navigateBack({
+					
+									})
+								}
+							})
+						} else {
+							uni.showToast({
+								title: res.res.error
+							})
+						}
+					})
+				}
+				
 				
 			}
 		}
@@ -251,14 +394,15 @@
 		transform: scale(0.7, 0.7);
 	}
 
-	.selectxl{
+	.selectxl {
 		display: flex;
 		width: 100px;
 		height: 20px;
 		border-radius: 5px;
 		border: 1px solid #e8654b;
-		background-color:#e8654b; 
-		.selectxl_item{
+		background-color: #e8654b;
+
+		.selectxl_item {
 			margin: 0px;
 			font-size: 12px;
 			color: #FFFFFF;
@@ -268,8 +412,8 @@
 			flex: 1;
 			background-color: #FFFFFF;
 		}
-		
-		.isSelect{
+
+		.isSelect {
 			background-color: #e8654b;
 		}
 	}

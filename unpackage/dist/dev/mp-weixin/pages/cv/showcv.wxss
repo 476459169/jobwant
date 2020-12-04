@@ -29,49 +29,11 @@
   font-size: 12px;
   background-color: #FFFFFF;
 }
-.topView .topView_nameView {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
+.topView .topview_title {
+  font-size: 14px;
 }
-.topView .topView_nameView .topView_nameView_name {
-  font-size: 16px;
-}
-.topView .topView_nameView .topView_nameView_xb {
-  color: #999999;
-  font-size: 12px;
-  margin-top: 3px;
-  margin-left: 3px;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-          flex: 1;
-}
-.topView .topView_msg {
-  color: #333333;
-  height: 25px;
-  line-height: 25px;
-}
-.topView .topView_item {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  height: 25px;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-          align-items: center;
-}
-.topView .topView_item .topView_item_img {
-  width: 10px;
-  height: 10px;
-  background-color: #000000;
-}
-.topView .topView_item .topView_item_text {
-  font-size: 12px;
-  margin-left: 10px;
-  line-height: 25px;
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-          flex: 1;
+.btxet {
+  color: #e8654b;
 }
 .rightBtn {
   width: 12px;
@@ -126,7 +88,8 @@
   font-size: 12px;
   margin-left: 5px;
   color: #e8654b;
-  border-radius: 7.5px;
+  -webkit-border-radius: 7.5px;
+          border-radius: 7.5px;
   border: 1px solid #e8654b;
   text-align: center;
 }
@@ -181,6 +144,17 @@
 .work_experienceView .work_experienceView_detail {
   color: #666666;
   font-size: 12px;
+  display: -webkit-box;
+  /** 对象作为伸缩盒子模型显示 **/
+  overflow: hidden;
+  word-break: break-all;
+  /* break-all(允许在单词内换行。) */
+  text-overflow: ellipsis;
+  /* 超出部分省略号 */
+  -webkit-box-orient: vertical;
+  /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+  -webkit-line-clamp: 3;
+  /** 显示的行数 **/
 }
 .certificateView {
   display: -webkit-box;
@@ -205,5 +179,143 @@
   line-height: 40px;
   font-size: 10px;
   color: #666666;
+}
+.itemview {
+  padding: 10px;
+}
+.itemview .itemview_title {
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+}
+.itemview .itemview_text {
+  margin-top: 10px;
+  height: 20px;
+  line-height: 20px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  background-color: #f5f7f8;
+  font-size: 14px;
+  color: #666666;
+  padding: 5px;
+}
+.itemview .itemview_picture {
+  margin: 10px 0px;
+  width: 100%;
+  height: auto;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  background-color: #f5f7f8;
+}
+.selectView {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+.selectView .selectView_item {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.selectView .selectView_item .titleLabel {
+  font-size: 14px;
+  line-height: 15px;
+  padding: 10px;
+}
+.selectView .selectView_item .input_text {
+  margin: 0px 10px;
+  height: 20px;
+  font-size: 14px;
+  background-color: #f5f7f8;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  color: #666666;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  padding: 5px 0px 5px 5px;
+}
+.selectView .selectView_item .input_text .input_text_content {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.selectView .selectView_item .input_text .input_text_imgView {
+  width: 30px;
+  height: 30px;
+  background-color: #e8654b;
+  -webkit-border-top-right-radius: 5px;
+          border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+          border-bottom-right-radius: 5px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.selectView .selectView_item .input_text .input_text_imgView .input_text_imgView_img {
+  width: 8px;
+  height: 5px;
+}
+.topView {
+  padding: 10px;
+  font-size: 12px;
+  background-color: #FFFFFF;
+}
+.topView .topView_nameView {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.topView .topView_nameView .topView_nameView_name {
+  font-size: 16px;
+}
+.topView .topView_nameView .topView_nameView_xb {
+  color: #999999;
+  font-size: 12px;
+  margin-top: 3px;
+  margin-left: 3px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.topView .topView_msg {
+  color: #333333;
+  height: 25px;
+  line-height: 25px;
+}
+.topView .topView_item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  height: 25px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.topView .topView_item .topView_item_img {
+  width: 10px;
+  height: 10px;
+  background-color: #000000;
+}
+.topView .topView_item .topView_item_text {
+  font-size: 12px;
+  margin-left: 10px;
+  line-height: 25px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
 }
 

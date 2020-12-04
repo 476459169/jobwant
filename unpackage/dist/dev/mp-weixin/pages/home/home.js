@@ -105,7 +105,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   dAlert: function() {
-    return __webpack_require__.e(/*! import() | components/d-alert/d-alert */ "components/d-alert/d-alert").then(__webpack_require__.bind(null, /*! @/components/d-alert/d-alert.vue */ 208))
+    return __webpack_require__.e(/*! import() | components/d-alert/d-alert */ "components/d-alert/d-alert").then(__webpack_require__.bind(null, /*! @/components/d-alert/d-alert.vue */ 232))
   }
 }
 var render = function() {
@@ -208,47 +208,126 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _default =
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var _this;
+var timer = null;var _default =
 {
   data: function data() {
     return {
       loginkey: '',
       showModal: true,
-      data: [{
-        job: "CRA",
-        salary: "10k-15k",
-        adress: '北京',
-        worktime: '1-3年',
-        xl: '本科',
-        company: '临语堂（天津）健康管理有限公司',
-        releaseTime: '06月12日',
-        select: false },
-      {
-        job: "CRA",
-        salary: "10k-15k",
-        adress: '北京',
-        worktime: '1-3年',
-        xl: '本科',
-        company: '临语堂（天津）健康管理有限公司',
-        releaseTime: '06月12日',
-        select: true }] };
+      baseUrl: "https://uat.crlink.com/crlink/",
+      data: [],
+      page: 1,
+      selectArr: [],
+      shieldInf: {
+        // selEducationRequirement:'学历不限',
+        // selExperienceRequirement:'经验不限',
+        // selCompanyNatureRequirement:'全部',
+        // selCompanyScope:'',
+        // selWorkLocation:'',	
+
+        selEducationRequirement: '',
+        selExperienceRequirement: '',
+        selCompanyNatureRequirement: '',
+        selCompanyScope: '',
+        selWorkLocation: '' } };
+
 
 
   },
 
   onLoad: function onLoad() {
-    // if(!this.loginkey){
-    // 	this.datacommit();
-    // }
+    _this = this;
+    this.baseUrl = getApp().globalData.baseUrl;
+    this.getuserInfo();
+    this.getData();
 
   },
 
   onShow: function onShow() {
+
     this.getuserInfo();
+
+    if (this.shieldInf.reload === '1') {
+      _this.page = 1;
+      this.getData();
+    }
+    console.log('selCompanyScope=' + this.shieldInf.selCompanyScope);
+
+  },
+
+  onPullDownRefresh: function onPullDownRefresh() {
+    this.page = 1;
+    this.getData();
+
+  },
+
+  onReachBottom: function onReachBottom() {//当划到最底部的时候触发事件
+    if (timer != null) {//加载缓冲延迟
+      clearTimeout(timer);
+    }
+    timer = setTimeout(function () {
+      _this.getData();
+    }, 600);
   },
 
   methods: {
-    getuserInfo: function getuserInfo() {var _this = this;
+
+    getData: function getData() {var _this2 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.$api.post('qzPosition!ajaxGetPositionList.action', {
+          loginKey: loginkey,
+          selName: '',
+          selEducationRequirement: this.shieldInf.selEducationRequirement,
+          selExperienceRequirement: this.shieldInf.selExperienceRequirement,
+          selCompanyNatureRequirement: this.shieldInf.selCompanyNatureRequirement,
+          selCompanyScope: this.shieldInf.selCompanyScope,
+          selWorkLocation: this.shieldInf.selWorkLocation,
+          firstIndex: _this.page }).
+        then(function (res) {
+          if (res.res.status === 0) {
+            _this2.shieldInf.reload = '0';
+            if (_this.page === 1) {
+              _this2.data = res.inf.arr;
+              _this.page++;
+            } else {
+              if (_this.page <= res.inf.pageCount) {
+                _this.data = _this.data.concat(res.inf.arr); //进行数据的累加
+                _this.page++; //页数的++
+                _this.loading = "加载更多";
+              } else {
+                uni.showToast({
+                  title: '没有更多了！' });
+
+              }
+            }
+            uni.hideNavigationBarLoading();
+            uni.stopPullDownRefresh(); //数据加载完成,刷新结束
+          } else {
+
+          }
+        });
+
+      } else {
+        this.showModal = true;
+        this.showLoginModal();
+
+      }
+
+    },
+    getuserInfo: function getuserInfo() {var _this3 = this;
       // 
       var loginkey = uni.getStorageSync('loginKey');
       if (loginkey) {
@@ -258,14 +337,14 @@ var _default =
           if (res.res.status == 0) {
             // this.sfz = res.inf.subCardNo
             console.log("have loginkey");
-            _this.showModal = false;
+            _this3.showModal = false;
 
           } else {
             uni.removeStorageSync('loginKey');
             uni.removeStorageSync('userId');
             uni.removeStorageSync('isFill');
-            _this.showModal = true;
-            _this.showLoginModal();
+            _this3.showModal = true;
+            _this3.showLoginModal();
 
           }
         });
@@ -278,21 +357,54 @@ var _default =
 
     },
     screenClick: function screenClick() {
+
       uni.navigateTo({
-        url: './screen' });
+        url: './screen?shieldInf=' + encodeURIComponent(JSON.stringify(this.shieldInf)) });
 
     },
 
     itemClick: function itemClick(item) {
       uni.navigateTo({
-        url: './cvDetail' });
+        url: './cvDetail?id=' + item.id });
 
     },
     itemSelect: function itemSelect(item) {
       console.log('itemselect');
-      item.select = !item.select;
+
+      if (item.isDelivery === false) {
+        item.isSelected = !item.isSelected;
+        if (this.selectArr.indexOf(item) == -1) {
+          this.selectArr.push(item);
+        } else {
+          var index1 = this.selectArr.indexOf(item);
+          this.selectArr.splice(index1, 1);
+        }
+      }
+
+
     },
-    datacommit: function datacommit() {
+    datacommit: function datacommit() {var _this4 = this;
+
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.$api.post('qzPosition!ajaxBatchDelivery.action', {
+          loginKey: loginkey,
+          deliveryPositionArr: JSON.stringify(this.selectArr) }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            uni.showToast({
+              title: '投递成功' });
+
+            _this4.page = 1;
+            _this4.getData();
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+      }
+
 
     },
     showLoginModal: function showLoginModal() {

@@ -16,32 +16,42 @@
 			</view>
 		</view>
 
-		<view class="tab_list" >
+		<view class="tab_list">
 			<view class="cell" v-for="(item,index) in data" :key="index">
 
 				<view class="cell_mainV">
-					<view class="cell_btn" :class="[item.select==true?'cell_btn_select':'']" @click="itemSelect(item)">
+					<!-- <view class="cell_btn" :class="[item.select==true?'cell_btn_select':'']" @click="itemSelect(item)">
 
-					</view>
+					</view> -->
+
+					<image v-if="item.isSelected===true" class="cell_img" src="../../static/cv/tb_selected.png" mode="" @click="itemSelect(item)"></image>
+					<image v-if="item.isSelected===false" class="cell_img" src="../../static/cv/tb_normal.png" mode="" @click="itemSelect(item)"></image>
 
 					<view class="cell_content" @click="itemClick(item)">
-						<view class="cell_titleview">
+						<view class="cell_titleview" :class="[item.isDelivery===true?'itemisDelivery':'']">
 							<view class="cell_titleview_title">
-								{{item.job}}
+								{{item.name}}
 							</view>
-							<view class="cell_titleview_salary">
-								{{item.salary}}
+							<view class="cell_titleview_salary" :class="[item.isDelivery===true?'cell_isDelivery':'']">
+								{{item.salaryRequirement}}
 							</view>
 						</view>
-						<view class="cell_msg">
-							{{item.adress+'&nbsp|&nbsp'+item.worktime+'&nbsp|&nbsp'+item.xl}}
-						</view>
-						<view class="cell_bottomview">
-							<view class="cell_bottomview_company">
-								{{item.company}}
+						
+						<view class="cell_msgViews" :class="[item.isDelivery===true?'itemisDelivery':'']">
+							<view class="cell_msg" :class="[item.isDelivery===true?'cell_isDelivery':'']" >
+								{{item.location+'&nbsp|&nbsp'+item.expRequirement+'&nbsp|&nbsp'+item.educationRequirement}}
 							</view>
-							<view class="cell_bottomview_time">
-								{{item.releaseTime}}
+							<view class="cell_status">
+								{{item.isDelivery===true?'已投递':''}}
+							</view>
+						</view>
+						
+						<view class="cell_bottomview" :class="[item.isDelivery===true?'itemisDelivery':'']">
+							<view class="cell_bottomview_company" :class="[item.isDelivery===true?'cell_isDelivery':'']">
+								{{item.companyName}}
+							</view>
+							<view class="cell_bottomview_time" >
+								{{item.upDate}}
 							</view>
 						</view>
 
@@ -64,122 +74,224 @@
 </template>
 
 <script>
+	var _this;
+	var timer = null;
 	export default {
 		data() {
 			return {
-				loginkey:'',
-				showModal:true,
-				data: [{
-					job: "CRA",
-					salary: "10k-15k",
-					adress: '北京',
-					worktime: '1-3年',
-					xl: '本科',
-					company: '临语堂（天津）健康管理有限公司',
-					releaseTime: '06月12日',
-					select: false
-				}, {
-					job: "CRA",
-					salary: "10k-15k",
-					adress: '北京',
-					worktime: '1-3年',
-					xl: '本科',
-					company: '临语堂（天津）健康管理有限公司',
-					releaseTime: '06月12日',
-					select: true
-				}, ]
+				loginkey: '',
+				showModal: true,
+				baseUrl: "https://uat.crlink.com/crlink/",
+				data: [],
+				page: 1,
+				selectArr:[],
+				shieldInf: {
+					// selEducationRequirement:'学历不限',
+					// selExperienceRequirement:'经验不限',
+					// selCompanyNatureRequirement:'全部',
+					// selCompanyScope:'',
+					// selWorkLocation:'',	
+
+					selEducationRequirement: '',
+					selExperienceRequirement: '',
+					selCompanyNatureRequirement: '',
+					selCompanyScope: '',
+					selWorkLocation: '',
+				}
+
 			};
 		},
 
 		onLoad() {
-			// if(!this.loginkey){
-			// 	this.datacommit();
-			// }
+			_this = this
+			this.baseUrl = getApp().globalData.baseUrl
+			this.getuserInfo();
+			this.getData()
 
 		},
 
 		onShow() {
+
 			this.getuserInfo();
+
+			if (this.shieldInf.reload === '1') {
+				_this.page = 1
+				this.getData()
+			}
+			console.log('selCompanyScope=' + this.shieldInf.selCompanyScope);
+
+		},
+
+		onPullDownRefresh: function() {
+			this.page = 1;
+			this.getData()
+
+		},
+
+		onReachBottom: function() { //当划到最底部的时候触发事件
+			if (timer != null) { //加载缓冲延迟
+				clearTimeout(timer);
+			}
+			timer = setTimeout(function() {
+				_this.getData();
+			}, 600);
 		},
 
 		methods: {
+
+			getData() {
+				var loginkey = uni.getStorageSync('loginKey');
+				if (loginkey) {
+					this.$api.post('qzPosition!ajaxGetPositionList.action', {
+						loginKey:loginkey,
+						selName: '',
+						selEducationRequirement: this.shieldInf.selEducationRequirement,
+						selExperienceRequirement: this.shieldInf.selExperienceRequirement,
+						selCompanyNatureRequirement: this.shieldInf.selCompanyNatureRequirement,
+						selCompanyScope: this.shieldInf.selCompanyScope,
+						selWorkLocation: this.shieldInf.selWorkLocation,
+						firstIndex: _this.page
+					}).then(res => {
+						if (res.res.status === 0) {
+							this.shieldInf.reload = '0'
+							if (_this.page === 1) {
+								this.data = res.inf.arr
+								_this.page++;
+							} else {
+								if (_this.page <= res.inf.pageCount) {
+									_this.data = _this.data.concat(res.inf.arr); //进行数据的累加
+									_this.page++; //页数的++
+									_this.loading = "加载更多";
+								} else {
+									uni.showToast({
+										title: '没有更多了！'
+									});
+								}
+							}
+							uni.hideNavigationBarLoading();
+							uni.stopPullDownRefresh(); //数据加载完成,刷新结束
+						} else {
+
+						}
+					})
+
+				} else {
+					this.showModal = true;
+					this.showLoginModal();
+
+				}
+
+			},
 			getuserInfo() {
 				// 
 				var loginkey = uni.getStorageSync('loginKey');
-				if (loginkey){
+				if (loginkey) {
 					this.$api.post('user!ajaxGetUserInfo.action', {
 						loginKey: loginkey
 					}).then(res => {
 						if (res.res.status == 0) {
 							// this.sfz = res.inf.subCardNo
 							console.log("have loginkey");
-							this.showModal=false;
-							
+							this.showModal = false;
+
 						} else {
 							uni.removeStorageSync('loginKey');
 							uni.removeStorageSync('userId');
 							uni.removeStorageSync('isFill');
-							this.showModal=true;
+							this.showModal = true;
 							this.showLoginModal();
-							
+
 						}
 					})
-					
-				}else{
-					this.showModal=true;
+
+				} else {
+					this.showModal = true;
 					this.showLoginModal();
-					
+
 				}
-				
+
 			},
 			screenClick() {
+
 				uni.navigateTo({
-					url: './screen'
+					url: './screen?shieldInf=' + encodeURIComponent(JSON.stringify(this.shieldInf))
 				})
 			},
-			
+
 			itemClick(item) {
 				uni.navigateTo({
-					url: './cvDetail'
+					url: './cvDetail?id=' + item.id
 				})
 			},
 			itemSelect(item) {
 				console.log('itemselect');
-				item.select = !item.select
+				
+				if(item.isDelivery===false){
+					item.isSelected = !item.isSelected
+					if (this.selectArr.indexOf(item) == -1) {
+						this.selectArr.push(item)
+					} else {
+						var index1 = this.selectArr.indexOf(item);
+						this.selectArr.splice(index1, 1)
+					}
+				}
+				
+				
 			},
 			datacommit() {
 				
-			},
-			showLoginModal(){
-				
-					
-					this.$showModal({
-						title: "温馨提示",
-						content: '登录过后才可体验求职小程序',
-						showCancel: true,
-						cancelText: "取消",
-						cancelColor: "#000000",
-						confirmText: "登录",
-						confirmColor: "#3CC51F",
-						success: function(res) {
-							if (res.confirm) {
-								uni.navigateTo({
-									url: '../login/login'
+					var loginkey = uni.getStorageSync('loginKey');
+					if (loginkey) {
+						this.$api.post('qzPosition!ajaxBatchDelivery.action', {
+							loginKey: loginkey,
+							deliveryPositionArr:JSON.stringify(this.selectArr)
+						}).then(res => {
+							if (res.res.status == 0) {
+								uni.showToast({
+									title:'投递成功'
 								})
+								this.page=1
+								this.getData()
 							} else {
-								// wx.showToast({
-								//     title: '点击了取消',
-								//     icon: 'none',
-								//     duration: 2000
-								// })
+								uni.showToast({
+									title:res.res.error
+								})
 							}
-						}
-					})
+						})
+					}
 				
+				
+			},
+			showLoginModal() {
+
+
+				this.$showModal({
+					title: "温馨提示",
+					content: '登录过后才可体验求职小程序',
+					showCancel: true,
+					cancelText: "取消",
+					cancelColor: "#000000",
+					confirmText: "登录",
+					confirmColor: "#3CC51F",
+					success: function(res) {
+						if (res.confirm) {
+							uni.navigateTo({
+								url: '../login/login'
+							})
+						} else {
+							// wx.showToast({
+							//     title: '点击了取消',
+							//     icon: 'none',
+							//     duration: 2000
+							// })
+						}
+					}
+				})
+
 			}
-			
-			
-			
+
+
+
 
 		}
 	}
@@ -275,6 +387,12 @@
 
 			}
 
+			.cell_img {
+				margin: 37px 10px 10px 10px;
+				width: 15px;
+				height: 15px;
+			}
+
 			.cell_btn_select {
 				background-color: #e8654b;
 				border: 1px solid #e8654b;
@@ -300,15 +418,32 @@
 
 					color: #e8654b;
 				}
+				
+				.cell_isDelivery{
+					color: #CCCCCC;
+				}
 
 			}
 
-
-			.cell_msg {
-				font-size: 12px;
-				color: #333333;
-
+			.cell_msgViews{
+				display: flex;
+				align-items: center;
+				.cell_msg {
+					font-size: 12px;
+					color: #333333;
+					flex: 1;
+				}
+				
+				.cell_status{
+					font-size: 12px;
+					color: #CCCCCC;
+				}
+				
+				.cell_isDelivery{
+					color: #CCCCCC;
+				}
 			}
+			
 
 			.cell_bottomview {
 				display: flex;
@@ -324,6 +459,10 @@
 				.cell_bottomview_time {
 					font-size: 12px;
 
+				}
+				
+				.cell_isDelivery{
+					color: #CCCCCC;
 				}
 
 			}
@@ -356,7 +495,11 @@
 		line-height: 20px;
 		text-align: center;
 		padding: 4px;
-
-
 	}
+	
+	
+	.itemisDelivery{
+		color: #cccccc;
+	}
+	
 </style>

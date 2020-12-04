@@ -6,7 +6,7 @@
 				公司名称
 			</view>
 			<view class="item">
-				<input class="item_content" type="text" value="" v-model="companyName" />
+				<input class="item_content" style="padding: 5px;" type="text" value="" v-model="dataInf.companyName" />
 			</view>
 		</view>
 
@@ -18,13 +18,14 @@
 				职位名称
 			</view>
 			<view class="item" @tap="handleTap('picker333')">
-				<view class="item_content">{{jobName}}</view>
+				<view class="item_content">{{dataInf.positionName}}</view>
 				<view class="item_imgView">
 					<image class="item_img" src="../../static/login/star3.png" mode=""></image>
 				</view>
 			</view>
 		</view>
-		<lb-picker ref="picker333" v-model="jobName" mode="selector" :list="typelist">
+		<!-- <lb-picker ref="picker333" v-model="jobName" mode="selector" :list="typelist"> -->
+		<lb-picker ref="picker333" mode="multiSelector" level='2' :list="dataInf.positionArr" @confirm="handleConfirm1">
 		</lb-picker>
 
 
@@ -33,7 +34,7 @@
 				在职时间
 			</view>
 			<view class="item" @tap="handleTap('pickerdate1')">
-				<view class="item_content">{{beginTime}}</view>
+				<view class="item_content">{{dataInf.entryDate}}</view>
 				<view class="item_imgView">
 					<image class="item_img" src="../../static/login/star3.png" mode=""></image>
 				</view>
@@ -42,28 +43,29 @@
 				-
 			</view>
 			<view class="item" @tap="handleTap('pickerdate2')">
-				<view class="item_content">{{endTime}}</view>
+				<view class="item_content">{{dataInf.resignationDate}}</view>
 				<view class="item_imgView">
 					<image class="item_img" src="../../static/login/star3.png" mode=""></image>
 				</view>
 			</view>
 		</view>
-		<e-picker-plus ref="pickerdate1" @confirm="confirm1" mode="YM" :endRule=currentDate> </e-picker-plus>
-		<e-picker-plus ref="pickerdate2" @confirm="confirm2" mode="YM" :endRule=currentDate> </e-picker-plus>
-		<!-- <lb-picker ref="picker335" v-model="type" mode="multiSelector" level='2' :list="typelist" @confirm="handleConfirm"></lb-picker> -->
+		<!-- <e-picker-plus ref="pickerdate1" @confirm="confirm1" mode="YM" :endRule=currentDate> </e-picker-plus>
+		<e-picker-plus ref="pickerdate2" @confirm="confirm2" mode="YM" :endRule=currentDate> </e-picker-plus> -->
+		<bory-dateTimePicker ref='pickerdate1' :indicatorStyle='indicatorStyle' :type='type' :datestring='workTime' @change='confirm1'></bory-dateTimePicker>
+		<bory-dateTimePicker ref='pickerdate2' :indicatorStyle='indicatorStyle' :type='type' :datestring='workTime' @change='confirm2'></bory-dateTimePicker>
 
 		<view class="item_views">
 			<view class="item_title">
 				所属行业
 			</view>
 			<view class="item" @tap="handleTap('picker3366')">
-				<view class="item_content">{{industrystr}}</view>
+				<view class="item_content">{{dataInf.industry}}</view>
 				<view class="item_imgView">
 					<image class="item_img" src="../../static/login/star3.png" mode=""></image>
 				</view>
-			</view>
+			</view> 
 		</view>
-		<lb-picker ref="picker3366" v-model="industry" mode="multiSelector"  level='2'  :list="positionArr" @confirm="handleConfirm">
+		<lb-picker ref="picker3366" mode="multiSelector" level='2' :list="dataInf.industryArr" @confirm="handleConfirm">
 		</lb-picker>
 
 		<view class="item_views">
@@ -71,7 +73,8 @@
 				当前月薪
 			</view>
 			<view class="item">
-				<input class="item_content" type="text" value="" v-model="salary" placeholder="--k" />
+				<input class="item_content" style="padding: 5px;" type="text" value="" v-model="dataInf.monthSalary" />
+				<view class="item_placeholder">/k</view>
 			</view>
 		</view>
 
@@ -81,15 +84,13 @@
 				工作描述
 			</view>
 		</view>
-		<textarea class="desView" type="text" value="" v-model="workDes" />
+		<textarea class="desView" type="text" maxlength="-1" value="" v-model="dataInf.workDescription" />
 
 
-		<view class="item_views">
+		<view class="item_views" style="margin-bottom: 60px;">
 			<view class="item_title">
 				对这家公司隐藏我的信息
 			</view>
-
-
 			<switch class="sw" name="switch" @click="switchClick()" :checked="switchValue" />
 
 		</view>
@@ -108,55 +109,28 @@
 			})
 			return {
 				currentDate: currentD,
-				companyName: '',
-				resumeId:'',//简历id
-				positionInfoId:'',//职位名称id(二级列表中的id)
-				entryTime:'',//入职日期
-				resignnationTime:'',//离职日期
-				industryInfoId:'',//所属行业id(二级列表中的id)
-				selIndustryInfoId:'',
-				monthSalary:'',//月薪
-				workDescription:'',
-				isShield:'',
-				industry: '',
-				industrystr:'', //所属行业文字 显示用
-				positionName:'',//职位名称
 				switchValue: false,
+				type:'year-month',
+				cvid:'',
 				workExpId:'',
-				positionArr:[{
-                children:[
-                    {
-                        label:"临床试验",
-                        value:"402880cc751b7c3701751b8167800000"
-                    }
-                ],
-                label:"临床试验",
-                value:"402880cc751add0a01751ae0a181000a"
-					},{
-                children:[
-                    {
-                        label:"销售顾问",
-                        value:"402880cc751b7c3701751b8229030001"
-                    },
-                    {
-                        label:"商务拓展",
-                        value:"402880cc751b7c3701751b8251ca0002"
-                    },
-                    {
-                        label:"销售管理",
-                        value:"402880cc751b7c3701751b827b2a0003"
-                    }
-                ],
-                label:"销售/商务拓展",
-                value:"402880cc751ae40001751ae71d990000"
-            },{
-                children:[
-
-                ],
-                label:"互联网",
-                value:"402880cc751ae40001751ae777130002"
-            }],
-			
+				dataInf:{
+					companyName: '',
+					resumeId:'',//简历id
+					positionInfoId:'',//职位名称id(二级列表中的id)
+					entryDate:'',//入职日期
+					resignationDate:'',//离职日期
+					industryInfoId:'',//所属行业id(二级列表中的id)
+					selIndustryInfoId:'',
+					monthSalary:'',//月薪
+					workDescription:'',
+					industry: '',
+					industrystr:'', //所属行业文字 显示用
+					positionName:'',//职位名称
+					isShield:'0',//是否屏蔽公司，1表示屏蔽，0表示不屏蔽
+					positionArr:[],
+					industryArr:[],
+						
+				}
 			
 			};
 		},
@@ -164,36 +138,86 @@
 
 		onLoad(e) {
 			if(e.id){
-				this.id = e.id
+				this.cvid = e.id
 			}
 				
 			if(e.workExpId){
 				this.workExpId = e.workExpId
-				this.getMes();
+				console.log('this.workExpId='+e.workExpId);
+				this.getMes(e.workExpId);
 			}
+			
+			this.getdownList()
 	
+		},
+		computed: {
+		
+			indicatorStyle() {
+			                return {
+			                    background: 'rgba(15, 128, 255, 0.4)',
+			                    height: '40px',
+			                };
+			            },
+			
+		
 		},
 		methods: {
 			
 			handleConfirm(e){
-				console.log('handconfirm  value=' + e.value+"label ="+e.label  +"e.item="+e.item[1].value);
-				this.industrystr = e.value.map(item => item).join('-');
-				for (var i = 0; i < e.item; i++) {
-					if(i==0){
 
-					}else{
+				this.dataInf.industry = e.value.map(item => item).join('-');
+				for (var i = 0; i < e.item.length; i++) {
+					if(i==0){
 						
+					}else{
+						console.log('industryInfoId='+e.item[i].value);
+						this.dataInf.industryInfoId = e.item[i].value
 					}
 				}
 			},
-			getMes(){
+			
+			handleConfirm1(e){
+				
+					this.dataInf.positionName = e.value.map(item => item).join('-');
+					for (var i = 0; i <  e.item.length; i++) {
+						if(i==0){
+							
+						}else{
+							console.log('positionInfoId='+e.item[i].value);
+							this.dataInf.positionInfoId = e.item[i].value
+						}
+					}
+				
+			},
+			
+			getdownList(){
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxGetWorkExpDropdownInfo.action', {
+					loginKey: loginkey
+				}).then(res => {
+					if (res.res.status == 0) {
+						this.dataInf.positionArr = res.inf.positionArr;
+						this.dataInf.industryArr = res.inf.industryArr;
+						
+					} else {
+						uni.showToast({
+							title:res.res.error
+						})
+					}
+				})
+			},
+			getMes(workid){
 				var loginkey = uni.getStorageSync('loginKey');
 				this.$api.post('resume!ajaxGetWorkExperienceInfo.action', {
 					loginKey: loginkey,
-					workExpId:this.workExpId
+					workExpId:workid
 				}).then(res => {
 					if (res.res.status == 0) {
-						this.getResumeInfo()
+						this.dataInf = res.inf
+						this.dataInf.resumeId = this.cvid
+						this.switchValue = res.inf.isShield === 1?true:false
+						this.dataInf.positionInfoId = res.inf.selPositionInfoId
+						this.dataInf.industryInfoId = res.inf.selIndustryInfoId
 					} else {
 						uni.showToast({
 							title:res.res.error
@@ -223,23 +247,87 @@
 			handleTap(picker) {
 				this.$refs[picker].show()
 			},
-			switchClick() {
+			switchClick() { 
 				this.switchValue = !this.switchValue;
+				if(this.switchValue === true){
+					this.dataInf.isShield = '1'
+				}else{
+					this.dataInf.isShield='0'
+				}
 				console.log('this.switch = ' + this.switchValue);
 			},
 			confirm1(e) {
-				this.beginTime = e.result
-				console.log(e.result)
+				this.dataInf.entryDate = e
 			},
 			confirm2(e) {
-				if(e.result === this.currentDate){
-					this.endTime='至今'
+				if(e === this.currentDate){
+					this.dataInf.resignationDate='至今'
 				}else{
-					this.endTime = e.result
+					this.dataInf.resignationDate = e
 				}
 			},
 			saveClick(){
-				
+			
+			   
+			   if(this.workExpId.length>0){
+				   var loginkey = uni.getStorageSync('loginKey');
+				   let  workExpInf = JSON.stringify(this.dataInf)
+				   this.$api.post('resume!ajaxUpdateWorkExperience.action', {
+				   	loginKey: loginkey,
+					workExpId:this.workExpId,
+				   	workExpInfo:workExpInf
+				   }).then(res => {
+				   	if (res.res.status == 0) {
+				   		uni.showToast({
+				   			title:'保存成功',
+				   						success() {
+				   							uni.navigateBack({
+				   								
+				   							})
+				   						}
+				   		})
+				   	} else {
+				   		uni.showToast({
+				   			title:res.res.error
+				   		})
+				   	}
+				   })
+			   }else{
+				   var loginkey = uni.getStorageSync('loginKey');
+				   let dict = {
+				   				   resumeId:this.cvid,
+				   				   companyName:this.dataInf.companyName,
+				   				   positionInfoId:this.dataInf.positionInfoId,
+				   				   entryDate:this.dataInf.entryDate,
+				   				   resignationDate:this.dataInf.resignationDate,
+				   				   industryInfoId:this.dataInf.industryInfoId,
+				   				   monthSalary:this.dataInf.monthSalary,
+				   				   workDescription:this.dataInf.workDescription,
+				   				   isShield:this.dataInf.isShield
+				   }
+				   let  workExpInf = JSON.stringify(dict)
+				   this.$api.post('resume!ajaxAddWorkExperience.action', {
+				   	loginKey: loginkey,
+				   	workExpInfo:workExpInf
+				   }).then(res => {
+				   	if (res.res.status == 0) {
+				   		uni.showToast({
+				   			title:'保存成功',
+				   						success() {
+				   							uni.navigateBack({
+				   								
+				   							})
+				   						}
+				   		})
+				   	} else {
+				   		uni.showToast({
+				   			title:res.res.error
+				   		})
+				   	}
+				   })
+			   }
+			   
+			   
 			}
 					
 				
@@ -274,9 +362,12 @@
 
 			.item_content {
 				flex: 1;
-				padding: 5px;
+				padding: 0px 5px;
+				line-height: 30px;
 
 			}
+			
+			
 
 			.item_imgView {
 				width: 30px;
@@ -284,7 +375,7 @@
 				background-color: #e8654b;
 				border-top-right-radius: 5px;
 				border-bottom-right-radius: 5px; //右下角
-
+				
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -294,8 +385,22 @@
 					height: 5px;
 				}
 			}
+			.item_placeholder{
+				width: 30px;
+				height: 30px;
+				line-height: 30px;
+				border-top-right-radius: 5px;
+				border-bottom-right-radius: 5px; //右下角
+				font-size: 12px;
+				text-align: center;
+			}
 
 		}
+	}
+	
+	.input_view{
+		height: 30px;
+		line-height: 30px;
 	}
 
 	.bottom_view {
@@ -305,6 +410,8 @@
 		display: flex;
 		justify-content: center;
 		width: 100%;
+		z-index: 999;
+	
 		.bottom_view_cz {
 			border: 2px solid #e8654b;
 			background-color: #fbc9bc;
@@ -317,7 +424,7 @@
 			text-align: center;
 			line-height: 30px;
 		}
-
+	
 		.bottom_view_qd {
 			border: 2px solid #e8654b;
 			border-radius: 5px;
@@ -329,7 +436,7 @@
 			font-size: 17px;
 			text-align: center;
 			line-height: 30px;
-
+	
 		}
 	}
 
@@ -338,9 +445,10 @@
 		padding: 10px;
 		width: calc(100vw - 40px);
 		background-color: #f5f7f8;
-		height: 60px;
+		height: 400px;
 		font-size: 14px;
 		color: #666666;
+		z-index: 999;
 	}
 
 	.sw {

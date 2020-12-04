@@ -54,7 +54,8 @@
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
-  border-radius: 20px;
+  -webkit-border-radius: 20px;
+          border-radius: 20px;
 }
 .topView .search .search_view .image_search {
   width: 20px;
@@ -118,6 +119,11 @@
   border: 1px solid #666666;
   background-color: #FFFFFF;
 }
+.tab_list .cell .cell_img {
+  margin: 37px 10px 10px 10px;
+  width: 15px;
+  height: 15px;
+}
 .tab_list .cell .cell_btn_select {
   background-color: #e8654b;
   border: 1px solid #e8654b;
@@ -146,9 +152,30 @@
   font-size: 14px;
   color: #e8654b;
 }
-.tab_list .cell .cell_msg {
+.tab_list .cell .cell_titleview .cell_isDelivery {
+  color: #CCCCCC;
+}
+.tab_list .cell .cell_msgViews {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+}
+.tab_list .cell .cell_msgViews .cell_msg {
   font-size: 12px;
   color: #333333;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+}
+.tab_list .cell .cell_msgViews .cell_status {
+  font-size: 12px;
+  color: #CCCCCC;
+}
+.tab_list .cell .cell_msgViews .cell_isDelivery {
+  color: #CCCCCC;
 }
 .tab_list .cell .cell_bottomview {
   display: -webkit-box;
@@ -168,6 +195,9 @@
 .tab_list .cell .cell_bottomview .cell_bottomview_time {
   font-size: 12px;
 }
+.tab_list .cell .cell_bottomview .cell_isDelivery {
+  color: #CCCCCC;
+}
 .tab_list .cell .cell_line {
   margin: 0px 0px 0px 0px;
   height: 2px;
@@ -180,12 +210,17 @@
   width: 40px;
   height: 40px;
   background-color: #e8654b;
-  border-top-left-radius: 8px;
-  border-bottom-left-radius: 8px;
+  -webkit-border-top-left-radius: 8px;
+          border-top-left-radius: 8px;
+  -webkit-border-bottom-left-radius: 8px;
+          border-bottom-left-radius: 8px;
   color: #FFFFFF;
   font-size: 14px;
   line-height: 20px;
   text-align: center;
   padding: 4px;
+}
+.itemisDelivery {
+  color: #cccccc;
 }
 

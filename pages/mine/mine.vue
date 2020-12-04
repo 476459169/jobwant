@@ -178,7 +178,7 @@
 		.item_img{
 			width: 15px;
 			height: 15px;
-			background-color: #FFA200;
+			// background-color: #FFA200;
 		}
 		.item_text{
 			margin-left: 10px;

@@ -52,7 +52,7 @@
 		 			</view>
 		 			
 		 			<view class="cv_item_settingviews">
-		 				<view class="cv_item_settingviews_item" @click="showcv()">预览</view>
+		 				<view class="cv_item_settingviews_item" @click="showcv(item.id)">预览</view>
 		 				<view class="cv_item_settingviews_item" >下载</view>
 		 				<view class="cv_item_settingviews_item" @click="seettingCv(item.id)">修改</view>
 		 				<view class="cv_item_settingviews_item" @click="removeCv(item.id)">删除</view>
@@ -84,6 +84,7 @@
 </template>
 
 <script>
+	var _this;
 	export default {
 		data() {
 			return {
@@ -97,6 +98,9 @@
 		
 		onShow() {
 			this.getuserInfo()
+		},
+		onLoad() {
+			_this = this
 		},
 		methods: {
 			
@@ -213,9 +217,9 @@
 				})
 			},
 			
-			showcv(){
+			showcv(id){
 				uni.navigateTo({
-					url:'./showcv'
+					url:'./showcv?id='+id
 				})
 			},
 			seettingCv(id){
@@ -226,19 +230,32 @@
 			
 			removeCv(id){
 				
-					var loginkey = uni.getStorageSync('loginKey');
-					this.$api.post('resume!ajaxDeleteResume.action', {
-						loginKey: loginkey,
-						resumeId:id
-					}).then(res => {
-						if (res.res.status == 0) {
-							this.getResumeInfo()
-						} else {
-							uni.showToast({
-								title:res.res.error
-							})
-						}
-					})
+				uni.showModal({
+					 title: '提示',
+					    content: '确认删除该简历？',
+					    success: function (res) {
+					        if (res.confirm) {
+					           var loginkey = uni.getStorageSync('loginKey');
+					           _this.$api.post('resume!ajaxDeleteResume.action', {
+					           	loginKey: loginkey,
+					           	resumeId:id
+					           }).then(res => {
+					           	if (res.res.status == 0) {
+					           		_this.getResumeInfo()
+					           	} else {
+					           		uni.showToast({
+					           			title:res.res.error
+					           		})
+					           	}
+					           })
+					        } else if (res.cancel) {
+					            console.log('用户点击取消');
+					        }
+					    }
+					
+				})
+				
+					
 					
 				
 			},

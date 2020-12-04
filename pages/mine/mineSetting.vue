@@ -84,7 +84,7 @@
 						that.userRealName = that.userInfo.realName
 						that.sfz = that.userInfo.subCardNo
 					} else {
-						uni.showModal({
+						uni.showToast({
 							title: res.res.error
 						})
 					}
@@ -123,13 +123,12 @@
 				if (_this.picStr) {
 					if (_this.picStr.length > 0) {
 						uni.uploadFile({
-							url: this.baseUrl + 'app/user!ajaxUpdateUser.action', //仅为示例，非真实的接口地址
+							url: this.baseUrl + 'app/qzUser!ajaxUpdateQZUserInfo.action', //仅为示例，非真实的接口地址
 							filePath: _this.picStr ? _this.picStr : _this.userInfo.imgUrl ? _this.baseUrl + _this.userInfo.imgUrl : '../../static/image/mine/default_head_img@2x.png',
-							name: 'imgFile',
+							name: 'headerImgFile',
 							formData: {
 								'loginKey': loginkey,
 								'realName': this.userRealName,
-								'sex': "1",
 								'nickName': this.userName,
 								'subCardNo': this.sfz
 							},
@@ -143,7 +142,7 @@
 					}
 				} else {
 					var loginkey = uni.getStorageSync('loginKey');
-					this.$api.post('user!ajaxUpdateUser.action', {
+					this.$api.post('qzUser!ajaxUpdateQZUserInfo.action', {
 						loginKey: loginkey,
 						realName: this.userRealName,
 						sex: "1",
@@ -156,7 +155,7 @@
 								title: "更改成功"
 							})
 						} else {
-							uni.showModal({
+							uni.showToast({
 								title: res.res.error
 							})
 						}

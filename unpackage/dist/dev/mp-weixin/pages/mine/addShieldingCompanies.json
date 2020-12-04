@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "添加公司",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
   "usingComponents": {}
 }

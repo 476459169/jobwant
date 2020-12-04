@@ -130,7 +130,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
 //
 //
 //
@@ -168,12 +168,34 @@ var _default =
   },
 
 
-  onLoad: function onLoad(e) {
-  },
+  onLoad: function onLoad(e) {},
   methods: {
     saveClick: function saveClick() {
 
+
+      var that = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('qzUser!ajaxAddUserShieldEnterprise.action', {
+        loginKey: loginkey,
+        shieldCompanyName: that.companyName }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          uni.showToast({
+            title: '添加成功',
+            success: function success() {
+              uni.navigateBack({});
+            } });
+
+        } else {
+          uni.showModal({
+            title: res.res.error });
+
+        }
+      });
+
+
     } } };exports.default = _default;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ }),
 

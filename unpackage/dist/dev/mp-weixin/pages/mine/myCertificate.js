@@ -157,31 +157,79 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
     return {
-      dataArr: [
-      {
-        certifName: 'CRA学院证书',
-        certifJG: '临语堂（天津）健康管理有限公司' },
-
-
-      {
-        certifName: 'CRA学院证书',
-        certifJG: '临语堂（天津）健康管理有限公司' }] };
-
-
+      id: '',
+      dataArr: [] };
 
   },
 
+  onLoad: function onLoad(e) {
+    // this.id = e.id
 
+  },
+
+  onShow: function onShow() {
+    this.getData();
+  },
   methods: {
 
     uploadClick: function uploadClick() {
       uni.navigateTo({
         url: './uploadCertif' });
 
+    },
+
+
+    getData: function getData() {var _this = this;
+
+
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetCertificationList.action', {
+        loginKey: loginkey }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this.dataArr = res.inf.arr;
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+
+      });
+    },
+
+    itemClick: function itemClick(item) {
+      uni.navigateTo({
+        url: './uploadCertif?id=' + item.id });
+
+    },
+
+    deleteItem: function deleteItem(item) {var _this2 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!deleteCertification.action', {
+        loginKey: loginkey,
+        certificationId: item.id }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this2.getData();
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+
+      });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

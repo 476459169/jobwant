@@ -1,4 +1,7 @@
 {
   "navigationBarTitleText": "求职进展",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
   "usingComponents": {}
 }

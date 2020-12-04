@@ -12,9 +12,9 @@
 				<view class="plateItemview_titleView_title">简历名称<text class="btxet">{{zwf}}⦁</text></view>
 				<!-- <view class="plateItemview_titleView_mes">必填</view> -->
 				<view class="plateItemview_titleView_noneview"></view>
-				<image class="rightBtn" src="../../static/cv/bj.png" mode=""></image>
+				<image class="rightBtn" src="../../static/cv/bj.png" mode="" @click="editName()"></image>
 			</view>
-		
+
 			<view class="" v-if="data.title.length>0">
 				<view class="plateItemview_titleView_title" style="color: #666666;">
 					{{data.title}}
@@ -35,12 +35,12 @@
 						<image class="input_text_imgView_img" src="../../static/login/star3.png" mode=""></image>
 					</view>
 				</view>
-				<lb-picker ref="picker11111" v-model="status" mode="selector" :list="cvtype" @confirm="handleConfirm">
+				<lb-picker ref="picker11111" mode="selector" :list="cvtype" @confirm="handleConfirm">
 				</lb-picker>
 			</view>
 
 			<view class="selectView_item">
-				<view class="titleLabel">是否置顶</view>
+				<view class="titleLabel">设为默认</view>
 				<view class="input_text" @tap="handleTap('picker111111')">
 					<view class="input_text_content">
 						{{zd}}
@@ -49,7 +49,7 @@
 						<image class="input_text_imgView_img" src="../../static/login/star3.png" mode=""></image>
 					</view>
 				</view>
-				<lb-picker ref="picker111111" v-model="zd" mode="selector" :list="zdArr">
+				<lb-picker ref="picker111111" mode="selector" :list="zdArr" @confirm="handleConfirm1">
 				</lb-picker>
 			</view>
 
@@ -65,15 +65,15 @@
 				<image class="rightBtn" src="../../static/cv/sz.png" mode=""></image>
 			</view>
 
-			<view class="" v-if="data.jobwant.time.length>0">
+			<view class="" v-if="data.wantedIntention.expectedPosition.length>0">
 				<view class="view_item">
 					<image class="view_item_img" src="../../static/cv/sj.png" mode=""></image>
-					<view class="view_item_text">{{data.jobwant.time}}</view>
+					<view class="view_item_text">{{data.wantedIntention.expectedPosition}}</view>
 				</view>
-				<view class="" v-for="(item,index) in data.jobwant.job" :key="index">
+				<view class="" >
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/b.png" mode=""></image>
-						<view class="view_item_text">{{item}}</view>
+						<view class="view_item_text">{{data.wantedIntention.jobStatusContent}}</view>
 					</view>
 				</view>
 			</view>
@@ -96,15 +96,15 @@
 					<view class="" v-if="index<showWorkExperienceNumb">
 						<view class="view_item">
 							<image class="view_item_img" src="../../static/cv/gs.png"></image>
-							<view class="view_item_text">{{item.company}}</view>
+							<view class="view_item_text">{{item.companyName}}</view>
 							<image class="rightBtn" src="../../static/cv/bj.png" mode="" @click="workExperienceClick(item,index)"></image>
 						</view>
-						<view class="work_experienceView_time">{{item.beginTime+'-'+item.endTime}}</view>
+						<view class="work_experienceView_time">{{item.workTime}}</view>
 						<view class="work_experienceView_jobview">
-							<view class="work_experienceView_jobview_title">{{item.job}}</view>
-							<view class="work_experienceView_jobview_salary">{{item.salary}}</view>
+							<view class="work_experienceView_jobview_title">{{item.positionName}}</view>
+							<view class="work_experienceView_jobview_salary">{{item.monthSalary}}/k</view>
 						</view>
-						<view class="work_experienceView_detail">{{item.detail}}</view>
+						<view class="work_experienceView_detail">{{item.workDescription}}</view>
 					</view>
 				</view>
 			</view>
@@ -121,20 +121,20 @@
 				<view class="plateItemview_titleView_title">教育经历<text class="btxet">{{zwf}}⦁</text></view>
 				<!-- <view class="plateItemview_titleView_mes">必填</view> -->
 				<view class="plateItemview_titleView_noneview"></view>
-				<image class="rightBtn" src="../../static/cv/tj.png" @click="educationClick()"></image>
+				<image class="rightBtn" src="../../static/cv/tj.png" @click="addeducationClick()"></image>
 			</view>
 
 			<view v-if="data.educationArr.length>0">
 				<view class="work_experienceView" v-for="(item,index) in data.educationArr" :key="index">
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/b.png"></image>
-						<view class="view_item_text">{{item.school}}</view>
-						<image class="rightBtn" src="../../static/cv/bj.png"> </image>
+						<view class="view_item_text">{{item.schoolName}}</view>
+						<image class="rightBtn" src="../../static/cv/bj.png" @click="educationClick(item)"> </image>
 					</view>
-					<view class="work_experienceView_time">{{item.beginTime+'-'+item.endTime}}</view>
+					<view class="work_experienceView_time">{{item.studyDate}}</view>
 					<view class="work_experienceView_jobview">
 						<view class="work_experienceView_jobview_title">
-							{{item.xl+'&nbsp|&nbsp'+item.discipline}}
+							{{item.education+'&nbsp|&nbsp'+item.major}}
 						</view>
 					</view>
 				</view>
@@ -145,36 +145,41 @@
 			<view class="plateItemview_titleView">
 				<view class="plateItemview_titleView_title">项目经历</view>
 				<view class="plateItemview_titleView_noneview"></view>
-				<image class="rightBtn" src="../../static/cv/tj.png" @click="projecClick()"></image>
+				<image class="rightBtn" src="../../static/cv/tj.png" @click="addprojecClick()"></image>
 			</view>
+
 			<view v-if="data.projectExpArr.length>0">
 				<view class="work_experienceView" v-for="(item,index) in data.projectExpArr" :key="index">
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/b.png"></image>
-						<view class="view_item_text">{{item.project}}</view>
-						<image class="rightBtn" src="../../static/cv/bj.png"></image>
+						<view class="view_item_text">{{item.name}}</view>
+						<image class="rightBtn" src="../../static/cv/bj.png" @click="projecClick(item)"></image>
 					</view>
-					<view class="work_experienceView_time"> {{item.beginTime+'-'+item.endTime}}</view>
-					<view class="work_experienceView_jobview">
+					<view class="work_experienceView_time"> {{item.projectDate}}</view>
+					<!-- <view class="work_experienceView_jobview">
 						<view class="work_experienceView_jobview_title" style="color: #666666;">
-							{{item.msg}}
+							{{item.description}}
 						</view>
-					</view>
+					</view> -->
+					<view class="work_experienceView_detail">{{item.description}}</view>
 				</view>
 			</view>
+
+
+
 		</view>
 
 		<view class="plateItemview">
 			<view class="plateItemview_titleView">
 				<view class="plateItemview_titleView_title">获得证书</view>
 				<view class="plateItemview_titleView_noneview"></view>
-				<image class="rightBtn" src="../../static/cv/tj.png"></image>
+				<image class="rightBtn" src="../../static/cv/tj.png" @click="cerClick()"></image>
 			</view>
 			<view v-if="data.certificateArr.length>0">
 				<view v-for="(item,index) in data.certificateArr" :key="index">
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/b.png"></image>
-						<view class="view_item_text">{{item.certificateName}}</view>
+						<view class="view_item_text">{{item.name}}</view>
 					</view>
 				</view>
 			</view>
@@ -243,124 +248,31 @@
 				status: '公开',
 				cvtype: [{
 					label: '保密',
-					value: '1'
+					value: '0'
 				}, {
 					label: '公开',
-					value: '2'
+					value: '1'
 				}],
-				zd: '是',
-				zdArr: ['是', '否'],
+				zd: '否',
+				zdArr: [{
+					label: '是',
+					value: '1'
+				}, {
+					label: '否',
+					value: '0'
+				}],
 				zwf: '\u0020',
 				data: Object,
-				// data: {
-				// 	personMsg: {
-				// 		name: '临小妹',
-				// 		age: '36岁',
-				// 		gender: '女士',
-				// 		workTime: '工作17年',
-				// 		address: '北京-朝阳',
-				// 		phone: '13552300611',
-				// 		email: '476459169@qq.com',
-				// 		xl: '本科',
-
-				// 	},
-				// 	jobwant: {
-				// 		time: '月内到岗',
-				// 		job: ['CRA', 'PM'],
-
-				// 	},
-				// 	workExperience: [
-				// 		{
-				// 			company: '临语堂（天津）健康管理有限公司',
-				// 			beginTime: '2018.3',
-				// 			endTime: '至今',
-				// 			job: 'CTA',
-				// 			detail: '工作详情',
-				// 			salary: '7k/月',
-				// 			id:1
-				// 		},
-				// 		{
-				// 			company: '临语堂（天津）健康管理有限公司',
-				// 			beginTime: '2018.3',
-				// 			endTime: '至今',
-				// 			job: 'CTA',
-				// 			detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-				// 			salary: '7k/月'
-				// 		},
-				// 		{
-				// 			company: '临语堂（天津）健康管理有限公司',
-				// 			beginTime: '2018.3',
-				// 			endTime: '至今',
-				// 			job: 'CTA',
-				// 			detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-				// 			salary: '7k/月'
-				// 		}
-				// 	],
-				// 	educationExperience: [
-				// 		// {
-				// 		// 	school: '湖北医药大学',
-				// 		// 	beginTime: '2018.3',
-				// 		// 	endTime: '至今',
-				// 		// 	xl: '本科',
-				// 		// 	discipline: '药理学'
-				// 		// },
-				// 		// {
-				// 		// 	school: '湖北医药大学',
-				// 		// 	beginTime: '2018.3',
-				// 		// 	endTime: '至今',
-				// 		// 	xl: '本科',
-				// 		// 	discipline: '药理学'
-				// 		// }
-				// 	],
-				// 	projectExperience: [
-				// 	// 	{
-				// 	// 	project: '肿瘤项目三期',
-				// 	// 	beginTime: '2018.3',
-				// 	// 	endTime: '至今',
-				// 	// 	msg: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工'
-				// 	// },
-				// 	],
-				// 	certificate: [
-				// 		// {
-				// 		// 	certificateName: 'GCP证书',
-				// 		// 	certificateJG: '临语堂'
-				// 		// },
-				// 		// {
-				// 		// 	certificateName: 'GCP证书',
-				// 		// 	certificateJG: '临语堂'
-				// 		// }
-				// 	],
-				// 	trainingExperience: [
-				// 		// {
-				// 		// 	trainingJG: '临语堂培训',
-				// 		// 	beginTime: '2018.3',
-				// 		// 	endTime: '至今',
-				// 		// },
-				// 		// {
-				// 		// 	trainingJG: '临语堂培训',
-				// 		// 	beginTime: '2018.3',
-				// 		// 	endTime: '至今',
-				// 		// }
-				// 	],
-				// 	language: [
-				// 		// {
-				// 		// 	language: '汉语'
-				// 		// },
-				// 		// {
-				// 		// 	language: '英语'
-				// 		// }
-				// 	],
-				// 	evaluation: '自我评价 自我评价 自我评价 自我评价 自我评价 自我评价',
-				// 	reloadTime: "2020.04.26"
-				// }
 			};
 		},
 
-		onLoad(e) {
+		onLoad(e) {  
 			this.id = e.id
-			console.log('id='+e.id);
+			console.log('id=' + e.id);
+		},
+
+		onShow() {
 			this.getDetailMes()
-			
 		},
 		methods: {
 
@@ -368,16 +280,18 @@
 				var loginkey = uni.getStorageSync('loginKey');
 				this.$api.post('resume!ajaxGetOnlineResumeInfo.action', {
 					loginKey: loginkey,
-					resumeId:this.id
+					resumeId: this.id
 				}).then(res => {
-				if (res.res.status == 0) {
-					this.data = res.inf
-				} else {
-					uni.showToast({
-						title: res.res.error
-					})
-				}		
-				
+					if (res.res.status == 0) {
+						this.data = res.inf
+						this.status = res.inf.isPublic===1?'公开':'保密'
+						this.zd = res.inf.isDefault ===1?'是':'否'
+					} else {
+						uni.showToast({
+							title: res.res.error
+						})
+					}
+
 				})
 			},
 
@@ -385,7 +299,42 @@
 				this.$refs[picker].show()
 			},
 			handleConfirm(e) {
+				this.status = e.item.label;
 				console.log('handconfirm' + e.item.value);
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxUpdateResumePublic.action', {
+					loginKey: loginkey,
+					resumeId: this.id,
+					isPublic: e.item.value
+				}).then(res => {
+					if (res.res.status == 0) {
+
+					} else {
+						uni.showToast({
+							title: res.res.error
+						})
+					}
+
+				})
+
+			},
+			handleConfirm1(e) {
+				this.zd = e.item.label;
+				console.log('handconfirm' + e.item.value);
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxUpdateResumeDefault.action', {
+					loginKey: loginkey,
+					resumeId: this.id,
+					isDefault: e.item.value
+				}).then(res => {
+					if (res.res.status == 0) {
+					} else {
+						uni.showToast({
+							title: res.res.error
+						})
+					}
+
+				})
 			},
 			dowmViewClick() {
 				this.showWorkExperience = !this.showWorkExperience
@@ -397,16 +346,35 @@
 				console.log('this.showWorkExperience = ' + this.showWorkExperienceNumb);
 			},
 
-			educationClick() {
+			editName() {
 				uni.navigateTo({
-					url: './educationExperience'
+					url: './vcName?id=' + this.id
+				})
+			},
+
+			educationClick(item) {
+				uni.navigateTo({
+					url: './educationExperience?id=' + this.id + '&educationExpId=' + item.id
+				})
+			},
+
+
+			addeducationClick() {
+				uni.navigateTo({
+					url: './educationExperience?id=' + this.id
 				})
 			},
 
 			addworkExperienceClick() {
 
 				uni.navigateTo({
-					url: './workExperience?id='+this.id
+					url: './workExperience?id=' + this.id
+				})
+			},
+
+			cerClick() {
+				uni.navigateTo({
+					url: './CertificateAssociated?id=' + this.id
 				})
 			},
 
@@ -416,26 +384,36 @@
 				console.log("workExperience=" + item.id);
 				if (item) {
 					uni.navigateTo({
-						url: './workExperience?workExpId=' + item.workExpId
+						url: './workExperience?workExpId=' + item.id + '&id=' + this.id
 					})
 				}
 
 			},
 
 			wantjobClick() {
+				// uni.navigateTo({
+				// 	url: '../mine/jobManage?id=' + this.id
+				// })
+				
 				uni.navigateTo({
-					url: '../mine/jobManage'
+					url:'../mine/addJobIntention?id='+this.id+'&wantedIntentionId='+this.data.wantedIntention.id
 				})
 			},
-			projecClick() {
+			projecClick(item) {
 				uni.navigateTo({
-					url: './projectExpere'
+					url: './projectExpere?id=' + this.id + '&projectExpId=' + item.id
+				})
+			},
+
+			addprojecClick() {
+				uni.navigateTo({
+					url: './projectExpere?id=' + this.id
 				})
 			},
 
 			assessmen() {
 				uni.navigateTo({
-					url: './assessment'
+					url: './assessment?id=' + this.id
 				})
 			}
 		}
@@ -552,6 +530,7 @@
 			.work_experienceView_jobview_title {
 				font-size: 12px;
 				flex: 1;
+
 			}
 
 			.work_experienceView_jobview_salary {
@@ -562,6 +541,17 @@
 		.work_experienceView_detail {
 			color: #666666;
 			font-size: 12px;
+			display: -webkit-box;
+			/** 对象作为伸缩盒子模型显示 **/
+			overflow: hidden;
+			word-break: break-all;
+			/* break-all(允许在单词内换行。) */
+			text-overflow: ellipsis;
+			/* 超出部分省略号 */
+			-webkit-box-orient: vertical;
+			/** 设置或检索伸缩盒对象的子元素的排列方式 **/
+			-webkit-line-clamp: 3;
+			/** 显示的行数 **/
 		}
 
 	}

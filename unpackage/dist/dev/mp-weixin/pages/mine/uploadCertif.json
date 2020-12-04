@@ -1,4 +1,8 @@
 {
   "navigationBarTitleText": "上传证书",
-  "usingComponents": {}
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "bory-date-time-picker": "/components/bory-dateTimePicker/bory-dateTimePicker"
+  }
 }

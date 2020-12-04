@@ -88,7 +88,8 @@
   font-size: 12px;
   margin-left: 5px;
   color: #e8654b;
-  border-radius: 7.5px;
+  -webkit-border-radius: 7.5px;
+          border-radius: 7.5px;
   border: 1px solid #e8654b;
   text-align: center;
 }
@@ -143,6 +144,17 @@
 .work_experienceView .work_experienceView_detail {
   color: #666666;
   font-size: 12px;
+  display: -webkit-box;
+  /** 对象作为伸缩盒子模型显示 **/
+  overflow: hidden;
+  word-break: break-all;
+  /* break-all(允许在单词内换行。) */
+  text-overflow: ellipsis;
+  /* 超出部分省略号 */
+  -webkit-box-orient: vertical;
+  /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+  -webkit-line-clamp: 3;
+  /** 显示的行数 **/
 }
 .certificateView {
   display: -webkit-box;
@@ -180,7 +192,8 @@
   margin-top: 10px;
   height: 20px;
   line-height: 20px;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   background-color: #f5f7f8;
   font-size: 14px;
   color: #666666;
@@ -190,7 +203,8 @@
   margin: 10px 0px;
   width: 100%;
   height: auto;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   background-color: #f5f7f8;
 }
 .selectView {
@@ -217,7 +231,8 @@
   height: 20px;
   font-size: 14px;
   background-color: #f5f7f8;
-  border-radius: 5px;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -236,8 +251,10 @@
   width: 30px;
   height: 30px;
   background-color: #e8654b;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+          border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+          border-bottom-right-radius: 5px;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;

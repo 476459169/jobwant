@@ -94,7 +94,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "components", function() { return components; });
 var components = {
   dAlert: function() {
-    return __webpack_require__.e(/*! import() | components/d-alert/d-alert */ "components/d-alert/d-alert").then(__webpack_require__.bind(null, /*! @/components/d-alert/d-alert.vue */ 208))
+    return __webpack_require__.e(/*! import() | components/d-alert/d-alert */ "components/d-alert/d-alert").then(__webpack_require__.bind(null, /*! @/components/d-alert/d-alert.vue */ 232))
   }
 }
 var render = function() {
@@ -219,7 +219,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-var _default =
+
+var _this;var _default =
 {
   data: function data() {
     return {
@@ -234,9 +235,12 @@ var _default =
   onShow: function onShow() {
     this.getuserInfo();
   },
+  onLoad: function onLoad() {
+    _this = this;
+  },
   methods: {
 
-    getuserInfo: function getuserInfo() {var _this = this;
+    getuserInfo: function getuserInfo() {var _this2 = this;
       // 
       var loginkey = uni.getStorageSync('loginKey');
       if (loginkey) {
@@ -247,14 +251,14 @@ var _default =
           if (res.res.status == 0) {
             // this.sfz = res.inf.subCardNo
             console.log("have loginkey");
-            _this.showModal = false;
-            _this.getResumeInfo();
+            _this2.showModal = false;
+            _this2.getResumeInfo();
           } else {
             uni.removeStorageSync('loginKey');
             uni.removeStorageSync('userId');
             uni.removeStorageSync('isFill');
-            _this.showModal = true;
-            _this.showLoginModal();
+            _this2.showModal = true;
+            _this2.showLoginModal();
           }
         });
 
@@ -264,7 +268,7 @@ var _default =
       }
     },
 
-    getResumeInfo: function getResumeInfo() {var _this2 = this;
+    getResumeInfo: function getResumeInfo() {var _this3 = this;
       var loginkey = uni.getStorageSync('loginKey');
       if (loginkey) {
         this.loginKey = loginkey;
@@ -272,7 +276,7 @@ var _default =
           loginKey: loginkey }).
         then(function (res) {
           if (res.res.status == 0) {
-            _this2.dataInfo = res.inf;
+            _this3.dataInfo = res.inf;
           } else {
             uni.showToast({
               title: res.res.error });
@@ -349,9 +353,9 @@ var _default =
 
     },
 
-    showcv: function showcv() {
+    showcv: function showcv(id) {
       uni.navigateTo({
-        url: './showcv' });
+        url: './showcv?id=' + id });
 
     },
     seettingCv: function seettingCv(id) {
@@ -360,21 +364,34 @@ var _default =
 
     },
 
-    removeCv: function removeCv(id) {var _this3 = this;
+    removeCv: function removeCv(id) {
 
-      var loginkey = uni.getStorageSync('loginKey');
-      this.$api.post('resume!ajaxDeleteResume.action', {
-        loginKey: loginkey,
-        resumeId: id }).
-      then(function (res) {
-        if (res.res.status == 0) {
-          _this3.getResumeInfo();
-        } else {
-          uni.showToast({
-            title: res.res.error });
+      uni.showModal({
+        title: '提示',
+        content: '确认删除该简历？',
+        success: function success(res) {
+          if (res.confirm) {
+            var loginkey = uni.getStorageSync('loginKey');
+            _this.$api.post('resume!ajaxDeleteResume.action', {
+              loginKey: loginkey,
+              resumeId: id }).
+            then(function (res) {
+              if (res.res.status == 0) {
+                _this.getResumeInfo();
+              } else {
+                uni.showToast({
+                  title: res.res.error });
 
-        }
-      });
+              }
+            });
+          } else if (res.cancel) {
+            console.log('用户点击取消');
+          }
+        } });
+
+
+
+
 
 
     },

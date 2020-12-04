@@ -302,146 +302,106 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var _default =
 {
   data: function data() {
     return {
       showWorkExperience: false,
       showWorkExperienceNumb: 2,
-      data: {
-        personMsg: {
-          name: '临小妹',
-          age: '36岁',
-          gender: '女士',
-          workTime: '工作17年',
-          address: '北京-朝阳',
-          phone: '13552300611',
-          email: '476459169@qq.com',
-          xl: '本科' },
-
-
-        jobwant: {
-          time: '月内到岗',
-          job: ['CRA', 'PM'] },
-
-
-        workExperience: [{
-          company: '临语堂（天津）健康管理有限公司',
-          beginTime: '2018.3',
-          endTime: '至今',
-          job: 'CTA',
-          detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-          salary: '7k/月' },
-
-        {
-          company: '临语堂（天津）健康管理有限公司',
-          beginTime: '2018.3',
-          endTime: '至今',
-          job: 'CTA',
-          detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-          salary: '7k/月' },
-
-        {
-          company: '临语堂（天津）健康管理有限公司',
-          beginTime: '2018.3',
-          endTime: '至今',
-          job: 'CTA',
-          detail: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情',
-          salary: '7k/月' }],
-
-
-        educationExperience: [{
-          school: '湖北医药大学',
-          beginTime: '2018.3',
-          endTime: '至今',
-          xl: '本科',
-          discipline: '药理学' },
-
-        {
-          school: '湖北医药大学',
-          beginTime: '2018.3',
-          endTime: '至今',
-          xl: '本科',
-          discipline: '药理学' }],
-
-
-        projectExperience: [{
-          project: '肿瘤项目三期',
-          beginTime: '2018.3',
-          endTime: '至今',
-          msg: '工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工作详情工' }],
-
-        certificate: [{
-          certificateName: 'GCP证书',
-          certificateJG: '临语堂' },
-
-        {
-          certificateName: 'GCP证书',
-          certificateJG: '临语堂' }],
-
-
-        trainingExperience: [{
-          trainingJG: '临语堂培训',
-          beginTime: '2018.3',
-          endTime: '至今' },
-
-        {
-          trainingJG: '临语堂培训',
-          beginTime: '2018.3',
-          endTime: '至今' }],
-
-
-        language: [{
-          language: '汉语' },
-
-        {
-          language: '英语' }],
-
-
-        evaluation: '自我评价 自我评价 自我评价 自我评价 自我评价 自我评价',
-        reloadTime: "2020.04.26" } };
-
-
-
-
+      zwf: " ",
+      data: Object,
+      dataInfo: Object };
 
   },
+
+  onLoad: function onLoad(e) {
+    this.id = e.id;
+    console.log('id=' + e.id);
+  },
+
+  onShow: function onShow() {
+    this.getResumeInfo();
+    this.getDetailMes();
+  },
   methods: {
+    getResumeInfo: function getResumeInfo() {var _this = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      if (loginkey) {
+        this.loginKey = loginkey;
+        this.$api.post('resume!ajaxGetResumeInfo.action', {
+          loginKey: loginkey }).
+        then(function (res) {
+          if (res.res.status == 0) {
+            _this.dataInfo = res.inf;
+          } else {
+            uni.showToast({
+              title: res.res.error });
+
+          }
+        });
+
+      } else {
+        this.showModal = true;
+        this.showLoginModal();
+      }
+    },
+    getDetailMes: function getDetailMes() {var _this2 = this;
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxGetOnlineResumeInfo.action', {
+        loginKey: loginkey,
+        resumeId: this.id }).
+      then(function (res) {
+        if (res.res.status == 0) {
+          _this2.data = res.inf;
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+
+      });
+    },
+
+    handleTap: function handleTap(picker) {
+      this.$refs[picker].show();
+    },
+    handleConfirm: function handleConfirm(e) {
+      this.status = e.item.label;
+      console.log('handconfirm' + e.item.value);
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxUpdateResumePublic.action', {
+        loginKey: loginkey,
+        resumeId: this.id,
+        isPublic: e.item.value }).
+      then(function (res) {
+        if (res.res.status == 0) {
+
+        } else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+
+      });
+
+    },
+    handleConfirm1: function handleConfirm1(e) {
+      this.zd = e.item.label;
+      console.log('handconfirm' + e.item.value);
+      var loginkey = uni.getStorageSync('loginKey');
+      this.$api.post('resume!ajaxUpdateResumeDefault.action', {
+        loginKey: loginkey,
+        resumeId: this.id,
+        isDefault: e.item.value }).
+      then(function (res) {
+        if (res.res.status == 0) {} else {
+          uni.showToast({
+            title: res.res.error });
+
+        }
+
+      });
+    },
     dowmViewClick: function dowmViewClick() {
       this.showWorkExperience = !this.showWorkExperience;
       if (this.showWorkExperience == true) {
@@ -452,10 +412,70 @@ var _default =
       console.log('this.showWorkExperience = ' + this.showWorkExperienceNumb);
     },
 
+    editName: function editName() {
+      uni.navigateTo({
+        url: './vcName?id=' + this.id });
+
+    },
+
+    educationClick: function educationClick(item) {
+      uni.navigateTo({
+        url: './educationExperience?id=' + this.id + '&educationExpId=' + item.id });
+
+    },
+
+
+    addeducationClick: function addeducationClick() {
+      uni.navigateTo({
+        url: './educationExperience?id=' + this.id });
+
+    },
+
+    addworkExperienceClick: function addworkExperienceClick() {
+
+      uni.navigateTo({
+        url: './workExperience?id=' + this.id });
+
+    },
+
+    cerClick: function cerClick() {
+      uni.navigateTo({
+        url: './CertificateAssociated?id=' + this.id });
+
+    },
+
+    workExperienceClick: function workExperienceClick(item, index) {
+      console.log('index = ' + index);
+
+      console.log("workExperience=" + item.id);
+      if (item) {
+        uni.navigateTo({
+          url: './workExperience?workExpId=' + item.id + '&id=' + this.id });
+
+      }
+
+    },
 
     wantjobClick: function wantjobClick() {
       uni.navigateTo({
-        url: '../mine/jobManage' });
+        url: '../mine/jobManage?id=' + this.id });
+
+    },
+    projecClick: function projecClick(item) {
+      uni.navigateTo({
+        url: './projectExpere?id=' + this.id + '&projectExpId=' + item.id });
+
+    },
+
+    addprojecClick: function addprojecClick() {
+      uni.navigateTo({
+        url: './projectExpere?id=' + this.id });
+
+    },
+
+    assessmen: function assessmen() {
+      uni.navigateTo({
+        url: './assessment?id=' + this.id });
 
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

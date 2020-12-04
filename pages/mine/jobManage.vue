@@ -2,7 +2,7 @@
 	<view>
 		<view class="top_view">
 			<view class="top_view_title">
-				管理求职意向 <text class="top_view_ftitle">( <text style="color: #e8654b;">3</text>/3) </text>
+				管理求职意向 <text class="top_view_ftitle">( <text style="color: #e8654b;">{{dataArr.length}}</text>/3) </text>
 			</view>
 			<view class="top_view_msg">
 				我们会根据你的"求职意向"在首页展示合适的职位
@@ -12,35 +12,35 @@
 
 		<view class="selectView" @tap="handleTap('picker31')">
 			<view class="titleLabel">求职状态</view>
-			<view class="selectView_btn">{{type}}{{zwf}}⟩</view>
+			<view class="selectView_btn">{{dataInf.selJobStatusContent.length>0?dataInf.selJobStatusContent:'月内到岗'}}{{zwf}}⟩</view>
 		</view>
-		
-	<!-- 	<view class="company" >
-			<view class="company_content">{{type}}</view>
-			<view class="company_imgView">
-				<image class="company_img" src="../../static/login/star3.png" mode=""></image>
-			</view>
-		</view> -->
+		<lb-picker :props="myProps" ref="picker31" mode="multiSelector" level='1' :list="typelist" @confirm="handleConfirm">
+		</lb-picker>
 		<view class="line">	</view>
-		<lb-picker ref="picker31"
+		<!-- <lb-picker ref="picker31"
 		  v-model="type"
 		  mode="selector"
 		  :list="typelist">
 		  </lb-picker>
-
+ -->
 
 		<view class="list">
 			<view v-for="(item,index) in dataArr" :key="index">
 				<view class="cell">
 					<view class="cell_content">
 						<view class="cell_content_title">
-							{{item.jobName}}
+							{{item.expectedPosition}}
 						</view>
 						<view class="cell_content_detail">
-							{{item.salary+'&nbsp|&nbsp'+item.address+'&nbsp|&nbsp'+item.status}}
+							{{item.expectedSalary+'&nbsp|&nbsp'+item.workLocation+'&nbsp|&nbsp'+item.workNature}}
+						</view>
+						
+						<view class="cell_content_detail">
+							{{item.companyNatures}}
 						</view>
 					</view>
-					<image class="cell_endBtn" src="../../static/cv/bj.png" mode=""></image>
+					
+					<image class="cell_endBtn" src="../../static/cv/bj.png" mode="" @click="editExpected(item)"> </image>
 				</view>
 				<view class="line">
 					
@@ -63,36 +63,125 @@
 
 		data() {
 			return {
+				
+				myProps: {
+					label: 'content',
+					value: 'id',
+					children: 'child'
+				},
 				typelist: ['离职，随时到岗', '在职，月内到岗', '在职，考虑机会','在职，暂不考虑'],
-				type: '在职，暂不考虑',
+				type: '月内到岗',
+				typeId:'',
 				zwf:'\u0020',
-				dataArr:[
-					{
-						jobName:'CRA',
-						salary:'10k-15k',
-						address:'北京',
-						status:'全职'
-					},
-					{
-						jobName:'CRA',
-						salary:'10k-15k',
-						address:'北京',
-						status:'全职'
-					}
-				]
+				id:'',
+				dataInf:{
+					selJobStatusContent:''
+				},
+				dataArr:[],
 			};
 		},
+		
+		onLoad(e) {
+			this.id = e.id
+			this.getdownList()
+		},
+		
+		onShow() {
+			this.getMes()
+		},
+		
+		
 
 		methods: {
 			handleTap(picker) {
 				this.$refs[picker].show()
 			},
+				
+			handleConfirm(e){
+				
+				this.dataInf.selJobStatusContent = e.value.map(item => item).join('-');
+				for (var i = 0; i <  e.item.length; i++) {
+					if(i==0){
+						console.log('positionInfoId='+e.item[i].id);
+						this.typeId = e.item[i].id
+						this.upstatus(this.typeId)
+					}
+				}
+			},
 			
-			addClick(){
-				uni.navigateTo({
-					url:'./addJobIntention'
+			upstatus(id){
+				//ajaxUpdateResumeJobStatus
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxUpdateResumeJobStatus.action', {
+					loginKey: loginkey,
+					resumeId:this.id,
+					jobStatusId:id
+				}).then(res => {
+					if (res.res.status == 0) {
+					this.typelist = res.inf.jobWantedStatusArr
+						
+					} else {
+						uni.showToast({
+							title:res.res.error
+						})
+					}
 				})
-			}
+			},
+			
+				
+			editExpected(item){
+				uni.navigateTo({
+					url:'./addJobIntention?id='+this.id+'&wantedIntentionId='+item.id
+				})
+			},
+			addClick(){
+				
+					
+				if(this.dataArr.length>4){
+					uni.navigateTo({
+						url:'./addJobIntention?id='+this.id
+					})
+					
+				}else{
+					uni.showToast({
+						title:'最多可添加3条！'
+					})
+				}
+				
+			},
+			
+			getdownList(){
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxGetJobStatusDropdownInfo.action', {
+					loginKey: loginkey
+				}).then(res => {
+					if (res.res.status == 0) {
+					this.typelist = res.inf.jobWantedStatusArr
+						
+					} else {
+						uni.showToast({
+							title:res.res.error
+						})
+					}
+				})
+			},
+			getMes(){
+				var loginkey = uni.getStorageSync('loginKey');
+				this.$api.post('resume!ajaxGetWantedIntentionList.action', {
+					loginKey: loginkey,
+					resumeId:this.id
+				}).then(res => {
+					if (res.res.status == 0) {
+						this.dataArr = res.inf.arr
+						this.dataInf = res.inf
+					} else {
+						uni.showToast({
+							title:res.res.error
+						})
+					}
+				})
+			},
+			
 		}
 	}
 </script>

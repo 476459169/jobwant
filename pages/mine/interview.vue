@@ -12,10 +12,10 @@
 						</view>
 					</view>
 					
-					<view v-else class="top_view_item" @click="topItemClick(item)">
-						<view  :class="[item===topSelect?'top_view_item_btn_selected':'top_view_item_btn_normal']"></view>
-						<view  :class="[item===topSelect?'top_view_item_text_select':'top_view_item_text_normal']">
-							{{item}}
+					<view class="top_view_item" @click="topItemClick(item)">
+						<view  :class="[item.content===topSelect.content?'top_view_item_btn_selected':'top_view_item_btn_normal']"></view>
+						<view  :class="[item.content===topSelect.content?'top_view_item_text_select':'top_view_item_text_normal']">
+							{{item.content}}
 						</view>
 					</view>
 					
@@ -32,21 +32,21 @@
 					<view class="cell_content" @click="itemClick(item)">
 						<view class="cell_titleview">
 							<view class="cell_titleview_title">
-								{{item.job}}
+								{{item.positionName}}
 							</view>
 							<view class="cell_titleview_salary">
-								{{item.salary}}
+								{{item.salaryRequirement}}
 							</view>
 						</view>
 						<view class="cell_msg">
-							{{item.adress+'&nbsp|&nbsp'+item.worktime+'&nbsp|&nbsp'+item.xl}}
+							{{item.workLocation+'&nbsp|&nbsp'+item.experienceRequirement+'&nbsp|&nbsp'+item.educationRequirement}}
 						</view>
 						<view class="cell_bottomview">
 							<view class="cell_bottomview_company">
-								{{item.company}}
+								{{item.companyName}}
 							</view>
 							<view class="cell_bottomview_time">
-								{{item.releaseTime}}
+								{{item.status}}
 							</view>
 						</view>
 
@@ -65,34 +65,108 @@
 </template>
 
 <script>
+	
+	var _this;
+	var timer = null;
 	export default {
 		data() {
 			return {
-				topArr: ['全部', '待处理', '已接受', '已拒绝'],
-				topSelect: '全部',
-				data: [{
-					job: "CRA",
-					salary: "10k-15k",
-					adress: '北京',
-					worktime: '1-3年',
-					xl: '本科',
-					company: '临语堂（天津）健康管理有限公司',
-					releaseTime: '已接受',
-					select: false
-				}, {
-					job: "CRA",
-					salary: "10k-15k",
-					adress: '北京',
-					worktime: '1-3年',
-					xl: '本科',
-					company: '临语堂（天津）健康管理有限公司',
-					releaseTime: '已拒绝',
-					select: true
-				}, ]
+				topArr: [],
+				topSelect: Object,
+				data: [],
+				page:1
 			};
+		},
+		
+		onLoad() {
+			_this = this
+				this.getTopArr()
+				
+		},
+		
+		onShow() {
+			this.page = 1;
+			this.getData()
+		},
+		
+		onPullDownRefresh: function() {
+			this.page = 1;
+			this.getData()
+		
+		},
+		
+		onReachBottom: function() { //当划到最底部的时候触发事件
+			if (timer != null) { //加载缓冲延迟
+				clearTimeout(timer);
+			}
+			timer = setTimeout(function() {
+				_this.getData();
+			}, 600);
 		},
 
 		methods: {
+			
+			
+			getTopArr(){
+				var loginkey = uni.getStorageSync('loginKey');
+				if (loginkey){
+					this.loginKey = loginkey;
+					this.$api.post('qzPosition!ajaxGetInterviewInvitationStatusStatusList.action', {
+						loginKey: loginkey
+					}).then(res => {
+						if (res.res.status == 0) {
+							this.topArr = res.inf.arr
+						} else {
+							
+						}
+					})
+					
+				}else{
+				}
+			},
+			
+			getData(){
+				var loginkey = uni.getStorageSync('loginKey');
+				if (loginkey){
+					this.loginKey = loginkey;
+					this.$api.post('qzPosition!ajaxGetInterviewInvitationList.action', {
+						loginKey: loginkey,
+						interviewInvitationStatus:this.topSelect.id?this.topSelect.id:this.topSelect.id===0?'0':'',
+						first:this.page
+					}).then(res => {
+						if (res.res.status == 0) {
+							if (res.res.status == 0) {
+								if (_this.page === 1) {
+									this.data = res.inf.arr
+									_this.page++;
+								} else {
+									if (_this.page <= res.inf.pageCount) {
+										_this.data = _this.data.concat(res.inf.arr); //进行数据的累加
+										_this.page++; //页数的++
+										_this.loading = "加载更多";
+									} else {
+										uni.showToast({
+											title: '没有更多了！'
+										});
+									}
+								}
+							
+							} else {
+								uni.showToast({
+									title: res.res.error
+								});
+							}
+							
+							uni.hideNavigationBarLoading();
+							uni.stopPullDownRefresh(); //数据加载完成,刷新结束
+						} else {
+						}
+					})
+					
+				}else{
+					
+				}
+			},
 			screenClick() {
 				uni.navigateTo({
 					url: './screen'
@@ -101,7 +175,7 @@
 
 			itemClick(item) {
 				uni.navigateTo({
-					url: './cvDetail'
+					url: './invitation?id='+item.id+'&delta=1'
 				})
 			},
 			itemSelect(item) {
@@ -112,8 +186,10 @@
 				console.log("commit");
 			},
 			topItemClick(item) {
-				console.log("item = " + item);
+				console.log('index = '+item.id);
 				this.topSelect = item;
+				this.page = 1
+				this.getData()
 			},
 
 

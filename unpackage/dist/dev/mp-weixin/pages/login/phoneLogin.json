@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "临研招聘",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
   "usingComponents": {}
 }

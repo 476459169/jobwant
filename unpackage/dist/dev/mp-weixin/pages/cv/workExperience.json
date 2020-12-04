@@ -1,7 +1,9 @@
 {
   "navigationBarTitleText": "工作/实习经历",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
   "usingComponents": {
     "lb-picker": "/components/lb-picker/index",
-    "e-picker-plus": "/components/e-picker-plus/e-picker-plus"
+    "bory-date-time-picker": "/components/bory-dateTimePicker/bory-dateTimePicker"
   }
 }
