@@ -6,7 +6,7 @@
 				自我评价
 			</view>
 		</view>
-		<textarea class="desView" type="text" value="" v-model="workDes" />
+		<textarea class="desView" cursor-spacing="0" maxlength="-1" type="text" value="" v-model="workDes" />
 
 
 		<view class="bottom_view">
@@ -18,11 +18,11 @@
 <script>
 	export default {
 		data() {
-			const currentD = this.getDate({
-				format: true
-			})
+			// const currentD = this.getDate({
+			// 	format: true
+			// })
 			return {
-				currentDate: currentD,
+				// currentDate: currentD,
 				companyName: '',
 				jobName: '',
 				beginTime: '',
@@ -168,9 +168,10 @@
 		padding: 10px;
 		width: calc(100vw - 40px);
 		background-color: #f5f7f8;
-		height: 60px;
+		height: 200px;
 		font-size: 14px;
 		color: #666666;
+		
 	}
 
 	.sw {

@@ -36,15 +36,15 @@
 
 			</view>
 
-			<view class="" v-if="data.jobStatusContent.length>0">
+			<view class="" v-if="data.wantedIntention.expectedPosition.length>0">
 				<view class="view_item">
 					<image class="view_item_img" src="../../static/cv/sj.png" mode=""></image>
-					<view class="view_item_text">{{data.jobStatusContent}}</view>
+					<view class="view_item_text">{{data.wantedIntention.expectedPosition}}</view>
 				</view>
-				<view class="" v-for="(item,index) in data.jobWantedIntentionArr" :key="index">
+				<view class="" >
 					<view class="view_item">
 						<image class="view_item_img" src="../../static/cv/b.png" mode=""></image>
-						<view class="view_item_text">{{item}}</view>
+						<view class="view_item_text">{{data.wantedIntention.jobStatusContent}}</view>
 					</view>
 				</view>
 			</view>
@@ -473,14 +473,14 @@
 			font-size: 12px;
 			display: -webkit-box;
 			/** 对象作为伸缩盒子模型显示 **/
-			overflow: hidden;
-			word-break: break-all;
+			// overflow: hidden;
+			// word-break: break-all;
 			/* break-all(允许在单词内换行。) */
-			text-overflow: ellipsis;
+			// text-overflow: ellipsis;
 			/* 超出部分省略号 */
-			-webkit-box-orient: vertical;
+			// -webkit-box-orient: vertical;
 			/** 设置或检索伸缩盒对象的子元素的排列方式 **/
-			-webkit-line-clamp: 3;
+			// -webkit-line-clamp: 3;
 			/** 显示的行数 **/
 		}
 

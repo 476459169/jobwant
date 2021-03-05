@@ -84,7 +84,7 @@
 				工作描述
 			</view>
 		</view>
-		<textarea class="desView" type="text" maxlength="-1" value="" v-model="dataInf.workDescription" />
+		<textarea class="desView" cursor-spacing="0" type="text" maxlength="-1" value="" v-model="dataInf.workDescription" />
 
 
 		<view class="item_views" style="margin-bottom: 60px;">
@@ -448,7 +448,7 @@
 		height: 400px;
 		font-size: 14px;
 		color: #666666;
-		z-index: 999;
+		// z-index: 999;
 	}
 
 	.sw {

@@ -254,7 +254,7 @@
 		}
 		.top_view_company{
 			font-size: 12px;
-			color: #cccccc;
+			color: #333333;
 			line-height: 20px;
 			height: 20px;
 		}
@@ -271,7 +271,7 @@
 			}
 			.top_view_msgview_text{
 				font-size: 12px;
-				color: #cccccc;
+				color: #333;
 				margin-right: 8px;
 				margin-left: 3px;
 			}

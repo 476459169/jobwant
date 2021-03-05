@@ -150,11 +150,11 @@ __webpack_require__.r(__webpack_exports__);
 var _default =
 {
   data: function data() {
-    var currentD = this.getDate({
-      format: true });
-
+    // const currentD = this.getDate({
+    // 	format: true
+    // })
     return {
-      currentDate: currentD,
+      // currentDate: currentD,
       companyName: '',
       jobName: '',
       beginTime: '',

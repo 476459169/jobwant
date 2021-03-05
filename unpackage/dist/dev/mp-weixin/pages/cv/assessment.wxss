@@ -127,7 +127,7 @@
   padding: 10px;
   width: calc(100vw - 40px);
   background-color: #f5f7f8;
-  height: 60px;
+  height: 200px;
   font-size: 14px;
   color: #666666;
 }
